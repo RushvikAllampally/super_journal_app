@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e8dff5"
+    tools:context=".screens.fragments.JournalsDataFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Journal Analytics"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:textColor="@color/app_blue"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- TODO: Update blank fragment layout -->
+            <!--    <TextView-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:gravity="center"-->
+            <!--        android:text="Manage Your Journals Here !!"-->
+            <!--        android:textSize="20sp"-->
+            <!--        android:textStyle="bold" />-->
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginVertical="8dp"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/planet_nature"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Journals written till date"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/total_journal_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Journals"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@drawable/mood_emojies" />-->
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mood Statistics"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:layout_marginVertical="15dp"
+                android:layout_marginHorizontal="15dp"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                />
+
+            <!--Ui component for our bar chart-->
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/idBarChart"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/barchart_bg"
+                android:padding="10dp" />
+
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:src="@drawable/more_coming_soon_purple"
+                android:layout_margin="10dp"
+                />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

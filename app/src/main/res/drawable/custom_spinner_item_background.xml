@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/app_blue" /> <!-- Customize the background color -->
+    <corners android:radius="10dp" /> <!-- Customize the corner radius -->
+    <stroke
+        android:color="@color/black" /> <!-- Customize the border color and width -->
+</shape>

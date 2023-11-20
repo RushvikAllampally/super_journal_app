@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#e8dff5"
+    android:orientation="vertical"
+    tools:context=".screens.settings.ReminderScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Reminders"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
+            android:text="Journal"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:text="Gratitude Journal"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/gratitude_notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/gratitude_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="gratitude" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/gratitude_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:tag="gratitude"
+                app:thumbTint="@color/switch_thumb_selector"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:text="Reflective Journal"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/reflective_notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/reflective_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="reflective" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/reflective_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="reflective"
+                app:thumbTint="@color/switch_thumb_selector"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:text="Bullet Journal"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/bullet_notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/bullet_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="bullet" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/bullet_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="bullet"
+                app:thumbTint="@color/switch_thumb_selector" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:text="Dream Journal"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/dream_notification_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/dream_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="dream" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/dream_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="dream"
+                app:thumbTint="@color/switch_thumb_selector"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="15dp"
+            android:text="Notifications"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:text="Quote of the Day"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/quote_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/quote_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="quote" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/quote_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="quote"
+                app:thumbTint="@color/switch_thumb_selector" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/notifications_none_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:text="Daily Affirmation"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/affirmation_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:layout_marginRight="5dp"
+                android:text="8:00 PM"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/affirmation_time_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="3dp"
+                android:background="@color/white"
+                android:src="@drawable/access_time_24"
+                android:tag="affirmation" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/affirmation_notification_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:tag="affirmation"
+                app:thumbTint="@color/switch_thumb_selector" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

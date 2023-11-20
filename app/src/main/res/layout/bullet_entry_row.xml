@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginVertical="8dp"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <Button
+            android:id="@+id/task_drag_btn"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:background="@drawable/drag_indicator_24"
+            android:backgroundTint="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/bullet_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/app_blue"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:text="This is a test journal; jgdjgjdgjdgdjgdjhgdjghjgdjgdjhgdjhgdhj gdjhgd"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="14dp" />
+
+        <!-- Edit Button with Pencil Symbol -->
+        <Button
+            android:id="@+id/task_edit_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/baseline_edit_24"
+            android:padding="8dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

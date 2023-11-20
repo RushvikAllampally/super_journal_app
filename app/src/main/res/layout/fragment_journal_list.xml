@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e8dff5"
+    tools:context=".screens.fragments.JournalListFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="All Journals"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textColor="@color/app_blue"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/journal_options_spinner"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:textAlignment="center"
+            android:backgroundTint="@color/btn_color"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:background="@drawable/custom_spinner_item_background"
+            android:layout_margin="10dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/journal_list_duration_spinner"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="110dp"
+            android:layout_height="30dp"
+            android:textAlignment="center"
+            android:backgroundTint="@color/btn_color"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:background="@drawable/custom_spinner_item_background"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Your Journal Entries here"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/nothing_found_journals_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/nothing_found"
+        android:layout_gravity="center"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/journal_entries_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+
+</LinearLayout>

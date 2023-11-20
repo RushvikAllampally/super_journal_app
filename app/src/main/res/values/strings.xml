@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SUper Journal App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="journal_list_btn_items">
+        <item>All</item>
+        <item>Gratitude Journal</item>
+        <item>Reflective Journal</item>
+        <item>Bullet Journal</item>
+        <item>Dream Journal</item>
+    </string-array>
+
+    <string-array name="journal_list_duration_items">
+        <item>This Month</item>
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>This Week</item>
+        <item>Last 3 Months</item>
+        <item>Last Month</item>
+    </string-array>
+</resources>

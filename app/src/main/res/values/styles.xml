@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RoundedFAB" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- Adjust the percentage as needed -->
+    </style>
+
+    <style name="SwitchCompatStyle" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:trackTint">@color/app_blue</item>
+    </style>
+
+</resources>
