@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#F7D3E8">
 
@@ -76,25 +77,27 @@
 
     </LinearLayout>
 
+    <!-- Title Input -->
+    <EditText
+        android:id="@+id/journal_title_reflective"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:hint="Title"
+        android:inputType="text" />
+
     <!-- Journal Entry Form -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-
-            <!-- Title Input -->
-            <EditText
-                android:id="@+id/journal_title_reflective"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Title"
-                android:inputType="text" />
 
             <!-- Content Input -->
             <EditText
@@ -109,4 +112,57 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingVertical="6dp"
+            >
+
+            <ImageButton
+                android:id="@+id/reflective_color_palette"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/color_palette"
+                />
+
+            <ImageButton
+                android:id="@+id/reflective_text_style_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/text_style_icon"
+                />
+
+            <ImageButton
+                android:id="@+id/reflective_emoji_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/emoji_icon"
+                />
+
+            <ImageButton
+                android:id="@+id/reflective_sticker_icon"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/sticker_icon"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </LinearLayout>

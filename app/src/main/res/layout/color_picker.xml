@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/design_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="0dp"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/black_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/black"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/grey_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/grey"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/red_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/red"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/green_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/green"
+                app:cardCornerRadius="100dp" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/brown_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/brown"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/yellow_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/yellow"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/purple_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/purple"
+                app:cardCornerRadius="100dp" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/blue_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/blue"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/orange_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/orange"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/pink_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/pink"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/teal_color_select"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/teal"
+                app:cardCornerRadius="100dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/white_color_select"
+                android:layout_width="1dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="100dp"
+                android:background="@android:color/transparent"
+                />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</LinearLayout>

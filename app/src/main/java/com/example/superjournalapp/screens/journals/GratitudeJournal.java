@@ -6,6 +6,9 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,6 +29,8 @@ import com.example.superjournalapp.entity.JournalCategories.GratitudeJournalEnti
 import com.example.superjournalapp.screens.fragments.HomeFragment;
 import com.example.superjournalapp.screens.fragments.JournalListFragment;
 import com.example.superjournalapp.utils.JournalUtils;
+import com.example.superjournalapp.utils.TextEditorUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,6 +50,10 @@ public class GratitudeJournal extends AppCompatActivity {
     private ImageButton deleteIcon;
     private Journal journal;
     private GratitudeJournalEntity gratitudeJournal;
+    private BottomSheetDialog bottomSheetDialog;
+    private ImageButton colorPalette;
+    private ImageButton textStylesBtn;
+    private ImageButton emojiesBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,18 @@ public class GratitudeJournal extends AppCompatActivity {
         journalTitle = findViewById(R.id.journal_title);
         journalContent = findViewById(R.id.journal_content);
         deleteIcon = findViewById(R.id.gratitude_delete_icon);
+        colorPalette = findViewById(R.id.gratitude_color_palette);
+        textStylesBtn = findViewById(R.id.gratitude_text_style_icon);
+        emojiesBtn = findViewById(R.id.gratitude_emoji_icon);
+
+        colorPalette.setOnClickListener(view -> {
+            TextEditorUtils.colorPaletteOnClickListener(bottomSheetDialog, journalContent, GratitudeJournal.this);
+        });
+
+        textStylesBtn.setOnClickListener(view -> {
+            TextEditorUtils.textStylesOnClickListener(bottomSheetDialog, journalContent, GratitudeJournal.this);
+
+        });
 
         // Retrieve the data from the Intent
         Intent intent = getIntent();
@@ -78,7 +99,10 @@ public class GratitudeJournal extends AppCompatActivity {
                 journal.setJournalId(Long.parseLong(journalId));
 
                 journalTitle.setText(gratitudeJournal.getTitle());
-                journalContent.setText(gratitudeJournal.getJournalContent());
+
+                /// Convert the HTML-formatted string back to a Spannable
+                Spanned spanned = Html.fromHtml(gratitudeJournal.getJournalContent(), Html.FROM_HTML_MODE_LEGACY, null, null);
+                journalContent.setText(spanned);
 
                 // Define the desired date format
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMMM yyyy", Locale.ENGLISH);
@@ -159,7 +183,8 @@ public class GratitudeJournal extends AppCompatActivity {
                 gratitudeJournalEntity.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
                 gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
                 gratitudeJournalEntity.setTitle(title);
-                gratitudeJournalEntity.setJournalContent(content);
+                gratitudeJournalEntity.setJournalContent(
+                        Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
                 gratitudeJournalEntity.setJournalId(journalId);
 
                 if (journal.getJournalId() == 0) {
