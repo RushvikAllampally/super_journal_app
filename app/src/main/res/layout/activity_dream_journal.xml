@@ -102,7 +102,7 @@
 
 
             <!-- Content Input -->
-            <com.vanniktech.emoji.EmojiTextView
+            <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/journal_content_dream"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

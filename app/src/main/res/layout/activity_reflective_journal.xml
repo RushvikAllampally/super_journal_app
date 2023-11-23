@@ -79,7 +79,7 @@
     </LinearLayout>
 
     <!-- Title Input -->
-    <com.vanniktech.emoji.EmojiTextView
+    <com.vanniktech.emoji.EmojiEditText
         android:id="@+id/journal_title_reflective"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
             android:padding="10dp">
 
             <!-- Content Input -->
-            <com.vanniktech.emoji.EmojiTextView
+            <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/journal_content_reflective"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
