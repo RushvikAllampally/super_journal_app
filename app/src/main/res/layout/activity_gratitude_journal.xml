@@ -110,7 +110,7 @@
             android:orientation="vertical"
             android:padding="10dp">
             <!-- Content Input -->
-            <com.vanniktech.emoji.EmojiTextView
+            <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/journal_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
