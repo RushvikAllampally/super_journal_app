@@ -156,13 +156,13 @@
                 android:background="@drawable/emoji_icon"
                 />
 
-            <ImageButton
-                android:id="@+id/reflective_sticker_icon"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="@drawable/sticker_icon"
-                />
+<!--            <ImageButton-->
+<!--                android:id="@+id/reflective_sticker_icon"-->
+<!--                android:layout_width="31dp"-->
+<!--                android:layout_height="31dp"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                android:background="@drawable/sticker_icon"-->
+<!--                />-->
 
         </LinearLayout>
 

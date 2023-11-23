@@ -2,6 +2,7 @@ package com.example.superjournalapp.screens.journals;
 
 import static com.example.superjournalapp.utils.JournalUtils.getMonthName;
 
+import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 public class GratitudeJournal extends AppCompatActivity {
 
@@ -55,6 +57,7 @@ public class GratitudeJournal extends AppCompatActivity {
     private ImageButton colorPalette;
     private ImageButton textStylesBtn;
     private ImageButton emojiesBtn;
+    private ImageButton promptIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +80,9 @@ public class GratitudeJournal extends AppCompatActivity {
         colorPalette = findViewById(R.id.gratitude_color_palette);
         textStylesBtn = findViewById(R.id.gratitude_text_style_icon);
         emojiesBtn = findViewById(R.id.gratitude_emoji_icon);
+        promptIcon = findViewById(R.id.prompt_icon);
 
-        EmojiPopup popup = EmojiPopup.Builder
-                .fromRootView(findViewById(R.id.gratitude_journal_root)).build(journalContent);
+        EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.gratitude_journal_root)).build(journalContent);
         emojiesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +97,18 @@ public class GratitudeJournal extends AppCompatActivity {
         textStylesBtn.setOnClickListener(view -> {
             TextEditorUtils.textStylesOnClickListener(bottomSheetDialog, journalContent, GratitudeJournal.this);
 
+        });
+
+        promptIcon.setOnClickListener(view -> {
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(promptIcon, "alpha", 1f, 0.5f);
+            alphaAnimator.setDuration(200); // Set the duration of the animation
+            alphaAnimator.setRepeatCount(1); // Optionally, you can repeat the animation
+            alphaAnimator.setRepeatMode(ObjectAnimator.REVERSE); // Reverse the animation
+
+            // Start the animation
+            alphaAnimator.start();
+            Random random = new Random();
+            journalTitle.setText(ApplicationConstants.GRATITUDE_PROMPTS.get(random.nextInt(21)));
         });
 
         // Retrieve the data from the Intent
@@ -193,8 +208,7 @@ public class GratitudeJournal extends AppCompatActivity {
                 gratitudeJournalEntity.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
                 gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
                 gratitudeJournalEntity.setTitle(title);
-                gratitudeJournalEntity.setJournalContent(
-                        Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
+                gratitudeJournalEntity.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
                 gratitudeJournalEntity.setJournalId(journalId);
 
                 if (journal.getJournalId() == 0) {

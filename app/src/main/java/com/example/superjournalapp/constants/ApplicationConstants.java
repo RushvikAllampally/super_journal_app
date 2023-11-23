@@ -264,5 +264,32 @@ public class ApplicationConstants {
         NOTIFICATION_TYPE_REQUEST_CODE.put("affirmation",5);
     }
 
+    public static List<String> GRATITUDE_PROMPTS = new ArrayList<>();
+
+    static {
+        //list of 21 prompts
+        GRATITUDE_PROMPTS.add("What made you smile today?");
+        GRATITUDE_PROMPTS.add("Name three things that brought you joy.");
+        GRATITUDE_PROMPTS.add("What achievements are you proud of today?");
+        GRATITUDE_PROMPTS.add("Describe a person you are thankful to have in your life.");
+        GRATITUDE_PROMPTS.add("Reflect on a recent act of kindness you experienced.");
+        GRATITUDE_PROMPTS.add("List three things in nature you are grateful for.");
+        GRATITUDE_PROMPTS.add("Write about a skill or talent you are thankful for having.");
+        GRATITUDE_PROMPTS.add("Share a positive experience from today.");
+        GRATITUDE_PROMPTS.add("Reflect on a challenge you faced and the lessons learned.");
+        GRATITUDE_PROMPTS.add("Write about a place that brings you peace and gratitude.");
+        GRATITUDE_PROMPTS.add("List three small pleasures you enjoyed today.");
+        GRATITUDE_PROMPTS.add("Reflect on the support you received from others.");
+        GRATITUDE_PROMPTS.add("Write about a moment of personal growth.");
+        GRATITUDE_PROMPTS.add("Express gratitude for your health and well-being.");
+        GRATITUDE_PROMPTS.add("What made today different from other days?");
+        GRATITUDE_PROMPTS.add("Write about a positive change you've noticed recently.");
+        GRATITUDE_PROMPTS.add("Reflect on something you learned today.");
+        GRATITUDE_PROMPTS.add("List three things you love about yourself.");
+        GRATITUDE_PROMPTS.add("Write about a happy memory that brings you joy.");
+        GRATITUDE_PROMPTS.add("List things that you are grateful for today?");
+        GRATITUDE_PROMPTS.add("Express gratitude for the opportunities in your life.");
+    }
+
 
 }

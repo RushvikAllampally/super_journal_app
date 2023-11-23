@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gratitude_journal_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/gratitude_journal_root"
-    android:background="#B0E57C">
+    android:background="#B0E57C"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,19 +29,18 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="5dp"
-            android:src="@drawable/delete_icon_24"
             android:background="#B0E57C"
-            />
+            android:src="@drawable/delete_icon_24" />
 
         <Button
             android:id="@+id/save_journal"
             android:layout_width="90dp"
             android:layout_height="40dp"
-            android:text="Save"
-            android:gravity="center"
-            android:fontFamily="@font/balsamiqsans_regular"
             android:layout_margin="1dp"
-            android:textSize="14sp"/>
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:gravity="center"
+            android:text="Save"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -56,8 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Today"
             android:fontFamily="@font/balsamiqsans_regular"
+            android:text="Today"
             android:textSize="15sp" />
 
         <TextView
@@ -65,8 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="24th September 2023"
             android:fontFamily="@font/balsamiqsans_regular"
+            android:text="24th September 2023"
             android:textSize="15sp" />
 
         <ImageView
@@ -78,24 +77,41 @@
 
     </LinearLayout>
 
-    <!-- Title Input -->
-    <TextView
-        android:id="@+id/journal_title"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:layout_marginBottom="8dp"
-        android:text="List things that you are grateful for today ?"
-        android:fontFamily="@font/balsamiqsans_regular"
-        android:textSize="20sp"
-        android:paddingHorizontal="10dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingHorizontal="10dp">
+
+        <!-- Title Input -->
+        <TextView
+            android:id="@+id/journal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:text="List things that you are grateful for today ?"
+            android:layout_weight="1"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/prompt_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#B0E57C"
+            android:src="@drawable/bulb_32px" />
+
+    </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="10dp"
         android:background="@android:color/black" />
 
     <!-- Journal Entry Form -->
@@ -115,10 +131,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textSize="17sp"
                 android:background="@android:color/transparent"
                 android:hint="Journal Content"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -127,50 +143,45 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
-        >
+        app:cardCornerRadius="30dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingVertical="6dp"
-            >
+            android:paddingVertical="6dp">
 
             <ImageButton
                 android:id="@+id/gratitude_color_palette"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:background="@drawable/color_palette"
-                />
+                android:background="@drawable/color_palette" />
 
             <ImageButton
                 android:id="@+id/gratitude_text_style_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:background="@drawable/text_style_icon"
-                />
+                android:background="@drawable/text_style_icon" />
 
             <ImageButton
                 android:id="@+id/gratitude_emoji_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginHorizontal="15dp"
-                android:background="@drawable/emoji_icon"
-                />
+                android:background="@drawable/emoji_icon" />
 
-            <ImageButton
-                android:id="@+id/gratitude_sticker_icon"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="@drawable/sticker_icon"
-                />
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/gratitude_sticker_icon"-->
+            <!--                android:layout_width="31dp"-->
+            <!--                android:layout_height="31dp"-->
+            <!--                android:layout_marginHorizontal="15dp"-->
+            <!--                android:background="@drawable/sticker_icon"-->
+            <!--                />-->
 
         </LinearLayout>
 
