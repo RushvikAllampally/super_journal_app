@@ -31,6 +31,7 @@ import com.example.superjournalapp.screens.fragments.JournalListFragment;
 import com.example.superjournalapp.utils.JournalUtils;
 import com.example.superjournalapp.utils.TextEditorUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.vanniktech.emoji.EmojiPopup;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,6 +77,15 @@ public class GratitudeJournal extends AppCompatActivity {
         colorPalette = findViewById(R.id.gratitude_color_palette);
         textStylesBtn = findViewById(R.id.gratitude_text_style_icon);
         emojiesBtn = findViewById(R.id.gratitude_emoji_icon);
+
+        EmojiPopup popup = EmojiPopup.Builder
+                .fromRootView(findViewById(R.id.gratitude_journal_root)).build(journalContent);
+        emojiesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup.toggle();
+            }
+        });
 
         colorPalette.setOnClickListener(view -> {
             TextEditorUtils.colorPaletteOnClickListener(bottomSheetDialog, journalContent, GratitudeJournal.this);

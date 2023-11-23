@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/gratitude_journal_root"
     android:background="#B0E57C">
 
     <LinearLayout
@@ -109,11 +110,12 @@
             android:orientation="vertical"
             android:padding="10dp">
             <!-- Content Input -->
-            <EditText
+            <com.vanniktech.emoji.EmojiTextView
                 android:id="@+id/journal_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:textSize="17sp"
                 android:background="@android:color/transparent"
                 android:hint="Journal Content"
                 android:inputType="textMultiLine" />

@@ -42,6 +42,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.jjoe64:graphview:4.2.2")
+    implementation("com.vanniktech:emoji-google:0.6.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     annotationProcessor("androidx.room:room-compiler:2.5.2")

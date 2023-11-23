@@ -31,6 +31,7 @@ import com.example.superjournalapp.screens.fragments.JournalListFragment;
 import com.example.superjournalapp.utils.JournalUtils;
 import com.example.superjournalapp.utils.TextEditorUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.vanniktech.emoji.EmojiPopup;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -77,6 +78,15 @@ public class ReflectiveJournal extends AppCompatActivity {
         colorPalette = findViewById(R.id.reflective_color_palette);
         textStylesBtn = findViewById(R.id.reflective_text_style_icon);
         emojiesBtn = findViewById(R.id.reflective_emoji_icon);
+
+        EmojiPopup popup = EmojiPopup.Builder
+                .fromRootView(findViewById(R.id.reflective_journal_root)).build(journalContent);
+        emojiesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup.toggle();
+            }
+        });
 
         colorPalette.setOnClickListener(view -> {
             TextEditorUtils.colorPaletteOnClickListener(bottomSheetDialog, journalContent, ReflectiveJournal.this);

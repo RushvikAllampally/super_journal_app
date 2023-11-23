@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.EmojiCompatConfigurationView;
 
 import com.example.superjournalapp.R;
 import com.example.superjournalapp.constants.ApplicationConstants;
@@ -32,6 +31,7 @@ import com.example.superjournalapp.screens.fragments.JournalListFragment;
 import com.example.superjournalapp.utils.JournalUtils;
 import com.example.superjournalapp.utils.TextEditorUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.vanniktech.emoji.EmojiPopup;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -76,6 +76,14 @@ public class DreamJournal extends AppCompatActivity {
         colorPalette = findViewById(R.id.dream_color_palette);
         textStylesBtn = findViewById(R.id.dream_text_style_icon);
         emojiesBtn = findViewById(R.id.dream_emoji_icon);
+
+        EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.dream_journal_root)).build(journalContent);
+        emojiesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup.toggle();
+            }
+        });
 
         colorPalette.setOnClickListener(view -> {
             TextEditorUtils.colorPaletteOnClickListener(bottomSheetDialog, journalContent, DreamJournal.this);
