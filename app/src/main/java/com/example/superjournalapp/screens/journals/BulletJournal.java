@@ -62,6 +62,8 @@ public class BulletJournal extends AppCompatActivity {
     private boolean isPinned;
     private Journal journal;
     private ImageButton deleteIcon;
+    private Date selectedDate = null;
+    private DatabaseHelper databaseHelper;
     private List<BulletEntryDetails> tasksList = new ArrayList<>();
 
     @Override
@@ -72,7 +74,7 @@ public class BulletJournal extends AppCompatActivity {
         final Calendar calendar = Calendar.getInstance();
         journal = new Journal();
 
-        DatabaseHelper databaseHelper = DatabaseHelper.getDb(this);
+        databaseHelper = DatabaseHelper.getDb(this);
 
         closeJournalButton = findViewById(R.id.close_journal_bullet);
         saveJournalButton = findViewById(R.id.save_journal_bullet);
@@ -169,8 +171,15 @@ public class BulletJournal extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(BulletJournal.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        System.out.println(getMonthName(String.valueOf(i1)));
                         selectJournalDate.setText(i2 + ", " + getMonthName(String.valueOf(i1 + 1)) + " " + i);
+
+                        Calendar calendarInside = Calendar.getInstance();
+                        calendarInside.set(Calendar.YEAR, i); // Set the year
+                        calendarInside.set(Calendar.MONTH, i1); // Set the month (Note: Months are zero-based, so November is 10)
+                        calendarInside.set(Calendar.DAY_OF_MONTH, i2); // Set the day
+
+                        selectedDate = calendarInside.getTime();
+
                     }
                 }, y, m, d);
                 datePickerDialog.show();
@@ -237,25 +246,36 @@ public class BulletJournal extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                journal.setJournalCreatedOn(new Date());
-                journal.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
-
-                BulletJournalEntity bulletJournalEntity = new BulletJournalEntity();
-
-                bulletJournalEntity.setJournalCreatedOn(new Date());
-                bulletJournalEntity.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
-                bulletJournalEntity.setListPinned(isPinned);
-
-                bulletRecyclerAdaptor.saveBulletJournal(databaseHelper, bulletJournalEntity, journal, journal.getJournalId() == 0);
-
-                JournalUtils.updateStreak(view.getContext());
-                HomeFragment.notifyHomeRecyclerViewChanges();
-                HomeFragment.notifyHomeBulletChanges();
-
-                Toast.makeText(BulletJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
+                saveJournalDetails();
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveJournalDetails();
+
+    }
+
+    private void saveJournalDetails() {
+        journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        journal.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
+
+        BulletJournalEntity bulletJournalEntity = new BulletJournalEntity();
+
+        bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        bulletJournalEntity.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
+        bulletJournalEntity.setListPinned(isPinned);
+
+        bulletRecyclerAdaptor.saveBulletJournal(databaseHelper, bulletJournalEntity, journal, journal.getJournalId() == 0);
+
+        JournalUtils.updateStreak(BulletJournal.this);
+        HomeFragment.notifyHomeRecyclerViewChanges();
+        HomeFragment.notifyHomeBulletChanges();
+
+        Toast.makeText(BulletJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }
 
     private void showConfirmationDialog() {

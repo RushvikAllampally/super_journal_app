@@ -12,7 +12,7 @@ public class ApplicationConstants {
     public static String MY_APP_NAME = "superJournalApp";
     public static String FIRST_TIME_USER = "firstTimeUser";
     public static String GRATITUDE_JOURNAL = "Gratitude Journal";
-    public static String REFLECTIVE_JOURNAL = "Reflective Journal";
+    public static String REFLECTIVE_JOURNAL = "My Diary";
     public static String BULLET_JOURNAL = "Bullet Journal";
     public static String DREAM_JOURNAL = "Dream Journal";
     public static String JOURNAL_ID_INTENT = "journalId";

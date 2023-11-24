@@ -58,6 +58,8 @@ public class GratitudeJournal extends AppCompatActivity {
     private ImageButton textStylesBtn;
     private ImageButton emojiesBtn;
     private ImageButton promptIcon;
+    private DatabaseHelper databaseHelper;
+    private Date selectedDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class GratitudeJournal extends AppCompatActivity {
         final Calendar calendar = Calendar.getInstance();
         journal = new Journal();
 
-        DatabaseHelper databaseHelper = DatabaseHelper.getDb(this);
+        databaseHelper = DatabaseHelper.getDb(this);
 
         closeJournalButton = findViewById(R.id.close_journal);
         saveJournalButton = findViewById(R.id.save_journal);
@@ -165,8 +167,15 @@ public class GratitudeJournal extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(GratitudeJournal.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        System.out.println(getMonthName(String.valueOf(i1)));
                         selectJournalDate.setText(i2 + ", " + getMonthName(String.valueOf(i1 + 1)) + " " + i);
+
+                        Calendar calendarInside = Calendar.getInstance();
+                        calendarInside.set(Calendar.YEAR, i); // Set the year
+                        calendarInside.set(Calendar.MONTH, i1); // Set the month (Note: Months are zero-based, so November is 10)
+                        calendarInside.set(Calendar.DAY_OF_MONTH, i2); // Set the day
+
+                        selectedDate = calendarInside.getTime();
+
                     }
                 }, y, m, d);
                 datePickerDialog.show();
@@ -176,56 +185,66 @@ public class GratitudeJournal extends AppCompatActivity {
         saveJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = journalTitle.getText().toString();
-                String content = journalContent.getText().toString();
-
-                if (title.isEmpty()) {
-                    Toast.makeText(GratitudeJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
-                    return;
-                } else if (content.isEmpty()) {
-                    Toast.makeText(GratitudeJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                journal.setJournalCreatedOn(new Date());
-                journal.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
-
-                int contentLength = (content.length() > 100) ? 100 : content.length();
-                journal.setJournalStartText(content.substring(0, contentLength));
-                journal.setTitle(title);
-
-                long journalId;
-                if (journal.getJournalId() == 0) {
-                    journalId = databaseHelper.journalDao().addJournal(journal);
-                } else {
-                    databaseHelper.journalDao().updateJournal(journal);
-                    journalId = journal.getJournalId();
-                }
-
-                GratitudeJournalEntity gratitudeJournalEntity = new GratitudeJournalEntity();
-
-                gratitudeJournalEntity.setJournalCreatedOn(new Date());
-                gratitudeJournalEntity.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
-                gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
-                gratitudeJournalEntity.setTitle(title);
-                gratitudeJournalEntity.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
-                gratitudeJournalEntity.setJournalId(journalId);
-
-                if (journal.getJournalId() == 0) {
-                    databaseHelper.gratitudeJournalContentDao().insert(gratitudeJournalEntity);
-                } else {
-                    databaseHelper.gratitudeJournalContentDao().updateGratitudeJournalEntity(gratitudeJournalEntity);
-
-                }
-                JournalUtils.updateStreak(view.getContext());
-                Toast.makeText(GratitudeJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
-
-                HomeFragment.notifyHomeRecyclerViewChanges();
-
+                saveJournalDetails();
                 finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveJournalDetails();
+
+    }
+
+    private void saveJournalDetails() {
+        String title = journalTitle.getText().toString();
+        String content = journalContent.getText().toString();
+
+        if (title.isEmpty()) {
+            Toast.makeText(GratitudeJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
+            return;
+        } else if (content.isEmpty()) {
+            Toast.makeText(GratitudeJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        journal.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
+
+        int contentLength = (content.length() > 100) ? 100 : content.length();
+        journal.setJournalStartText(content.substring(0, contentLength));
+        journal.setTitle(title);
+
+        long journalId;
+        if (journal.getJournalId() == 0) {
+            journalId = databaseHelper.journalDao().addJournal(journal);
+        } else {
+            databaseHelper.journalDao().updateJournal(journal);
+            journalId = journal.getJournalId();
+        }
+
+        GratitudeJournalEntity gratitudeJournalEntity = new GratitudeJournalEntity();
+
+        gratitudeJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        gratitudeJournalEntity.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
+        gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
+        gratitudeJournalEntity.setTitle(title);
+        gratitudeJournalEntity.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
+        gratitudeJournalEntity.setJournalId(journalId);
+
+        if (journal.getJournalId() == 0) {
+            databaseHelper.gratitudeJournalContentDao().insert(gratitudeJournalEntity);
+        } else {
+            databaseHelper.gratitudeJournalContentDao().updateGratitudeJournalEntity(gratitudeJournalEntity);
+
+        }
+        JournalUtils.updateStreak(GratitudeJournal.this);
+        Toast.makeText(GratitudeJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
+
+        HomeFragment.notifyHomeRecyclerViewChanges();
     }
 
     private void showConfirmationDialog() {

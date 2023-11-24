@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.superjournalapp.R;
 import com.example.superjournalapp.applock.SetPasscodeScreen;
 import com.example.superjournalapp.constants.ApplicationConstants;
+import com.example.superjournalapp.screens.fragments.HomeFragment;
 import com.example.superjournalapp.utils.comingSoonActivity;
 
 public class SettingsScreen extends AppCompatActivity {
@@ -123,6 +124,7 @@ public class SettingsScreen extends AppCompatActivity {
                         editor.apply();
 
                         displayProfileName.setText(profileName);
+                        HomeFragment.updateUserNameInHome(profileName);
                         dialog.dismiss();
 
                     }

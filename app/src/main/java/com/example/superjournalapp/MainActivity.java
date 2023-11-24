@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         ListView journalsListView = popupView.findViewById(R.id.journal_listView);
 
         // Set up your ListView and its adapter here
-        String[] journalListViewData = {ApplicationConstants.GRATITUDE_JOURNAL, ApplicationConstants.REFLECTIVE_JOURNAL, ApplicationConstants.BULLET_JOURNAL, ApplicationConstants.DREAM_JOURNAL};
+        String[] journalListViewData = {ApplicationConstants.REFLECTIVE_JOURNAL,ApplicationConstants.GRATITUDE_JOURNAL, ApplicationConstants.BULLET_JOURNAL, ApplicationConstants.DREAM_JOURNAL};
 
         // Create an ArrayAdapter to populate the ListView with data
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.textView, journalListViewData);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(MainActivity.this, GratitudeJournal.class);
                         startActivity(intent);
                         break;
-                    case "Reflective Journal":
+                    case "My Diary":
                         intent = new Intent(MainActivity.this, ReflectiveJournal.class);
                         startActivity(intent);
                         break;

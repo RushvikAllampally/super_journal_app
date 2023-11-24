@@ -52,7 +52,9 @@ public class DreamJournal extends AppCompatActivity {
     private TextView selectJournalDate;
     private EditText journalTitle = null;
     private EditText journalContent;
+    private Date selectedDate = null;
     private Journal journal;
+    private DatabaseHelper databaseHelper;
     private DreamJournalEntity dreamJournalEntity;
 
     @Override
@@ -63,7 +65,7 @@ public class DreamJournal extends AppCompatActivity {
         final Calendar calendar = Calendar.getInstance();
         journal = new Journal();
 
-        DatabaseHelper databaseHelper = DatabaseHelper.getDb(this);
+        databaseHelper = DatabaseHelper.getDb(this);
 
         closeJournalButton = findViewById(R.id.close_journal_dream);
         saveJournalButton = findViewById(R.id.save_journal_dream);
@@ -154,8 +156,17 @@ public class DreamJournal extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         System.out.println(getMonthName(String.valueOf(i1)));
                         selectJournalDate.setText(i2 + ", " + getMonthName(String.valueOf(i1 + 1)) + " " + i);
+
+                        Calendar calendarInside = Calendar.getInstance();
+                        calendarInside.set(Calendar.YEAR, i); // Set the year
+                        calendarInside.set(Calendar.MONTH, i1); // Set the month (Note: Months are zero-based, so November is 10)
+                        calendarInside.set(Calendar.DAY_OF_MONTH, i2); // Set the day
+
+                        selectedDate = calendarInside.getTime();
+
                     }
                 }, y, m, d);
+
                 datePickerDialog.show();
             }
         });
@@ -163,56 +174,66 @@ public class DreamJournal extends AppCompatActivity {
         saveJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = journalTitle.getText().toString();
-                String content = journalContent.getText().toString();
-
-                if (title.isEmpty()) {
-                    Toast.makeText(DreamJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
-                    return;
-                } else if (content.isEmpty()) {
-                    Toast.makeText(DreamJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                journal.setJournalCreatedOn(new Date());
-                journal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
-
-                int contentLength = (content.length() > 100) ? 100 : content.length();
-                journal.setJournalStartText(content.substring(0, contentLength));
-                journal.setTitle(title);
-
-                long journalId;
-                if (journal.getJournalId() == 0) {
-                    journalId = databaseHelper.journalDao().addJournal(journal);
-                } else {
-                    databaseHelper.journalDao().updateJournal(journal);
-                    journalId = journal.getJournalId();
-                }
-
-                DreamJournalEntity dreamJournal = new DreamJournalEntity();
-
-                dreamJournal.setJournalCreatedOn(new Date());
-                dreamJournal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
-                dreamJournal.setJournalStartText(content.substring(0, contentLength));
-                dreamJournal.setTitle(title);
-                dreamJournal.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
-                dreamJournal.setJournalId(journalId);
-
-                if (journal.getJournalId() == 0) {
-                    databaseHelper.dreamJournalContentDao().insert(dreamJournal);
-                } else {
-                    databaseHelper.dreamJournalContentDao().updateDreamJournalEntity(dreamJournal);
-
-                }
-
-                JournalUtils.updateStreak(view.getContext());
-                HomeFragment.notifyHomeRecyclerViewChanges();
-
-                Toast.makeText(DreamJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
+                saveJournalDetails();
                 finish();
             }
         });
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveJournalDetails();
+
+    }
+
+    private void saveJournalDetails() {
+        String title = journalTitle.getText().toString();
+        String content = journalContent.getText().toString();
+
+        if (title.isEmpty()) {
+            Toast.makeText(DreamJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
+            return;
+        } else if (content.isEmpty()) {
+            Toast.makeText(DreamJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        journal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
+
+        int contentLength = (content.length() > 100) ? 100 : content.length();
+        journal.setJournalStartText(content.substring(0, contentLength));
+        journal.setTitle(title);
+
+        long journalId;
+        if (journal.getJournalId() == 0) {
+            journalId = databaseHelper.journalDao().addJournal(journal);
+        } else {
+            databaseHelper.journalDao().updateJournal(journal);
+            journalId = journal.getJournalId();
+        }
+
+        DreamJournalEntity dreamJournal = new DreamJournalEntity();
+
+        dreamJournal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+        dreamJournal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
+        dreamJournal.setJournalStartText(content.substring(0, contentLength));
+        dreamJournal.setTitle(title);
+        dreamJournal.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
+        dreamJournal.setJournalId(journalId);
+
+        if (journal.getJournalId() == 0) {
+            databaseHelper.dreamJournalContentDao().insert(dreamJournal);
+        } else {
+            databaseHelper.dreamJournalContentDao().updateDreamJournalEntity(dreamJournal);
+
+        }
+
+        JournalUtils.updateStreak(DreamJournal.this);
+        HomeFragment.notifyHomeRecyclerViewChanges();
+
+        Toast.makeText(DreamJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }
 
     private void showConfirmationDialog() {

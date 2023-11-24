@@ -104,11 +104,48 @@
                 android:layout_height="wrap_content"
                 android:text="Mood Statistics"
                 android:fontFamily="@font/balsamiqsans_regular"
-                android:layout_marginVertical="15dp"
                 android:layout_marginHorizontal="15dp"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="15dp"
+                >
+
+                <ImageButton
+                    android:id="@+id/left_arrow_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/left_arrow_24"
+                    android:background="#e8dff5"
+                    />
+
+                <TextView
+                    android:id="@+id/graph_month_name"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    />
+
+                <ImageButton
+                    android:id="@+id/right_arrow_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/right_arrow_24"
+                    android:background="#e8dff5"
+                    />
+
+            </LinearLayout>
+
+
 
             <!--Ui component for our bar chart-->
 
@@ -127,6 +164,20 @@
                 android:layout_gravity="center"
                 android:src="@drawable/more_coming_soon_purple"
                 android:layout_margin="10dp"
+                />
+
+
+            <Button
+                android:id="@+id/share_improvements_btn"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:text="Share Improvements and Suggestions"
+                android:textColor="@color/black"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="15sp"
+                android:backgroundTint="@color/btn_color"
                 />
 
 

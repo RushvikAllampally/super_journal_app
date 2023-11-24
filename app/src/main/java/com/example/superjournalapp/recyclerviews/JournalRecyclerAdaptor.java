@@ -67,7 +67,7 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
                         intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
                         view.getContext().startActivity(intent);
                         break;
-                    case "Reflective Journal":
+                    case "My Diary":
                         intent = new Intent(view.getContext(), ReflectiveJournal.class);
                         intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
                         view.getContext().startActivity(intent);

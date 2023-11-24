@@ -279,7 +279,7 @@ public class JournalListFragment extends Fragment {
                 endDate = calendar.getTime();
                 break;
 
-            case "Last Three Months":
+            case "Last 3 Months":
                 // Set the end date to the last day of the current month
                 calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
                 calendar.set(Calendar.HOUR_OF_DAY, 23);

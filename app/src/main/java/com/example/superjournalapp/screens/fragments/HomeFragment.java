@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
     private static TextView streakCount;
     private static List<BulletJournalEntity> bulletJournalEntities;
     private static LinearLayout linearLayoutContainer;
-    private TextView hiQuoteName;
+    private static TextView hiQuoteName;
     private TextView quote;
     private TextView quoteAuthor;
     private TextView affirmation;
@@ -105,6 +105,12 @@ public class HomeFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static void updateUserNameInHome(String newUserName) {
+        if (context != null) {
+            hiQuoteName.setText("Hi, " + newUserName);
+        }
     }
 
     public static void notifyHomeRecyclerViewChanges() {
