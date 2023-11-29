@@ -23,21 +23,20 @@ public class NotificationReceiver extends BroadcastReceiver {
     public static String getNotificationTitle(String notificationType) {
 
         switch (notificationType) {
-
             case "gratitude":
-                return "gratitude journal title";
+                return "Reflect and Express Gratitude";
             case "dream":
-                return "dream journal title";
-            case "reflective":
-                return "reflective journal title";
+                return "Capture Your Dreams";
+            case "diary":
+                return "Journal Your Thoughts";
             case "bullet":
-                return "bullet journal title";
+                return "Organize with Bullet Journal";
             case "affirmation":
-                return "affirmation dude";
+                return "Receive Positive Affirmation";
             case "quote":
-                return "quote dude";
+                return "Discover Daily Inspiration";
             case "mood":
-                return "Rate Your Today's Mood";
+                return "Rate Your Mood Today";
             default:
                 return "";
         }
@@ -48,23 +47,24 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         switch (notificationType) {
             case "gratitude":
-                return "write gratitude journal dude";
+                return "Take a moment to write about what you're grateful for today.";
             case "dream":
-                return "write dream journal dude";
-            case "reflective":
-                return "write reflective journal dude";
+                return "Jot down your dreams and aspirations in your dream journal.";
+            case "diary":
+                return "Express your thoughts and feelings by writing in your personal diary.";
             case "bullet":
-                return "write bullet journal dude";
+                return "Organize your tasks and thoughts with the bullet journal method.";
             case "affirmation":
-                return "see affirmation dude";
+                return "Read a positive affirmation to boost your mood and confidence.";
             case "quote":
-                return "see quote dude";
+                return "Explore a motivational quote to inspire and uplift your spirit.";
             case "mood":
-                return "how's is your mood today ?";
+                return "Share how you're feeling today and reflect on your mood.";
             default:
                 return "";
         }
     }
+
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -49,7 +49,7 @@ public class SettingsScreen extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
         String appUserName = preferences.getString(ApplicationConstants.APP_USER_NAME, "");
-        System.out.println("app user name " + appUserName);
+
         displayProfileName.setText(appUserName);
 
         reminderBlock.setOnClickListener(new View.OnClickListener() {
