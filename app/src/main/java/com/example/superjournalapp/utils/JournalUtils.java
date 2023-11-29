@@ -79,6 +79,39 @@ public class JournalUtils {
         }
     }
 
+    public static int updateStreakOnLoad(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
+        boolean isStreakContinued = checkStreakContinuation(preferences);
+
+        long lastEntryDateMillis = preferences.getLong(ApplicationConstants.LAST_ENTRY_DATE_PREF_KEY, -1);
+
+        long currentDateMillis = System.currentTimeMillis();
+        // Compare dates to check if the last entry was on the previous date
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.setTimeInMillis(currentDateMillis);
+
+        Calendar lastEntryCalendar = Calendar.getInstance();
+        lastEntryCalendar.setTimeInMillis(lastEntryDateMillis);
+
+        if (lastEntryDateMillis != -1 && isSameDay(currentCalendar, lastEntryCalendar)) {
+            return 1;
+        } else if (!isStreakContinued) {
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(ApplicationConstants.STREAK_PREF_KEY, 0);
+            editor.apply();
+
+            saveLastEntryDate(preferences);
+            HomeFragment.updateStreakCount(0);
+
+            return 0;
+        } else {
+            int currentStreak = preferences.getInt(ApplicationConstants.STREAK_PREF_KEY, 0);
+            return currentStreak;
+        }
+
+    }
+
     public static void updateStreak(Context context) {
 
         SharedPreferences preferences = context.getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);

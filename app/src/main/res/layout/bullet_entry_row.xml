@@ -33,7 +33,7 @@
             android:paddingStart="8dp"
             android:text="This is a test journal; jgdjgjdgjdgdjgdjhgdjghjgdjgdjhgdjhgdhj gdjhgd"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textSize="14dp" />
+            android:textSize="@dimen/text_size_medium" />
 
         <!-- Edit Button with Pencil Symbol -->
         <Button

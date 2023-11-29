@@ -36,6 +36,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 return "affirmation dude";
             case "quote":
                 return "quote dude";
+            case "mood":
+                return "Rate Your Today's Mood";
             default:
                 return "";
         }
@@ -57,6 +59,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 return "see affirmation dude";
             case "quote":
                 return "see quote dude";
+            case "mood":
+                return "how's is your mood today ?";
             default:
                 return "";
         }

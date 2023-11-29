@@ -2,7 +2,9 @@ package com.example.superjournalapp.screens.fragments;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.DateFormatSymbols;
@@ -105,6 +108,19 @@ public class JournalsDataFragment extends Fragment {
         leftArrowBtn = view.findViewById(R.id.left_arrow_btn);
         rightArrowBtn = view.findViewById(R.id.right_arrow_btn);
         graphMonthName = view.findViewById(R.id.graph_month_name);
+
+        shareImprovementsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                String UriText = "mailto:" + Uri.encode("rushvik249@gmail.com") + "?subject=" +
+                        Uri.encode("Feedback of the App");
+
+                Uri uri = Uri.parse(UriText);
+                intent.setData(uri);
+                startActivity(Intent.createChooser(intent, "Send Email"));
+            }
+        });
 
         totalJournalCount.setText(String.valueOf(databaseHelper.journalDao().getTotalJournalsCount()));
 
@@ -227,6 +243,7 @@ public class JournalsDataFragment extends Fragment {
         leftAxis.setDrawZeroLine(true); // Display a zero line
         leftAxis.setDrawTopYLabelEntry(true); // Show top label entry
 
+
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setEnabled(false); // Disable the right Y Axis
 
@@ -253,6 +270,7 @@ public class JournalsDataFragment extends Fragment {
 
         // setting text size
         barDataSet.setValueTextSize(16f);
+        barDataSet.setValueFormatter(new DefaultAxisValueFormatter(0));
         barChart.getDescription().setEnabled(false);
     }
 

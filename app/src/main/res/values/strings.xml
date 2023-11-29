@@ -5,8 +5,8 @@
 
     <string-array name="journal_list_btn_items">
         <item>All</item>
+        <item>My Diary</item>
         <item>Gratitude Journal</item>
-        <item>Reflective Journal</item>
         <item>Bullet Journal</item>
         <item>Dream Journal</item>
     </string-array>

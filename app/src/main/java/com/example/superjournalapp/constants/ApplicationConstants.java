@@ -31,10 +31,12 @@ public class ApplicationConstants {
     public static String NOTIFICATION_TYPE = "notificationType";
     public static String Gratitude_NOTIFICATION_TYPE = "gratitude";
     public static String DREAM_NOTIFICATION_TYPE = "dream";
-    public static String REFLECTIVE_NOTIFICATION_TYPE = "reflective";
+    public static String REFLECTIVE_NOTIFICATION_TYPE = "diary";
     public static String BULLET_NOTIFICATION_TYPE = "bullet";
     public static String AFFIRMATION_NOTIFICATION_TYPE = "affirmation";
     public static String QUOTE_NOTIFICATION_TYPE = "quote";
+    public static String MOOD_NOTIFICATION_TYPE = "mood";
+    public static String DEFAULT_REMINDERS_NEEDED = "default_reminder_needed";
 
     //
 
@@ -154,7 +156,6 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("The only person you are destined to become is the person you decide to be.", "Ralph Waldo Emerson"));
         QUOTES_ARRAY.add(createQuote("The journey of a thousand miles begins with one step.", "Lao Tzu"));
         QUOTES_ARRAY.add(createQuote("Believe you can and you're halfway there.", "Theodore Roosevelt"));
-        QUOTES_ARRAY.add(createQuote("Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do.", "Steve Jobs"));
         QUOTES_ARRAY.add(createQuote("Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.", "Buddha"));
         QUOTES_ARRAY.add(createQuote("Life is what happens when you're busy making other plans.", "John Lennon"));
         QUOTES_ARRAY.add(createQuote("Success usually comes to those who are too busy to be looking for it.", "Henry David Thoreau"));
@@ -256,12 +257,13 @@ public class ApplicationConstants {
     public static Map<String,Integer> NOTIFICATION_TYPE_REQUEST_CODE = new HashMap<>();
 
     static {
-        NOTIFICATION_TYPE_REQUEST_CODE.put("gratitude",6);
-        NOTIFICATION_TYPE_REQUEST_CODE.put("reflective",1);
+        NOTIFICATION_TYPE_REQUEST_CODE.put("diary",1);
         NOTIFICATION_TYPE_REQUEST_CODE.put("bullet",2);
         NOTIFICATION_TYPE_REQUEST_CODE.put("dream",3);
         NOTIFICATION_TYPE_REQUEST_CODE.put("quote",4);
         NOTIFICATION_TYPE_REQUEST_CODE.put("affirmation",5);
+        NOTIFICATION_TYPE_REQUEST_CODE.put("gratitude",6);
+        NOTIFICATION_TYPE_REQUEST_CODE.put("mood",7);
     }
 
     public static List<String> GRATITUDE_PROMPTS = new ArrayList<>();

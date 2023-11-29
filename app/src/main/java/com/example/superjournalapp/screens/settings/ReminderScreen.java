@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -40,6 +41,7 @@ public class ReminderScreen extends AppCompatActivity {
     private ImageView dreamTimeIcon;
     private ImageView quoteTimeIcon;
     private ImageView affirmationTimeIcon;
+    private ImageView moodTimeIcon;
 
     private TextView gratitudeNotificationTime;
     private TextView ReflectiveNotificationTime;
@@ -47,6 +49,7 @@ public class ReminderScreen extends AppCompatActivity {
     private TextView DreamNotificationTime;
     private TextView QuoteNotificationTime;
     private TextView AffirmationNotificationTime;
+    private TextView MoodNotificationTime;
 
     private SwitchCompat gratitudeSwitchCombat;
     private SwitchCompat reflectiveSwitchCombat;
@@ -54,6 +57,7 @@ public class ReminderScreen extends AppCompatActivity {
     private SwitchCompat dreamSwitchCombat;
     private SwitchCompat quoteSwitchCombat;
     private SwitchCompat affirmationSwitchCombat;
+    private SwitchCompat moodSwitchCombat;
 
     // Function to retrieve notification data
     public static NotificationData getNotificationData(SharedPreferences sharedPreferences, String key) {
@@ -69,28 +73,40 @@ public class ReminderScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_screen);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
+        String dataJson = sharedPreferences.getString(ApplicationConstants.DEFAULT_REMINDERS_NEEDED, null);
+
+        if (dataJson == null || dataJson.equals("true")) {
+            setDefaultReminders();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(ApplicationConstants.DEFAULT_REMINDERS_NEEDED, "false");
+
+            editor.commit();
+        }
+
         gratitudeTimeIcon = findViewById(R.id.gratitude_time_icon);
         reflectTimeIcon = findViewById(R.id.reflective_time_icon);
         bulletTimeIcon = findViewById(R.id.bullet_time_icon);
         dreamTimeIcon = findViewById(R.id.dream_time_icon);
         quoteTimeIcon = findViewById(R.id.quote_time_icon);
         affirmationTimeIcon = findViewById(R.id.affirmation_time_icon);
+        moodTimeIcon = findViewById(R.id.mood_rem_icon);
 
         gratitudeNotificationTime = findViewById(R.id.gratitude_notification_time);
         ReflectiveNotificationTime = findViewById(R.id.reflective_notification_time);
         BulletNotificationTime = findViewById(R.id.bullet_notification_time);
         DreamNotificationTime = findViewById(R.id.dream_notification_time);
-
         QuoteNotificationTime = findViewById(R.id.quote_time);
         AffirmationNotificationTime = findViewById(R.id.affirmation_time);
+        MoodNotificationTime = findViewById(R.id.mood_rem_time);
 
         gratitudeNotificationTime.setText(getNotificationTime(ApplicationConstants.Gratitude_NOTIFICATION_TYPE));
         ReflectiveNotificationTime.setText(getNotificationTime(ApplicationConstants.REFLECTIVE_NOTIFICATION_TYPE));
         BulletNotificationTime.setText(getNotificationTime(ApplicationConstants.BULLET_NOTIFICATION_TYPE));
         DreamNotificationTime.setText(getNotificationTime(ApplicationConstants.DREAM_NOTIFICATION_TYPE));
-
         QuoteNotificationTime.setText(getNotificationTime(ApplicationConstants.QUOTE_NOTIFICATION_TYPE));
         AffirmationNotificationTime.setText(getNotificationTime(ApplicationConstants.AFFIRMATION_NOTIFICATION_TYPE));
+        MoodNotificationTime.setText(getNotificationTime(ApplicationConstants.MOOD_NOTIFICATION_TYPE));
 
         gratitudeSwitchCombat = findViewById(R.id.gratitude_notification_switch);
         reflectiveSwitchCombat = findViewById(R.id.reflective_notification_switch);
@@ -98,6 +114,7 @@ public class ReminderScreen extends AppCompatActivity {
         dreamSwitchCombat = findViewById(R.id.dream_notification_switch);
         quoteSwitchCombat = findViewById(R.id.quote_notification_switch);
         affirmationSwitchCombat = findViewById(R.id.affirmation_notification_switch);
+        moodSwitchCombat = findViewById(R.id.mood_rem_switch);
 
         gratitudeSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.Gratitude_NOTIFICATION_TYPE));
         reflectiveSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.REFLECTIVE_NOTIFICATION_TYPE));
@@ -105,23 +122,8 @@ public class ReminderScreen extends AppCompatActivity {
         dreamSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.DREAM_NOTIFICATION_TYPE));
         quoteSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.QUOTE_NOTIFICATION_TYPE));
         affirmationSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.AFFIRMATION_NOTIFICATION_TYPE));
+        moodSwitchCombat.setChecked(getNotificationStatus(ApplicationConstants.MOOD_NOTIFICATION_TYPE));
 
-
-//        gratitudeTimeIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                TimePickerDialog dialog = new TimePickerDialog(ReminderScreen.this, new TimePickerDialog.OnTimeSetListener() {
-//                    @Override
-//                    public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-//                        setNotificationTime(ApplicationConstants.Gratitude_NOTIFICATION_TYPE, hours, minutes);
-//                        scheduleNotification(ApplicationConstants.Gratitude_NOTIFICATION_TYPE, hours, minutes);
-//                    }
-//                }, 15, 0, true);
-//                dialog.show();
-//            }
-//
-//        });
 
         // Set the common OnClickListener for both buttons
         View.OnClickListener notificationOnClickListener = new View.OnClickListener() {
@@ -147,6 +149,7 @@ public class ReminderScreen extends AppCompatActivity {
         dreamTimeIcon.setOnClickListener(notificationOnClickListener);
         quoteTimeIcon.setOnClickListener(notificationOnClickListener);
         affirmationTimeIcon.setOnClickListener(notificationOnClickListener);
+        moodTimeIcon.setOnClickListener(notificationOnClickListener);
 
         CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -158,13 +161,12 @@ public class ReminderScreen extends AppCompatActivity {
                 int apiVersion = Build.VERSION_CODES.TIRAMISU;
 
                 if (buildVersion < apiVersion || (buildVersion >= apiVersion && (ContextCompat.checkSelfPermission(ReminderScreen.this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED))) {
-                    setNotificationEnabled(compoundButton.getTag().toString(), b);
-                }else{
+                    setNotificationEnabled(compoundButton.getTag().toString(), b, compoundButton);
+                } else {
                     compoundButton.setChecked(false);
                 }
             }
         };
-
 
 
         gratitudeSwitchCombat.setOnCheckedChangeListener(checkedChangeListener);
@@ -173,7 +175,30 @@ public class ReminderScreen extends AppCompatActivity {
         dreamSwitchCombat.setOnCheckedChangeListener(checkedChangeListener);
         quoteSwitchCombat.setOnCheckedChangeListener(checkedChangeListener);
         affirmationSwitchCombat.setOnCheckedChangeListener(checkedChangeListener);
+        moodSwitchCombat.setOnCheckedChangeListener(checkedChangeListener);
+    }
 
+    public void setDefaultReminders() {
+
+        System.out.println("setting default reminders");
+
+        SharedPreferences sharedPreferences = getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Example: Store data for the "Dream Journal"
+        NotificationData notificationData = new NotificationData(true, 19, 00);
+        String notificationDataInJson = new Gson().toJson(notificationData);
+        editor.putString(ApplicationConstants.REFLECTIVE_NOTIFICATION_TYPE, notificationDataInJson);
+
+        scheduleNotification(ApplicationConstants.REFLECTIVE_NOTIFICATION_TYPE, 19, 00);
+
+        notificationData = new NotificationData(true, 18, 00);
+        notificationDataInJson = new Gson().toJson(notificationData);
+        editor.putString(ApplicationConstants.MOOD_NOTIFICATION_TYPE, notificationDataInJson);
+
+        scheduleNotification(ApplicationConstants.MOOD_NOTIFICATION_TYPE, 18, 00);
+
+        editor.commit();
     }
 
 
@@ -189,7 +214,7 @@ public class ReminderScreen extends AppCompatActivity {
             case "gratitude":
                 gratitudeNotificationTime.setText(time);
                 break;
-            case "reflective":
+            case "diary":
                 ReflectiveNotificationTime.setText(time);
                 break;
             case "bullet":
@@ -203,6 +228,9 @@ public class ReminderScreen extends AppCompatActivity {
                 break;
             case "affirmation":
                 AffirmationNotificationTime.setText(time);
+                break;
+            case "mood":
+                MoodNotificationTime.setText(time);
                 break;
             default:
                 break;
@@ -269,7 +297,7 @@ public class ReminderScreen extends AppCompatActivity {
         return notificationData.isEnabled();
     }
 
-    public void setNotificationEnabled(String notificationType, boolean isNotificationEnabled) {
+    public void setNotificationEnabled(String notificationType, boolean isNotificationEnabled, CompoundButton compoundButton) {
 
         SharedPreferences sharedPreferences = getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -277,10 +305,14 @@ public class ReminderScreen extends AppCompatActivity {
         String dataJson = sharedPreferences.getString(notificationType, null);
 
         if (dataJson == null) {
+
             // Example: Store data for the "Dream Journal"
-            NotificationData notificationData = new NotificationData(false, 20, 00);
-            String notificationDataInJson = new Gson().toJson(notificationData);
-            editor.putString(notificationType, notificationDataInJson);
+//            NotificationData notificationData = new NotificationData(false, 20, 00);
+//            String notificationDataInJson = new Gson().toJson(notificationData);
+//            editor.putString(notificationType, notificationDataInJson);
+            Toast.makeText(ReminderScreen.this, "Set Notification Time !!", Toast.LENGTH_LONG).show();
+            compoundButton.setChecked(false);
+
         } else {
             NotificationData notificationData = new Gson().fromJson(dataJson, NotificationData.class);
             notificationData.setEnabled(isNotificationEnabled);
@@ -331,16 +363,6 @@ public class ReminderScreen extends AppCompatActivity {
 //        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//        } else {
-//            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//        }
     }
 
 }

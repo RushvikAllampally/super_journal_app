@@ -73,6 +73,7 @@ public class HomeFragment extends Fragment {
     private static List<BulletJournalEntity> bulletJournalEntities;
     private static LinearLayout linearLayoutContainer;
     private static TextView hiQuoteName;
+    private static long homeDisplayBulletJournalId;
     private TextView quote;
     private TextView quoteAuthor;
     private TextView affirmation;
@@ -147,9 +148,11 @@ public class HomeFragment extends Fragment {
                 tasksCard.setVisibility(View.GONE);
             } else {
                 bulletEntryDetails = gson.fromJson(bulletJournalEntity.taskListJson, listType);
+                homeDisplayBulletJournalId = bulletJournalEntity.getJournalId();
             }
         } else if (bulletJournalEntities.size() > 0) {
             bulletEntryDetails = gson.fromJson(bulletJournalEntities.get(bulletJournalEntities.size() - 1).taskListJson, listType);
+            homeDisplayBulletJournalId = bulletJournalEntities.get(bulletJournalEntities.size() - 1).getJournalId();
         } else {
             tasksCard.setVisibility(View.GONE);
         }
@@ -214,7 +217,7 @@ public class HomeFragment extends Fragment {
         NestedScrollView nestedScrollView = view.findViewById(R.id.next_scroll_view);
         nestedScrollView.scrollTo(0, 0);
 
-        int streak = JournalUtils.getCurrentStreak(view.getContext());
+        int streak = JournalUtils.updateStreakOnLoad(view.getContext());
         streakCount.setText(String.valueOf(streak));
 
         quote.setText(getQuoteOfTheDay().getQuote());
@@ -252,7 +255,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 Intent intent = new Intent(view.getContext(), BulletJournal.class);
-                intent.putExtra("journalId", String.valueOf(bulletJournalEntity.getJournalId()));
+                intent.putExtra("journalId", String.valueOf(homeDisplayBulletJournalId));
                 view.getContext().startActivity(intent);
             }
         });
