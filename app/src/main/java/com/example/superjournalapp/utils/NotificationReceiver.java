@@ -91,12 +91,12 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID);
 
-        builder.setSmallIcon(R.drawable.notifications_none_24).setContentTitle(getNotificationTitle(notificationType)).setContentText(getNotificationDescription(notificationType))
-                .setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_HIGH);
+        builder.setSmallIcon(R.drawable.journal_icon).setContentTitle(getNotificationTitle(notificationType)).setContentText(getNotificationDescription(notificationType))
+                .setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_MAX);
 
         Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("data", "dhvdjb");
+        intent.putExtra("notificationType", notificationType);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), intent, PendingIntent.FLAG_IMMUTABLE);
 
@@ -108,7 +108,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(channelID);
 
             if (notificationChannel == null) {
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                int importance = NotificationManager.IMPORTANCE_HIGH;
                 notificationChannel = new NotificationChannel(channelID, "Journal Notifications", importance);
                 notificationChannel.setLightColor(Color.GREEN);
                 notificationChannel.enableVibration(true);
