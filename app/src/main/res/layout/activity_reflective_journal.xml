@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:padding="10dp"
-        android:textSize="17sp"
+        android:textSize="@dimen/text_size_medium"
         android:hint="Title"
         android:inputType="text" />
 
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textSize="17sp"
+                android:textSize="@dimen/text_size_medium"
                 android:hint="Journal Content"
                 android:background="@android:color/transparent"
                 android:inputType="textMultiLine" />

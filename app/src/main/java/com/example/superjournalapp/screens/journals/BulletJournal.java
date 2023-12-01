@@ -121,6 +121,7 @@ public class BulletJournal extends AppCompatActivity {
                 String formattedDate = dateFormat.format(bulletJournalEntity.getJournalCreatedOn());
 
                 selectJournalDate.setText(formattedDate);
+                selectedDate = bulletJournalEntity.getJournalCreatedOn();
 
             } else {
                 selectJournalDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + ", " + getMonthName(String.valueOf(calendar.get(Calendar.MONTH) + 1)) + " " + calendar.get(Calendar.YEAR));

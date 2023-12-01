@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SUper Journal App"
+rootProject.name = "DiaryVerse"
 include(":app")

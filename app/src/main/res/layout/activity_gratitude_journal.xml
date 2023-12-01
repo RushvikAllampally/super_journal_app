@@ -96,7 +96,7 @@
             android:fontFamily="@font/balsamiqsans_regular"
             android:text="List things that you are grateful for today ?"
             android:layout_weight="1"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size_ultra_medium" />
 
         <ImageButton
             android:id="@+id/prompt_icon"
@@ -136,7 +136,7 @@
                 android:background="@android:color/transparent"
                 android:hint="Journal Content"
                 android:inputType="textMultiLine"
-                android:textSize="17sp" />
+                android:textSize="@dimen/text_size_medium" />
 
         </LinearLayout>
 

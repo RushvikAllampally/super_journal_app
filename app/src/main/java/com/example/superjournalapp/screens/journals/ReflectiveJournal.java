@@ -25,7 +25,6 @@ import com.example.superjournalapp.R;
 import com.example.superjournalapp.constants.ApplicationConstants;
 import com.example.superjournalapp.database.DatabaseHelper;
 import com.example.superjournalapp.entity.Journal;
-import com.example.superjournalapp.entity.JournalCategories.BulletJournalEntity;
 import com.example.superjournalapp.entity.JournalCategories.ReflectiveJournalEntity;
 import com.example.superjournalapp.screens.fragments.HomeFragment;
 import com.example.superjournalapp.screens.fragments.JournalListFragment;
@@ -125,6 +124,7 @@ public class ReflectiveJournal extends AppCompatActivity {
                 String formattedDate = dateFormat.format(reflectiveJournalEntity.getJournalCreatedOn());
 
                 selectJournalDate.setText(formattedDate);
+                selectedDate = reflectiveJournalEntity.getJournalCreatedOn();
 
             } else {
                 selectJournalDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + ", " + getMonthName(String.valueOf(calendar.get(Calendar.MONTH) + 1)) + " " + calendar.get(Calendar.YEAR));

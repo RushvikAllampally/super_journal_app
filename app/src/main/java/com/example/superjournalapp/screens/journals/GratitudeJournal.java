@@ -138,6 +138,7 @@ public class GratitudeJournal extends AppCompatActivity {
                 String formattedDate = dateFormat.format(gratitudeJournal.getJournalCreatedOn());
 
                 selectJournalDate.setText(formattedDate);
+                selectedDate = gratitudeJournal.getJournalCreatedOn();
 
             } else {
                 selectJournalDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + ", " + getMonthName(String.valueOf(calendar.get(Calendar.MONTH) + 1)) + " " + calendar.get(Calendar.YEAR));
