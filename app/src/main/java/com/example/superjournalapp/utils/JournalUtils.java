@@ -101,7 +101,6 @@ public class JournalUtils {
             editor.putInt(ApplicationConstants.STREAK_PREF_KEY, 0);
             editor.apply();
 
-            saveLastEntryDate(preferences);
             HomeFragment.updateStreakCount(0);
 
             return 0;
