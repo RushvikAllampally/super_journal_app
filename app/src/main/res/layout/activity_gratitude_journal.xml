@@ -84,8 +84,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:paddingHorizontal="10dp">
 
         <!-- Title Input -->
@@ -93,17 +93,27 @@
             android:id="@+id/journal_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/balsamiqsans_regular"
             android:text="List things that you are grateful for today ?"
-            android:layout_weight="1"
             android:textSize="@dimen/text_size_ultra_medium" />
 
-        <ImageButton
-            android:id="@+id/prompt_icon"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#B0E57C"
-            android:src="@drawable/bulb_32px" />
+            app:cardCornerRadius="50dp">
+
+            <ImageButton
+                android:id="@+id/prompt_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#3498db"
+                android:padding="2dp"
+                android:src="@drawable/bulb_32px"
+                />
+
+        </androidx.cardview.widget.CardView>
+
 
     </LinearLayout>
 
