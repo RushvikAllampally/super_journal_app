@@ -3,11 +3,24 @@ plugins {
 }
 
 android {
-    namespace = "com.example.superjournalapp"
+    namespace = "com.diary.superjournalapp"
     compileSdk = 33
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "key0"
+            keyPassword = "Varsha@1029"
+            storeFile = file("/home/rushvikallampally/AndroidStudioProjects/SUperJournalApp/DiaryverseApp_jks_file.jks")
+            storePassword = "Varsha@1029"
+
+            // Enable/Disable V1 and V2 signing
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
     defaultConfig {
-        applicationId = "com.example.superjournalapp"
+        applicationId = "com.diary.superjournalapp"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -26,7 +39,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            isDebuggable = true
+            isDebuggable = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
