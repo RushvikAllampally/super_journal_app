@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SUperJournalApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<!--    <style name="Base.Theme.SUperJournalApp" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your dark theme here. &ndash;&gt;-->
+<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_dark_primary</item> &ndash;&gt;-->
+<!--    </style>-->
+
+<!--  remove this line if you want to enable dark mode and also remove forceDarkMode in manifest file-->
+    <style name="Theme.SUperJournalApp" parent="Base.Theme.SUperJournalApp" >
+
     </style>
+
 </resources>
