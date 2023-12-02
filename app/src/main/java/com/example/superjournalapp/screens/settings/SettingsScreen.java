@@ -83,7 +83,7 @@ public class SettingsScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
-                String UriText = "mailto:" + Uri.encode("rushvik249@gmail.com") + "?subject=" +
+                String UriText = "mailto:" + Uri.encode(ApplicationConstants.CONTACT_EMAIL) + "?subject=" +
                         Uri.encode("Feedback of the App");
 
                 Uri uri = Uri.parse(UriText);

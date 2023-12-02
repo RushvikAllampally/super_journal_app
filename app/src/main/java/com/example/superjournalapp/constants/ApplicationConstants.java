@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class ApplicationConstants {
 
+    public static String CONTACT_EMAIL = "yourdiaryverse@gmail.com";
+
     public static String MY_APP_NAME = "superJournalApp";
     public static String FIRST_TIME_USER = "firstTimeUser";
     public static String GRATITUDE_JOURNAL = "Gratitude Journal";
