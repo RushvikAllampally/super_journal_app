@@ -10,7 +10,7 @@ android {
         create("release") {
             keyAlias = "key0"
             keyPassword = "Varsha@1029"
-            storeFile = file("/home/rushvikallampally/AndroidStudioProjects/SUperJournalApp/DiaryverseApp_jks_file.jks")
+            storeFile = file("${rootProject.projectDir}/DiaryverseApp_jks_file.jks")
             storePassword = "Varsha@1029"
 
             // Enable/Disable V1 and V2 signing
