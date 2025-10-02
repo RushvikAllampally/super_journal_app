@@ -22,6 +22,11 @@
     
     <!-- Journal specific colors -->
     <color name="journal_list_bg_color">#FFC107</color> <!-- Yellow background -->
+    <color name="journal_bg_gratitude">#B0E57C</color> <!-- Light green for gratitude journal -->
+    <color name="journal_bg_reflective">#87CEEB</color> <!-- Sky blue for reflective journal -->
+    <color name="journal_bg_dream">#DDA0DD</color> <!-- Plum for dream journal -->
+    <color name="journal_bg_bullet">#FFB6C1</color> <!-- Light pink for bullet journal -->
+    <color name="prompt_button_bg">#3498db</color> <!-- Blue for prompt button -->
     <color name="thumb_tint">#EDEFECEC</color> <!-- Light gray -->
     <color name="thumb_tint_on">#7F2EA1</color> <!-- Purple -->
     

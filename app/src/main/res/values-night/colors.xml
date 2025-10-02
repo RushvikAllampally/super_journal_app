@@ -18,6 +18,11 @@
     
     <!-- Journal specific colors - Dark theme variants -->
     <color name="journal_list_bg_color">#BB8506</color> <!-- Darker yellow -->
+    <color name="journal_bg_gratitude">#628937</color> <!-- Darker green for gratitude journal -->
+    <color name="journal_bg_reflective">#4A7285</color> <!-- Darker blue for reflective journal -->
+    <color name="journal_bg_dream">#8A6C8A</color> <!-- Darker plum for dream journal -->
+    <color name="journal_bg_bullet">#A06F77</color> <!-- Darker pink for bullet journal -->
+    <color name="prompt_button_bg">#1A5889</color> <!-- Darker blue for prompt button -->
     <color name="thumb_tint">#3A3A3A</color> <!-- Dark gray -->
     <color name="thumb_tint_on">#9547B7</color> <!-- Lighter purple -->
 </resources>

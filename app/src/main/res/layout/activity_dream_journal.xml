@@ -4,7 +4,7 @@
     android:id="@+id/dream_journal_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D2FFFF"
+    android:background="@color/journal_bg_dream"
     android:orientation="vertical">
 
     <LinearLayout
@@ -30,7 +30,7 @@
             android:layout_width="30dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:background="#D2FFFF"
+            android:background="@android:color/transparent"
             android:src="@drawable/delete_icon_24" />
 
         <Button

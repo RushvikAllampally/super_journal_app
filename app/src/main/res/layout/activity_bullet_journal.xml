@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F8E598"
+    android:background="@color/journal_bg_bullet"
     android:orientation="vertical">
 
     <LinearLayout
@@ -36,7 +36,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="5dp"
-                android:background="#F8E598"
+                android:background="@android:color/transparent"
                 android:src="@drawable/delete_icon_24" />
 
             <ImageView

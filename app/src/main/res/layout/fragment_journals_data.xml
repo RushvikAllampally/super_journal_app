@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#e8dff5"
+    android:background="?attr/android:colorBackground"
     tools:context=".screens.fragments.JournalsDataFragment">
 
     <ScrollView
@@ -122,7 +122,7 @@
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/left_arrow_24"
-                    android:background="#e8dff5"
+                    android:background="@android:color/transparent"
                     />
 
                 <TextView
@@ -140,7 +140,7 @@
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/right_arrow_24"
-                    android:background="#e8dff5"
+                    android:background="@android:color/transparent"
                     />
 
             </LinearLayout>
