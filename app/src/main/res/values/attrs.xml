@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom attributes for theme-aware components -->
+    <declare-styleable name="ThemeAwareComponents">
+        <attr name="themeIconTint" format="color" />
+    </declare-styleable>
+</resources>

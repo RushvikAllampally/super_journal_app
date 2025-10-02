@@ -7,7 +7,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#F6F3F3"
+        app:cardBackgroundColor="?attr/colorSurface"
         android:elevation="5dp"
         app:cardCornerRadius="7dp"
         app:cardUseCompatPadding="true">
@@ -31,7 +31,8 @@
                     android:text="24th"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:id="@+id/journal_row_month"
@@ -40,7 +41,8 @@
                     android:text="June"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
             </LinearLayout>
 
@@ -60,7 +62,8 @@
                     android:text="Title of the day"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:id="@+id/journal_row_details"
@@ -68,7 +71,8 @@
                     android:layout_height="wrap_content"
                     android:text="subCategory"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurface" />
 
             </LinearLayout>
 

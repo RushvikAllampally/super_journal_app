@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8dff5"
+    android:background="?attr/android:colorBackground"
     android:orientation="vertical"
     tools:context=".screens.settings.SettingsScreen">
 
@@ -37,7 +37,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="?attr/colorSurface"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -58,7 +58,7 @@
                     android:text="Rushvik"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="23sp"
-
+                    android:textColor="?attr/colorOnSurface"
                     />
 
                 <Button
@@ -82,13 +82,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="15dp"
                     android:text="Preferences"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" 
+                    android:textColor="?attr/colorOnSurface" />
 
                 <View
                     android:layout_width="match_parent"
@@ -99,7 +100,7 @@
                     android:id="@+id/reminder_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -107,7 +108,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/access_alarm_24_black" />
 
                     <TextView
@@ -117,13 +118,15 @@
                         android:layout_weight="1"
                         android:text="Reminders"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -131,7 +134,7 @@
                     android:id="@+id/passcode_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -139,7 +142,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/lock_open_24" />
 
                     <TextView
@@ -149,21 +152,23 @@
                         android:layout_weight="1"
                         android:text="Passcode Lock"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
-
+                
                 <LinearLayout
-                    android:id="@+id/export_data_block"
+                    android:id="@+id/dark_mode_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -171,7 +176,39 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
+                        android:src="@drawable/ic_dark_mode" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:text="Dark Theme"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/dark_mode_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/export_data_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorSurface"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/mport_export_24" />
 
                     <TextView
@@ -181,13 +218,15 @@
                         android:layout_weight="1"
                         android:text="Import &amp; Export Data"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -203,13 +242,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="15dp"
                     android:text="More options"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <View
                     android:layout_width="match_parent"
@@ -222,7 +262,7 @@
                     android:id="@+id/feed_back_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -230,7 +270,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/message_24" />
 
                     <TextView
@@ -240,13 +280,15 @@
                         android:layout_weight="1"
                         android:text="Share Feedback / Contact Us"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -254,7 +296,7 @@
                     android:id="@+id/invite_a_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -262,7 +304,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/card_giftcard_24" />
 
                     <TextView
@@ -272,13 +314,15 @@
                         android:layout_weight="1"
                         android:text="Invite a friend"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -286,7 +330,7 @@
                     android:id="@+id/rate_app_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -294,7 +338,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:backgroundTint="?attr/colorOnSurface"
                         android:src="@drawable/baseline_star_24" />
 
                     <TextView
@@ -304,13 +348,15 @@
                         android:layout_weight="1"
                         android:text="Rate Our App"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
