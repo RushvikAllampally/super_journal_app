@@ -159,7 +159,6 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="?attr/colorSurface"
-                        android:src="@drawable/navigate_next_24_black"
                         android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
@@ -184,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
-                        android:text="Dark Theme"
+                        android:text="Dark Mode"
                         android:fontFamily="@font/balsamiqsans_regular"
                         android:textSize="20sp"
                         android:textColor="?attr/colorOnSurface" />
@@ -195,9 +194,15 @@
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/export_data_block"
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@android:color/darker_gray"/>
+        
+    <LinearLayout
+                    android:id="@+id/daily_prompts_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
@@ -209,26 +214,32 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/mport_export_24" />
+                        android:src="@android:drawable/ic_menu_help" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
-                        android:text="Import &amp; Export Data"
+                        android:text="Writing Prompts"
                         android:fontFamily="@font/balsamiqsans_regular"
                         android:textSize="20sp"
                         android:textColor="?attr/colorOnSurface" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/navigate_next_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/prompts_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@android:color/darker_gray"/>
+        
+
 
             </LinearLayout>
 

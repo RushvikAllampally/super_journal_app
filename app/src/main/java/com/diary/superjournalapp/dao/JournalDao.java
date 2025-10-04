@@ -38,5 +38,28 @@ public interface JournalDao {
 
     @Query("select count(*) from journals")
     public int getTotalJournalsCount();
-
+    
+    @Transaction
+    @Query("select * from journals where is_bookmarked = 1 order by journal_created_on desc")
+    public List<Journal> getBookmarkedJournals();
+    
+    @Query("update journals set is_bookmarked = :isBookmarked where journalId = :journalId")
+    void updateBookmarkStatus(long journalId, boolean isBookmarked);
+    
+    @Query("update journals set tags = :tags where journalId = :journalId")
+    void updateJournalTags(long journalId, String tags);
+    
+    @Transaction
+    @Query("select * from journals where tags LIKE '%' || :tag || '%' order by journal_created_on desc")
+    public List<Journal> getJournalsByTag(String tag);
+    
+    /**
+     * Get journals created in the last specified number of days
+     * 
+     * @param days Number of days to look back
+     * @return List of journals from the last N days
+     */
+    @Transaction
+    @Query("select * from journals where journal_created_on >= datetime('now', '-' || :days || ' days') order by journal_created_on desc")
+    public List<Journal> getJournalsInLastDays(int days);
 }

@@ -34,10 +34,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.diary.superjournalapp.applock.AppLock;
 import com.diary.superjournalapp.base.ThemedActivity;
 import com.diary.superjournalapp.constants.ApplicationConstants;
+import com.diary.superjournalapp.screens.fragments.BookmarkedJournalsFragment;
 import com.diary.superjournalapp.screens.fragments.CalenderViewFragment;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.screens.fragments.JournalsDataFragment;
+import com.diary.superjournalapp.screens.fragments.LibraryFragment;
+import com.diary.superjournalapp.screens.fragments.TagSearchFragment;
 import com.diary.superjournalapp.screens.introScreens.WelcomeScreen;
 import com.diary.superjournalapp.screens.journals.BulletJournal;
 import com.diary.superjournalapp.screens.journals.DreamJournal;
@@ -208,10 +211,10 @@ public class MainActivity extends ThemedActivity {
                     loadFrag(new JournalsDataFragment(), false);
                     return true;
 
-                } else if (selectedId == R.id.nav_list) {
-                    loadFrag(new JournalListFragment(), false);
+                } else if (selectedId == R.id.nav_library) {
+                    // Show the library fragment which manages all journal views
+                    loadFrag(LibraryFragment.newInstance(), false);
                     return true;
-
                 }
                 return false;
             }
@@ -238,7 +241,10 @@ public class MainActivity extends ThemedActivity {
                         bottomNavigationItemView.getMenu().getItem(1).setChecked(true);
                     } else if (currentFragment instanceof JournalsDataFragment) {
                         bottomNavigationItemView.getMenu().getItem(3).setChecked(true);
-                    } else if (currentFragment instanceof JournalListFragment) {
+                    } else if (currentFragment instanceof LibraryFragment 
+                             || currentFragment instanceof JournalListFragment 
+                             || currentFragment instanceof BookmarkedJournalsFragment
+                             || currentFragment instanceof TagSearchFragment) {
                         bottomNavigationItemView.getMenu().getItem(4).setChecked(true);
                     }
                 }

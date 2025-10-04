@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?attr/android:colorBackground"
+    tools:context=".screens.fragments.TagSearchFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search by Tags"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+            
+        <Button
+            android:id="@+id/clear_tags_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:textAllCaps="false"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/search_by_tag_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_search"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search by tag" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select one or more tags to search for journals"
+        android:textSize="14sp"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:layout_marginBottom="8dp" />
+        
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/all_tags_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:background="#f5f5f5"
+        android:minHeight="50dp" />
+
+    <TextView
+        android:id="@+id/search_results_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Journal Results"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tag_search_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp" />
+
+    <TextView
+        android:id="@+id/no_results_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No journals found with selected tags"
+        android:textSize="16sp"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:visibility="gone" />
+
+</LinearLayout>

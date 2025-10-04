@@ -29,6 +29,7 @@ import com.diary.superjournalapp.entity.JournalCategories.DreamJournalEntity;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.TagDialogHelper;
 import com.diary.superjournalapp.utils.TextEditorUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
@@ -49,6 +50,8 @@ public class DreamJournal extends AppCompatActivity {
     private ImageButton colorPalette;
     private ImageButton textStylesBtn;
     private ImageButton emojiesBtn;
+    private ImageButton manageTagsButton;
+    private ImageButton promptIcon;
     private TextView selectJournalDate;
     private EditText journalTitle = null;
     private EditText journalContent;
@@ -78,6 +81,8 @@ public class DreamJournal extends AppCompatActivity {
         colorPalette = findViewById(R.id.dream_color_palette);
         textStylesBtn = findViewById(R.id.dream_text_style_icon);
         emojiesBtn = findViewById(R.id.dream_emoji_icon);
+        manageTagsButton = findViewById(R.id.manage_tags_button);
+        promptIcon = findViewById(R.id.dream_prompt_icon);
 
         EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.dream_journal_root)).build(journalContent);
         emojiesBtn.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +98,27 @@ public class DreamJournal extends AppCompatActivity {
 
         textStylesBtn.setOnClickListener(view -> {
             TextEditorUtils.textStylesOnClickListener(bottomSheetDialog, journalContent, DreamJournal.this);
-
+        });
+        
+        // Set up prompt icon click listener if prompts are enabled
+        if (com.diary.superjournalapp.utils.PromptUtils.arePromptsEnabled(this)) {
+            promptIcon.setVisibility(View.VISIBLE);
+            promptIcon.setOnClickListener(v -> {
+                com.diary.superjournalapp.utils.PromptUtils.showPromptDialog(
+                        DreamJournal.this, 
+                        ApplicationConstants.DREAM_JOURNAL, 
+                        journalTitle, 
+                        journalContent);
+            });
+        } else {
+            promptIcon.setVisibility(View.GONE);
+        }
+        
+        // Set up tag management
+        manageTagsButton.setOnClickListener(v -> {
+            showTagsDialog();
         });
 
-//        EmojiPop
 
 
         // Retrieve the data from the Intent
@@ -181,17 +203,42 @@ public class DreamJournal extends AppCompatActivity {
         });
     }
 
+    private void saveJournalDetails() {
+        saveDreamJournal();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        saveJournalDetails();
-
+        saveDreamJournal();
+    }
+    
+    /**
+     * Show the tags management dialog
+     */
+    private void showTagsDialog() {
+        if (journal != null && journal.getJournalId() > 0) {
+            // Journal already exists, use the TagDialogHelper normally
+            TagDialogHelper tagDialogHelper = new TagDialogHelper(this, journal.getJournalId());
+            tagDialogHelper.showTagDialog();
+        } else {
+            // Journal hasn't been saved yet, save it first then show tags dialog
+            Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
+            
+            // Create a new journal entry
+            saveDreamJournal();
+            
+            if (journal.getJournalId() > 0) {
+                // Now that journal is saved, show the tag dialog
+                TagDialogHelper tagDialogHelper = new TagDialogHelper(this, journal.getJournalId());
+                tagDialogHelper.showTagDialog();
+            }
+        }
     }
 
-    private void saveJournalDetails() {
+    private void saveDreamJournal() {
         String title = journalTitle.getText().toString();
         String content = journalContent.getText().toString();
-
         if (title.isEmpty()) {
             Toast.makeText(DreamJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
             return;

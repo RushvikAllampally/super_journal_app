@@ -12,73 +12,116 @@
         app:cardCornerRadius="7dp"
         app:cardUseCompatPadding="true">
 
-        <LinearLayout
-            android:id="@+id/journal_row"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="11dp">
-
+            android:layout_height="wrap_content">
+            
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/journal_row"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:padding="11dp">
 
-                <TextView
-                    android:id="@+id/journal_row_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="24th"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <TextView
-                    android:id="@+id/journal_row_month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="June"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/journal_row_title"
+                <!-- Date and Month section -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="Title of the day"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/journal_row_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="subCategory"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurface" />
+                    <TextView
+                        android:id="@+id/journal_row_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="24th"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface" />
 
+                    <TextView
+                        android:id="@+id/journal_row_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="June"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface" />
+
+                </LinearLayout>
+
+                <!-- Title, Details and Tags section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/journal_row_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="Title of the day"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:id="@+id/journal_row_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Details"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15sp"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                    
+                    <LinearLayout
+                        android:id="@+id/journal_row_tags_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone">
+                        
+                        <TextView
+                            android:id="@+id/journal_row_tags"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textColor="@color/app_blue"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
+                            
+                        <ImageButton
+                            android:id="@+id/journal_tags_button"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_edit"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Edit Tags" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-
-
-        </LinearLayout>
-
+            
+            <!-- Bookmark button -->
+            <ImageButton
+                android:id="@+id/journal_bookmark_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/btn_star_big_off"
+                android:background="@android:color/transparent"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:contentDescription="Bookmark Journal" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
 </RelativeLayout>

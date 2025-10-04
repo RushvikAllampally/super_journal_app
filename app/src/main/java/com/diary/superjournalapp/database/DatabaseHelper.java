@@ -21,7 +21,7 @@ import com.diary.superjournalapp.entity.JournalCategories.ReflectiveJournalEntit
 import com.diary.superjournalapp.entity.MoodTracker;
 
 
-@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class}, exportSchema = false, version = 12)
+@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class}, exportSchema = false, version = 13)
 @TypeConverters({Converters.class})
 public abstract class DatabaseHelper extends RoomDatabase {
 

@@ -9,36 +9,36 @@ import java.util.Map;
 
 public class ApplicationConstants {
 
-    public static String CONTACT_EMAIL = "yourdiaryverse@gmail.com";
+    public static final String CONTACT_EMAIL = "yourdiaryverse@gmail.com";
 
-    public static String MY_APP_NAME = "superJournalApp";
-    public static String FIRST_TIME_USER = "firstTimeUser";
-    public static String GRATITUDE_JOURNAL = "Gratitude Journal";
-    public static String REFLECTIVE_JOURNAL = "My Diary";
-    public static String BULLET_JOURNAL = "Bullet Journal";
-    public static String DREAM_JOURNAL = "Dream Journal";
-    public static String JOURNAL_ID_INTENT = "journalId";
+    public static final String MY_APP_NAME = "superJournalApp";
+    public static final String FIRST_TIME_USER = "firstTimeUser";
+    public static final String GRATITUDE_JOURNAL = "Gratitude Journal";
+    public static final String REFLECTIVE_JOURNAL = "My Diary";
+    public static final String BULLET_JOURNAL = "Bullet Journal";
+    public static final String DREAM_JOURNAL = "Dream Journal";
+    public static final String JOURNAL_ID_INTENT = "journalId";
 
     //shared preferences
-    public static String APP_USER_NAME = "appUserName";
-    public static String IS_PASSCODE_ENABLED = "isPasscodeEnabled";
+    public static final String APP_USER_NAME = "appUserName";
+    public static final String IS_PASSCODE_ENABLED = "isPasscodeEnabled";
     public static final String STREAK_PREF_KEY = "streak_counter";
     public static final String LAST_ENTRY_DATE_PREF_KEY = "last_entry_date";
 
 
     //intent
-    public static String IS_NEW_PASSCODE="setNewPasscode";
+    public static final String IS_NEW_PASSCODE = "setNewPasscode";
 
     //notificationType
-    public static String NOTIFICATION_TYPE = "notificationType";
-    public static String Gratitude_NOTIFICATION_TYPE = "gratitude";
-    public static String DREAM_NOTIFICATION_TYPE = "dream";
-    public static String REFLECTIVE_NOTIFICATION_TYPE = "diary";
-    public static String BULLET_NOTIFICATION_TYPE = "bullet";
-    public static String AFFIRMATION_NOTIFICATION_TYPE = "affirmation";
-    public static String QUOTE_NOTIFICATION_TYPE = "quote";
-    public static String MOOD_NOTIFICATION_TYPE = "mood";
-    public static String DEFAULT_REMINDERS_NEEDED = "default_reminder_needed";
+    public static final String NOTIFICATION_TYPE = "notificationType";
+    public static final String Gratitude_NOTIFICATION_TYPE = "gratitude";
+    public static final String DREAM_NOTIFICATION_TYPE = "dream";
+    public static final String REFLECTIVE_NOTIFICATION_TYPE = "diary";
+    public static final String BULLET_NOTIFICATION_TYPE = "bullet";
+    public static final String AFFIRMATION_NOTIFICATION_TYPE = "affirmation";
+    public static final String QUOTE_NOTIFICATION_TYPE = "quote";
+    public static final String MOOD_NOTIFICATION_TYPE = "mood";
+    public static final String DEFAULT_REMINDERS_NEEDED = "default_reminder_needed";
 
     //
 
@@ -294,6 +294,77 @@ public class ApplicationConstants {
         GRATITUDE_PROMPTS.add("List things that you are grateful for today?");
         GRATITUDE_PROMPTS.add("Express gratitude for the opportunities in your life.");
     }
+
+    public static List<String> REFLECTIVE_PROMPTS = new ArrayList<>();
+
+    static {
+        // Reflective journal prompts
+        REFLECTIVE_PROMPTS.add("How are you feeling today and why?");
+        REFLECTIVE_PROMPTS.add("What was the highlight of your day?");
+        REFLECTIVE_PROMPTS.add("What challenged you today and how did you handle it?");
+        REFLECTIVE_PROMPTS.add("Describe a conversation that impacted you recently.");
+        REFLECTIVE_PROMPTS.add("What is something you're currently worried about?");
+        REFLECTIVE_PROMPTS.add("What is something you're looking forward to?");
+        REFLECTIVE_PROMPTS.add("Reflect on a mistake you made and what you learned.");
+        REFLECTIVE_PROMPTS.add("What boundaries do you need to set or maintain?");
+        REFLECTIVE_PROMPTS.add("How have you practiced self-care recently?");
+        REFLECTIVE_PROMPTS.add("What are your current short-term and long-term goals?");
+        REFLECTIVE_PROMPTS.add("Write a letter to your future self.");
+        REFLECTIVE_PROMPTS.add("What's something you need to forgive yourself for?");
+        REFLECTIVE_PROMPTS.add("How have you grown in the past year?");
+        REFLECTIVE_PROMPTS.add("What's a recent situation you would handle differently now?");
+        REFLECTIVE_PROMPTS.add("Write about a personal strength you've discovered.");
+        REFLECTIVE_PROMPTS.add("Describe your ideal day from start to finish.");
+        REFLECTIVE_PROMPTS.add("What relationships are currently nurturing you?");
+        REFLECTIVE_PROMPTS.add("What relationships are currently draining you?");
+        REFLECTIVE_PROMPTS.add("What does success mean to you right now?");
+        REFLECTIVE_PROMPTS.add("If you could change one thing about your life, what would it be?");
+    }
+    
+    public static List<String> DREAM_PROMPTS = new ArrayList<>();
+
+    static {
+        // Dream journal prompts
+        DREAM_PROMPTS.add("Describe your dream in as much detail as you can remember.");
+        DREAM_PROMPTS.add("What emotions did you feel during your dream?");
+        DREAM_PROMPTS.add("Were there any recurring symbols or themes in your dream?");
+        DREAM_PROMPTS.add("Did any people from your life appear in your dream?");
+        DREAM_PROMPTS.add("Was there anything unusual or impossible in your dream?");
+        DREAM_PROMPTS.add("Did your dream seem to relate to anything happening in your waking life?");
+        DREAM_PROMPTS.add("Did you have any realizations during your dream?");
+        DREAM_PROMPTS.add("What would you change about the dream if you could?");
+        DREAM_PROMPTS.add("Was your dream in color or black and white?");
+        DREAM_PROMPTS.add("Did you have any physical sensations in your dream?");
+        DREAM_PROMPTS.add("How did the setting of your dream make you feel?");
+        DREAM_PROMPTS.add("What might your subconscious be trying to tell you?");
+        DREAM_PROMPTS.add("Did you have any control over what happened in your dream?");
+        DREAM_PROMPTS.add("Did your dream remind you of any past experiences?");
+        DREAM_PROMPTS.add("How did you feel when you woke up from your dream?");
+    }
+
+    public static List<String> BULLET_PROMPTS = new ArrayList<>();
+
+    static {
+        // Bullet journal prompts
+        BULLET_PROMPTS.add("Three important tasks to complete today.");
+        BULLET_PROMPTS.add("Weekly goals to accomplish.");
+        BULLET_PROMPTS.add("Things I need to buy soon.");
+        BULLET_PROMPTS.add("Books I want to read.");
+        BULLET_PROMPTS.add("Project milestones to track.");
+        BULLET_PROMPTS.add("Ideas I want to explore further.");
+        BULLET_PROMPTS.add("People I need to contact.");
+        BULLET_PROMPTS.add("Skills I want to develop.");
+        BULLET_PROMPTS.add("Places I want to visit.");
+        BULLET_PROMPTS.add("Self-care activities to schedule.");
+        BULLET_PROMPTS.add("Habits I want to build.");
+        BULLET_PROMPTS.add("Monthly goals to achieve.");
+        BULLET_PROMPTS.add("Upcoming events to prepare for.");
+        BULLET_PROMPTS.add("Meal planning for the week.");
+        BULLET_PROMPTS.add("Budget and expense tracking items.");
+    }
+
+    // Daily prompts constant
+    public static final String DAILY_PROMPTS_KEY = "dailyPromptsEnabled";
 
 
 }
