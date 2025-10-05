@@ -2,12 +2,16 @@ package com.diary.superjournalapp.screens.fragments;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,6 +48,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class StatisticsFragmentImproved extends Fragment {
+    
+    private static final String TAG = "StatisticsFragment";
 
     private TextView totalEntries;
     private TextView currentStreak;
@@ -55,12 +61,15 @@ public class StatisticsFragmentImproved extends Fragment {
     private TextView bulletCount;
     private TextView averageMood;
     private TextView moodEmoji;
+    private TextView averageMoodOverview;
+    private TextView moodEmojiOverview;
     private TextView averageWords;
+    private ImageButton prevPeriodButton;
+    private ImageButton nextPeriodButton;
     private TextView statsPeriodText;
     private Spinner journalTypesPeriodSpinner;
     private BarChart weeklyChart;
     private BarChart moodChart;
-
     // Period filters
     private static final int THIS_MONTH = 0;
     private static final int LAST_MONTH = 1;
@@ -69,6 +78,7 @@ public class StatisticsFragmentImproved extends Fragment {
 
     // Current filter states
     private int currentJournalTypesFilter = THIS_MONTH;
+    private int currentOverviewPeriod = THIS_MONTH;
 
     public StatisticsFragmentImproved() {
         // Required empty public constructor
@@ -109,11 +119,15 @@ public class StatisticsFragmentImproved extends Fragment {
         bulletCount = view.findViewById(R.id.bullet_count);
         averageMood = view.findViewById(R.id.average_mood);
         moodEmoji = view.findViewById(R.id.mood_emoji);
+        averageMoodOverview = view.findViewById(R.id.average_mood_overview);
+        moodEmojiOverview = view.findViewById(R.id.mood_emoji_overview);
         averageWords = view.findViewById(R.id.average_words);
         statsPeriodText = view.findViewById(R.id.stats_period_text);
         journalTypesPeriodSpinner = view.findViewById(R.id.journal_types_period_spinner);
         weeklyChart = view.findViewById(R.id.weekly_chart);
         moodChart = view.findViewById(R.id.mood_chart);
+        prevPeriodButton = view.findViewById(R.id.prev_period_button);
+        nextPeriodButton = view.findViewById(R.id.next_period_button);
         
         // Set current month/year
         Calendar cal = Calendar.getInstance();
@@ -123,11 +137,23 @@ public class StatisticsFragmentImproved extends Fragment {
     }
 
     private void setupSpinner(View view) {
+        // Setup period spinner adapter
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.time_period_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        journalTypesPeriodSpinner.setAdapter(adapter);
+        
         journalTypesPeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentJournalTypesFilter = position;
                 loadJournalTypeCounts();
+                
+                // Update the journal types section title to reflect the time period
+                TextView journalTypesTitle = getView().findViewById(R.id.journal_types_title);
+                if (journalTypesTitle != null) {
+                    journalTypesTitle.setText("Journal Types - " + StatisticsUtils.getFormattedPeriodName(position));
+                }
             }
 
             @Override
@@ -135,6 +161,39 @@ public class StatisticsFragmentImproved extends Fragment {
                 // Do nothing
             }
         });
+        
+        // Setup period navigation buttons
+        prevPeriodButton = view.findViewById(R.id.prev_period_button);
+        nextPeriodButton = view.findViewById(R.id.next_period_button);
+        
+        if (prevPeriodButton != null && nextPeriodButton != null) {
+            prevPeriodButton.setOnClickListener(v -> {
+                currentOverviewPeriod = Math.min(ALL_TIME, currentOverviewPeriod + 1);
+                updateOverviewPeriod();
+                loadStatistics();
+            });
+            
+            nextPeriodButton.setOnClickListener(v -> {
+                currentOverviewPeriod = Math.max(THIS_MONTH, currentOverviewPeriod - 1);
+                updateOverviewPeriod();
+                loadStatistics();
+            });
+            
+            // Set initial state
+            updateOverviewPeriod();
+        }
+    }
+    
+    /**
+     * Update the period text and button states for the overview section
+     */
+    private void updateOverviewPeriod() {
+        String periodName = StatisticsUtils.getFormattedPeriodName(currentOverviewPeriod);
+        statsPeriodText.setText(periodName);
+        
+        // Update button states
+        nextPeriodButton.setEnabled(currentOverviewPeriod > THIS_MONTH);
+        prevPeriodButton.setEnabled(currentOverviewPeriod < ALL_TIME);
     }
 
     private void setupCharts(View view) {
@@ -223,10 +282,13 @@ public class StatisticsFragmentImproved extends Fragment {
      */
     private void loadStatistics() {
         if (getContext() == null) return;
+        
+        Log.d(TAG, "Loading statistics for period: " + StatisticsUtils.getFormattedPeriodName(currentOverviewPeriod));
 
         // Get total entries
         int totalEntryCount = StatisticsUtils.getTotalJournalCount(getContext());
         totalEntries.setText(String.valueOf(totalEntryCount));
+        Log.d(TAG, "Total entries: " + totalEntryCount);
 
         // Get current streak
         int streak = StatisticsUtils.getCurrentStreak(getContext());
@@ -236,35 +298,49 @@ public class StatisticsFragmentImproved extends Fragment {
         int weeklyCount = StatisticsUtils.getJournalCountLastWeek(getContext());
         lastWeekEntries.setText(String.valueOf(weeklyCount));
 
-        // Get most productive day
-        int productiveDay = StatisticsUtils.getMostProductiveDay(getContext());
+        // Get most productive day for the current period
+        int productiveDay = StatisticsUtils.getMostProductiveDay(getContext(), currentOverviewPeriod);
         if (productiveDay >= 0) {
-            mostProductiveDay.setText(StatisticsUtils.getDayName(productiveDay));
+            String dayName = StatisticsUtils.getDayName(productiveDay);
+            mostProductiveDay.setText(dayName);
+            Log.d(TAG, "Most productive day: " + dayName);
         } else {
             mostProductiveDay.setText("N/A");
+            Log.d(TAG, "Most productive day: N/A");
         }
         
-        // Get average words per entry
-        int avgWords = StatisticsUtils.getAverageWordCount(getContext());
+        // Get average words per entry for the current period
+        int avgWords = StatisticsUtils.getAverageWordCount(getContext(), currentOverviewPeriod);
         averageWords.setText(String.valueOf(avgWords));
+        Log.d(TAG, "Average words: " + avgWords);
 
         // Load journal type counts based on current filter
         loadJournalTypeCounts();
         
-        // Get average mood
-        float avgMood = StatisticsUtils.getAverageMoodLevel(getContext());
+        // Get average mood for the current period
+        float avgMood = StatisticsUtils.getAverageMoodLevel(getContext(), currentOverviewPeriod);
         if (avgMood > 0) {
             DecimalFormat df = new DecimalFormat("#.#");
-            averageMood.setText(df.format(avgMood));
+            String formattedMood = df.format(avgMood);
+            averageMood.setText(formattedMood);
+            averageMoodOverview.setText(formattedMood);
             
             // Set mood emoji
             int moodIndex = Math.min(4, Math.max(0, (int) Math.round(avgMood) - 1));
             String[] emojis = getResources().getStringArray(R.array.mood_emojis);
             moodEmoji.setText(emojis[moodIndex]);
+            moodEmojiOverview.setText(emojis[moodIndex]);
+            Log.d(TAG, "Average mood: " + formattedMood + " (" + emojis[moodIndex] + ")");
         } else {
             averageMood.setText("N/A");
             moodEmoji.setText("");
+            averageMoodOverview.setText("N/A");
+            moodEmojiOverview.setText("");
+            Log.d(TAG, "Average mood: N/A");
         }
+        
+        // Apply background to statistic numbers for better visibility in dark mode
+        applyBackgroundToStatNumbers();
 
         // Load weekly activity chart
         loadWeeklyActivityChart();
@@ -278,6 +354,8 @@ public class StatisticsFragmentImproved extends Fragment {
      */
     private void loadJournalTypeCounts() {
         if (getContext() == null) return;
+        
+        Log.d(TAG, "Loading journal type counts for period: " + StatisticsUtils.getFormattedPeriodName(currentJournalTypesFilter));
         
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
         List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
@@ -344,10 +422,20 @@ public class StatisticsFragmentImproved extends Fragment {
         }
         
         // Update UI
-        reflectiveCount.setText(String.valueOf(countByType.get(ApplicationConstants.REFLECTIVE_JOURNAL)));
-        gratitudeCount.setText(String.valueOf(countByType.get(ApplicationConstants.GRATITUDE_JOURNAL)));
-        dreamCount.setText(String.valueOf(countByType.get(ApplicationConstants.DREAM_JOURNAL)));
-        bulletCount.setText(String.valueOf(countByType.get(ApplicationConstants.BULLET_JOURNAL)));
+        int reflectiveJournals = countByType.get(ApplicationConstants.REFLECTIVE_JOURNAL);
+        int gratitudeJournals = countByType.get(ApplicationConstants.GRATITUDE_JOURNAL);
+        int dreamJournals = countByType.get(ApplicationConstants.DREAM_JOURNAL);
+        int bulletJournals = countByType.get(ApplicationConstants.BULLET_JOURNAL);
+        
+        reflectiveCount.setText(String.valueOf(reflectiveJournals));
+        gratitudeCount.setText(String.valueOf(gratitudeJournals));
+        dreamCount.setText(String.valueOf(dreamJournals));
+        bulletCount.setText(String.valueOf(bulletJournals));
+        
+        Log.d(TAG, "Journal counts - Reflective: " + reflectiveJournals + 
+              ", Gratitude: " + gratitudeJournals + 
+              ", Dream: " + dreamJournals + 
+              ", Bullet: " + bulletJournals);
     }
     
     /**
@@ -475,5 +563,39 @@ public class StatisticsFragmentImproved extends Fragment {
         
         int[] attrs = new int[]{android.R.attr.textColorPrimary};
         return ContextCompat.getColor(getContext(), attrs[0]);
+    }
+    
+    /**
+     * Apply background to all statistic number TextViews for better visibility in dark mode
+     */
+    private void applyBackgroundToStatNumbers() {
+        // List of all statistic TextViews
+        TextView[] statTextViews = {
+            totalEntries, currentStreak, lastWeekEntries, mostProductiveDay,
+            reflectiveCount, gratitudeCount, dreamCount, bulletCount,
+            averageMood, averageMoodOverview, averageWords
+        };
+        
+        int backgroundColor = ContextCompat.getColor(requireContext(), android.R.color.white);
+        int textColor = ContextCompat.getColor(requireContext(), android.R.color.black);
+        float cornerRadius = getResources().getDimension(R.dimen.card_corner_radius);
+        
+        // Apply style to each TextView
+        for (TextView textView : statTextViews) {
+            if (textView != null) {
+                // Set background with rounded corners
+                GradientDrawable shape = new GradientDrawable();
+                shape.setCornerRadius(cornerRadius);
+                shape.setColor(backgroundColor);
+                textView.setBackground(shape);
+                
+                // Set text color to always be black for readability
+                textView.setTextColor(textColor);
+                
+                // Add padding
+                int padding = (int) getResources().getDimension(R.dimen.small_padding);
+                textView.setPadding(padding, padding, padding, padding);
+            }
+        }
     }
 }

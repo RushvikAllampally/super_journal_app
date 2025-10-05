@@ -7,15 +7,22 @@ import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.MoodTracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class StatisticsUtils {
+    
+    public static final int THIS_MONTH = 0;
+    public static final int LAST_MONTH = 1;
+    public static final int THIS_YEAR = 2;
+    public static final int ALL_TIME = 3;
     /**
      * Get the total number of journal entries
      * 
@@ -68,18 +75,31 @@ public class StatisticsUtils {
      * @return The average mood level (1-5) or 0 if no data
      */
     public static float getAverageMoodLevel(Context context) {
+        // Default to past month
+        return getAverageMoodLevel(context, THIS_MONTH);
+    }
+    
+    /**
+     * Get the average mood level for a specific time period
+     *
+     * @param context The context
+     * @param timePeriod The time period (THIS_MONTH, LAST_MONTH, THIS_YEAR, ALL_TIME)
+     * @return The average mood level (1-5) or 0 if no data
+     */
+    public static float getAverageMoodLevel(Context context, int timePeriod) {
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
         
-        // Calculate date range for the past month
-        Calendar calendarEnd = Calendar.getInstance();
-        Date endDate = calendarEnd.getTime();
+        Date[] dateRange = getDateRangeForPeriod(timePeriod);
+        Date startDate = dateRange[0];
+        Date endDate = dateRange[1];
         
-        Calendar calendarStart = Calendar.getInstance();
-        calendarStart.add(Calendar.MONTH, -1);
-        Date startDate = calendarStart.getTime();
-        
-        // Get all mood entries from the past month
-        List<MoodTracker> moodEntries = databaseHelper.moodTrackerDao().getAllMoods(startDate, endDate);
+        // Get mood entries for the specified period
+        List<MoodTracker> moodEntries;
+        if (startDate == null) {
+            moodEntries = databaseHelper.moodTrackerDao().getAllMoods();
+        } else {
+            moodEntries = databaseHelper.moodTrackerDao().getAllMoods(startDate, endDate);
+        }
         
         if (moodEntries.isEmpty()) {
             return 0;
@@ -126,6 +146,18 @@ public class StatisticsUtils {
      * @return The most productive day (0 = Sunday, 6 = Saturday), or -1 if no data
      */
     public static int getMostProductiveDay(Context context) {
+        // Default to all time
+        return getMostProductiveDay(context, THIS_MONTH);
+    }
+    
+    /**
+     * Get the most productive day of the week based on journal entries for a specific time period
+     *
+     * @param context The context
+     * @param timePeriod The time period (THIS_MONTH, LAST_MONTH, THIS_YEAR, ALL_TIME)
+     * @return The most productive day (0 = Sunday, 6 = Saturday), or -1 if no data
+     */
+    public static int getMostProductiveDay(Context context, int timePeriod) {
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
         List<Journal> journals = databaseHelper.journalDao().getAllJournal();
         
@@ -133,10 +165,23 @@ public class StatisticsUtils {
             return -1;
         }
         
+        // Get date range
+        Date[] dateRange = getDateRangeForPeriod(timePeriod);
+        Date startDate = dateRange[0];
+        Date endDate = dateRange[1];
+        
         int[] dayCount = new int[7];
         Calendar calendar = Calendar.getInstance();
         
         for (Journal journal : journals) {
+            // Skip if outside date range
+            if (startDate != null && journal.getJournalCreatedOn().before(startDate)) {
+                continue;
+            }
+            if (endDate != null && journal.getJournalCreatedOn().after(endDate)) {
+                continue;
+            }
+            
             calendar.setTime(journal.getJournalCreatedOn());
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0-based
             dayCount[dayOfWeek]++;
@@ -178,9 +223,26 @@ public class StatisticsUtils {
      * @return The average word count, or 0 if no journals
      */
     public static int getAverageWordCount(Context context) {
+        // Default to current month
+        return getAverageWordCount(context, THIS_MONTH);
+    }
+    
+    /**
+     * Get the average word count for journal entries in a specific time period
+     * 
+     * @param context The context
+     * @param timePeriod The time period (THIS_MONTH, LAST_MONTH, THIS_YEAR, ALL_TIME)
+     * @return The average word count, or 0 if no journals
+     */
+    public static int getAverageWordCount(Context context, int timePeriod) {
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
-        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
         
+        // Get date range
+        Date[] dateRange = getDateRangeForPeriod(timePeriod);
+        Date startDate = dateRange[0];
+        Date endDate = dateRange[1];
+        
+        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
         if (journals == null || journals.isEmpty()) {
             return 0;
         }
@@ -189,6 +251,14 @@ public class StatisticsUtils {
         int journalCount = 0;
         
         for (Journal journal : journals) {
+            // Skip if outside date range
+            if (startDate != null && journal.getJournalCreatedOn().before(startDate)) {
+                continue;
+            }
+            if (endDate != null && journal.getJournalCreatedOn().after(endDate)) {
+                continue;
+            }
+            
             // Get journal content based on type
             String content = journal.getJournalStartText();
             if (content != null && !content.trim().isEmpty()) {
@@ -199,5 +269,86 @@ public class StatisticsUtils {
         }
         
         return journalCount > 0 ? totalWords / journalCount : 0;
+    }
+    
+    /**
+     * Get date range for a specific time period
+     * 
+     * @param timePeriod The time period constant
+     * @return Array with [startDate, endDate]
+     */
+    public static Date[] getDateRangeForPeriod(int timePeriod) {
+        Date startDate = null;
+        Date endDate = Calendar.getInstance().getTime();
+        
+        Calendar cal = Calendar.getInstance();
+        
+        // Determine date range based on filter
+        switch (timePeriod) {
+            case THIS_MONTH:
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                break;
+                
+            case LAST_MONTH:
+                cal.add(Calendar.MONTH, -1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                
+                cal.add(Calendar.MONTH, 1);
+                cal.add(Calendar.MILLISECOND, -1);
+                endDate = cal.getTime();
+                break;
+                
+            case THIS_YEAR:
+                cal.set(Calendar.MONTH, Calendar.JANUARY);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                break;
+                
+            case ALL_TIME:
+                startDate = null; // null means all time
+                break;
+        }
+        
+        return new Date[]{startDate, endDate};
+    }
+    
+    /**
+     * Get formatted period name (e.g., "October 2023", "All time")
+     * 
+     * @param timePeriod The time period constant
+     * @return Formatted string representing the period
+     */
+    public static String getFormattedPeriodName(int timePeriod) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        
+        switch (timePeriod) {
+            case THIS_MONTH:
+                return monthYearFormat.format(cal.getTime());
+                
+            case LAST_MONTH:
+                cal.add(Calendar.MONTH, -1);
+                return monthYearFormat.format(cal.getTime());
+                
+            case THIS_YEAR:
+                return String.valueOf(cal.get(Calendar.YEAR));
+                
+            case ALL_TIME:
+                return "All time";
+                
+            default:
+                return "";
+        }
     }
 }

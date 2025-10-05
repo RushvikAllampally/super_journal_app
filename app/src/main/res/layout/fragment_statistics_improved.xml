@@ -12,18 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <TextView
+        
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Journal Stats"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:fontFamily="@font/balsamiqsans_regular"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
 
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_diary"
+                android:tint="?attr/colorPrimary"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Journal Stats"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:fontFamily="@font/balsamiqsans_regular" />
+        </LinearLayout>
+        
         <!-- Overview Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -54,6 +67,16 @@
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"
                         android:fontFamily="@font/balsamiqsans_regular" />
+                    
+                    <ImageButton
+                        android:id="@+id/prev_period_button"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@android:drawable/ic_media_previous"
+                        android:background="@drawable/rounded_button_background"
+                        android:tint="@color/white"
+                        android:padding="8dp"
+                        android:contentDescription="Previous period" />
 
                     <TextView
                         android:id="@+id/stats_period_text"
@@ -62,7 +85,19 @@
                         android:text="Current Month"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="14sp"
-                        android:fontFamily="@font/balsamiqsans_regular" />
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:gravity="center"
+                        android:minWidth="120dp" />
+                        
+                    <ImageButton
+                        android:id="@+id/next_period_button"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@android:drawable/ic_media_next"
+                        android:background="@drawable/rounded_button_background"
+                        android:tint="@color/white"
+                        android:padding="8dp"
+                        android:contentDescription="Next period" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -93,7 +128,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="42" />
@@ -176,7 +214,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="5" />
@@ -210,7 +251,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="Friday" />
@@ -221,13 +265,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="8dp"
-                        android:src="@android:drawable/ic_dialog_email"
+                        android:src="@android:drawable/ic_menu_edit"
                         android:tint="?attr/colorPrimary" />
 
                     <TextView
@@ -244,10 +289,65 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="157" />
+                </LinearLayout>
+                
+                <!-- Average Mood Section (New) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_mood"
+                        android:tint="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Average Mood Level"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp">
+                        
+                        <TextView
+                            android:id="@+id/average_mood_overview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="3.7" />
+                            
+                        <TextView
+                            android:id="@+id/mood_emoji_overview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:textSize="16sp"
+                            tools:text="😊" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -274,6 +374,7 @@
                     android:layout_marginBottom="16dp">
 
                     <TextView
+                        android:id="@+id/journal_types_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -283,11 +384,31 @@
                         android:textColor="?attr/colorOnSurface"
                         android:fontFamily="@font/balsamiqsans_regular" />
 
-                    <Spinner
-                        android:id="@+id/journal_types_period_spinner"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minWidth="120dp" />
+                        android:orientation="horizontal"
+                        android:background="@drawable/filter_background"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="4dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+                        
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@android:drawable/ic_menu_sort_by_size"
+                            android:tint="?attr/colorPrimary"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="4dp" />
+                            
+                        <Spinner
+                            android:id="@+id/journal_types_period_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:minWidth="120dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- Diary -->
@@ -318,7 +439,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="15" />
@@ -352,7 +476,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="10" />
@@ -386,7 +513,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="5" />
@@ -419,7 +549,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textColor="?attr/colorOnSurface"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:text="8" />
@@ -477,14 +610,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:background="@drawable/stat_number_background"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp">
                         
                         <TextView
                             android:id="@+id/average_mood"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/balsamiqsans_regular"
-                            android:textColor="?attr/colorOnSurface"
+                            android:textColor="@android:color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             tools:text="3.7" />
