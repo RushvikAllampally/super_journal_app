@@ -20,6 +20,7 @@ import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
+import com.diary.superjournalapp.screens.fragments.LibraryFragment.Searchable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +32,7 @@ import java.util.List;
  * Use the {@link JournalListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JournalListFragment extends Fragment {
+public class JournalListFragment extends Fragment implements Searchable {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,6 +46,7 @@ public class JournalListFragment extends Fragment {
     private Date[] selectedDateRangeInSpinner;
     private DatabaseHelper databaseHelper;
     private String selectedCategoryInSpinner;
+    private String currentSearchQuery = "";
     
     // Track all active instances for notification
     private static final List<JournalListFragment> activeInstances = new ArrayList<>();
@@ -137,6 +139,36 @@ public class JournalListFragment extends Fragment {
             } else {
                 journalsList.addAll(allJournals);
             }
+        }
+        
+        // Apply search query filter if one exists
+        if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
+            ArrayList<Journal> filteredList = new ArrayList<>();
+            String lowerCaseQuery = currentSearchQuery.toLowerCase();
+            
+            for (Journal journal : journalsList) {
+                // Search in title
+                if (journal.getTitle() != null && 
+                    journal.getTitle().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredList.add(journal);
+                    continue;
+                }
+                
+                // Search in content
+                if (journal.getJournalStartText() != null && 
+                    journal.getJournalStartText().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredList.add(journal);
+                    continue;
+                }
+                
+                // Search in category
+                if (journal.getJournalCategory() != null && 
+                    journal.getJournalCategory().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredList.add(journal);
+                }
+            }
+            
+            journalsList = filteredList;
         }
 
         recyclerView.setVisibility(View.VISIBLE);
@@ -362,5 +394,14 @@ public class JournalListFragment extends Fragment {
         Date[] dateRange = {startDate, endDate};
         return dateRange;
     }
-
+    
+    /**
+     * Implementation of Searchable interface
+     * @param query The search query to filter journals by
+     */
+    @Override
+    public void onSearch(String query) {
+        this.currentSearchQuery = query;
+        refreshJournalList();
+    }
 }

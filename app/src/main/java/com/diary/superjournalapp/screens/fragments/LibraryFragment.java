@@ -34,7 +34,6 @@ public class LibraryFragment extends Fragment {
     private MaterialCardView searchCard;
     private EditText searchEditText;
     private ImageButton searchClearButton;
-    private FloatingActionButton filterFab;
     
     public LibraryFragment() {
         // Required empty public constructor
@@ -63,9 +62,6 @@ public class LibraryFragment extends Fragment {
         
         // Set up the search functionality
         setupSearch();
-        
-        // Set up the filter FAB
-        setupFilterFab();
     }
     
     /**
@@ -77,7 +73,6 @@ public class LibraryFragment extends Fragment {
         searchCard = view.findViewById(R.id.search_card);
         searchEditText = view.findViewById(R.id.search_edit_text);
         searchClearButton = view.findViewById(R.id.search_clear_button);
-        filterFab = view.findViewById(R.id.library_fab);
     }
     
     /**
@@ -111,7 +106,10 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                updateFabForPage(position);
+                // Reset search field when changing tabs
+                if (searchEditText != null) {
+                    searchEditText.setText("");
+                }
             }
         });
     }
@@ -120,50 +118,7 @@ public class LibraryFragment extends Fragment {
      * Set up search functionality
      */
     private void setupSearch() {
-        // Show/hide search card when scrolling
-        View view = getView();
-        if (view == null) return;
-        
-        // Find the AppBarLayout which is the parent of our TabLayout
-        AppBarLayout appBarLayout = view.findViewById(R.id.app_bar_layout);
-        if (appBarLayout == null) {
-            // Fallback: find the first AppBarLayout in the view hierarchy
-            CoordinatorLayout rootCoordinatorLayout = null;
-            
-            // Try to get the root view as CoordinatorLayout
-            if (view instanceof CoordinatorLayout) {
-                rootCoordinatorLayout = (CoordinatorLayout) view;
-            } else if (view.getParent() instanceof CoordinatorLayout) {
-                rootCoordinatorLayout = (CoordinatorLayout) view.getParent();
-            }
-            
-            // Look for AppBarLayout in the CoordinatorLayout
-            if (rootCoordinatorLayout != null) {
-                for (int i = 0; i < rootCoordinatorLayout.getChildCount(); i++) {
-                    View child = rootCoordinatorLayout.getChildAt(i);
-                    if (child instanceof AppBarLayout) {
-                        appBarLayout = (AppBarLayout) child;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        if (appBarLayout != null) {
-            AppBarLayout finalAppBarLayout = appBarLayout;
-            appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
-                if (Math.abs(verticalOffset) > finalAppBarLayout.getTotalScrollRange() / 2) {
-                    // Show search when collapsed
-                    searchCard.setVisibility(View.VISIBLE);
-                } else {
-                    // Hide search when expanded
-                    searchCard.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            // If no AppBarLayout is found, just keep the search card visible
-            searchCard.setVisibility(View.VISIBLE);
-        }
+        // Search is now permanently visible, so we just need to handle text changes
         
         // Handle search text changes
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -197,43 +152,6 @@ public class LibraryFragment extends Fragment {
         });
     }
     
-    /**
-     * Set up the filter FAB
-     */
-    private void setupFilterFab() {
-        filterFab.setOnClickListener(v -> {
-            // Show appropriate filter dialog based on current tab
-            int currentPosition = viewPager.getCurrentItem();
-            Fragment currentFragment = getCurrentFragment();
-            
-            if (currentFragment instanceof Filterable) {
-                ((Filterable) currentFragment).showFilterOptions();
-            }
-        });
-        
-        // Set initial FAB icon based on the default tab
-        updateFabForPage(0);
-    }
-    
-    /**
-     * Update FAB icon and behavior based on the current page
-     */
-    private void updateFabForPage(int position) {
-        switch (position) {
-            case 0: // All journals
-                filterFab.setImageResource(R.drawable.filter_24);
-                filterFab.setContentDescription("Filter journals");
-                break;
-            case 1: // Bookmarks
-                filterFab.setImageResource(R.drawable.sort_24);
-                filterFab.setContentDescription("Sort bookmarks");
-                break;
-            case 2: // Tags
-                filterFab.setImageResource(R.drawable.add_24);
-                filterFab.setContentDescription("Add new tag");
-                break;
-        }
-    }
     
     /**
      * Get the currently displayed fragment from the ViewPager
@@ -251,10 +169,4 @@ public class LibraryFragment extends Fragment {
         void onSearch(String query);
     }
     
-    /**
-     * Interface for fragments that can be filtered
-     */
-    public interface Filterable {
-        void showFilterOptions();
-    }
 }

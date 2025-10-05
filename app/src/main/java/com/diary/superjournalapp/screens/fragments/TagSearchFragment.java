@@ -19,6 +19,7 @@ import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
+import com.diary.superjournalapp.screens.fragments.LibraryFragment.Searchable;
 import com.diary.superjournalapp.utils.TagUtils;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -30,7 +31,7 @@ import java.util.Set;
 /**
  * Fragment for searching journals by tags
  */
-public class TagSearchFragment extends Fragment {
+public class TagSearchFragment extends Fragment implements Searchable {
 
     private FlexboxLayout allTagsContainer;
     private ImageButton searchByTagButton;
@@ -40,6 +41,7 @@ public class TagSearchFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private Set<String> selectedTags = new HashSet<>();
     private List<Journal> searchResults = new ArrayList<>();
+    private String currentSearchQuery = "";
     
     public TagSearchFragment() {
         // Required empty public constructor
@@ -186,6 +188,36 @@ public class TagSearchFragment extends Fragment {
             }
         }
         
+        // Apply text search filter if it exists
+        if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
+            List<Journal> filteredResults = new ArrayList<>();
+            String lowerCaseQuery = currentSearchQuery.toLowerCase();
+            
+            for (Journal journal : searchResults) {
+                // Search in title
+                if (journal.getTitle() != null && 
+                    journal.getTitle().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredResults.add(journal);
+                    continue;
+                }
+                
+                // Search in content
+                if (journal.getJournalStartText() != null && 
+                    journal.getJournalStartText().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredResults.add(journal);
+                    continue;
+                }
+                
+                // Search in category
+                if (journal.getJournalCategory() != null && 
+                    journal.getJournalCategory().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredResults.add(journal);
+                }
+            }
+            
+            searchResults = filteredResults;
+        }
+        
         updateUIForResults();
     }
     
@@ -265,6 +297,19 @@ public class TagSearchFragment extends Fragment {
         }
         
         return true; // All tags were found
+    }
+    
+    /**
+     * Implementation of Searchable interface
+     * 
+     * @param query The search query to filter journals by
+     */
+    @Override
+    public void onSearch(String query) {
+        this.currentSearchQuery = query;
+        if (selectedTags != null && !selectedTags.isEmpty()) {
+            performSearch(); // Refresh search with the new query
+        }
     }
     
     /**

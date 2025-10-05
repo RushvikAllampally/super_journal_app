@@ -17,11 +17,12 @@ import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
+import com.diary.superjournalapp.screens.fragments.LibraryFragment.Searchable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkedJournalsFragment extends Fragment {
+public class BookmarkedJournalsFragment extends Fragment implements Searchable {
 
     private RecyclerView recyclerView;
     private JournalRecyclerAdaptor journalRecyclerAdaptor;
@@ -29,6 +30,7 @@ public class BookmarkedJournalsFragment extends Fragment {
     private ImageView noBookmarksImage;
     private TextView noBookmarksText;
     private View progressIndicator;
+    private String currentSearchQuery = "";
     
     // Track all active instances for notification
     private static final List<BookmarkedJournalsFragment> activeInstances = new ArrayList<>();
@@ -108,6 +110,37 @@ public class BookmarkedJournalsFragment extends Fragment {
         }
         
         List<Journal> bookmarkedJournals = databaseHelper.journalDao().getBookmarkedJournals();
+        
+        // Apply search filter if exists
+        if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
+            List<Journal> filteredJournals = new ArrayList<>();
+            String lowerCaseQuery = currentSearchQuery.toLowerCase();
+            
+            for (Journal journal : bookmarkedJournals) {
+                // Search in title
+                if (journal.getTitle() != null && 
+                    journal.getTitle().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredJournals.add(journal);
+                    continue;
+                }
+                
+                // Search in content
+                if (journal.getJournalStartText() != null && 
+                    journal.getJournalStartText().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredJournals.add(journal);
+                    continue;
+                }
+                
+                // Search in category
+                if (journal.getJournalCategory() != null && 
+                    journal.getJournalCategory().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredJournals.add(journal);
+                }
+            }
+            
+            bookmarkedJournals = filteredJournals;
+        }
+        
         View emptyView = getView() != null ? getView().findViewById(R.id.empty_view) : null;
         
         // Hide progress indicator now that loading is complete
@@ -151,5 +184,15 @@ public class BookmarkedJournalsFragment extends Fragment {
                 }
             }
         }
+    }
+    
+    /**
+     * Implementation of Searchable interface
+     * @param query The search query to filter bookmarked journals by
+     */
+    @Override
+    public void onSearch(String query) {
+        this.currentSearchQuery = query;
+        loadBookmarkedJournals();
     }
 }
