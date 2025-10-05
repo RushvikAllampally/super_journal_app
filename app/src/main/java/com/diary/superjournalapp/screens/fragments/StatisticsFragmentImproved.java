@@ -1,11 +1,13 @@
 package com.diary.superjournalapp.screens.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,7 +22,6 @@ import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.MoodTracker;
 import com.diary.superjournalapp.utils.StatisticsUtils;
-import com.diary.superjournalapp.utils.StatsMonthlyDataProvider;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -37,11 +38,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class StatisticsFragment extends Fragment {
+public class StatisticsFragmentImproved extends Fragment {
 
     private TextView totalEntries;
     private TextView currentStreak;
@@ -58,16 +60,22 @@ public class StatisticsFragment extends Fragment {
     private Spinner journalTypesPeriodSpinner;
     private BarChart weeklyChart;
     private BarChart moodChart;
-    
-    // Period filters
-    private int currentJournalTypesFilter = StatsMonthlyDataProvider.THIS_MONTH;
 
-    public StatisticsFragment() {
+    // Period filters
+    private static final int THIS_MONTH = 0;
+    private static final int LAST_MONTH = 1;
+    private static final int THIS_YEAR = 2;
+    private static final int ALL_TIME = 3;
+
+    // Current filter states
+    private int currentJournalTypesFilter = THIS_MONTH;
+
+    public StatisticsFragmentImproved() {
         // Required empty public constructor
     }
 
-    public static StatisticsFragment newInstance() {
-        return new StatisticsFragment();
+    public static StatisticsFragmentImproved newInstance() {
+        return new StatisticsFragmentImproved();
     }
 
     @Override
@@ -81,21 +89,16 @@ public class StatisticsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize views
+        // Initialize TextViews
         initializeViews(view);
-        
-        // Set up period spinner
-        setupSpinner();
-        
-        // Set up charts
-        setupCharts();
+        setupSpinner(view);
+        setupCharts(view);
 
         // Load statistics
         loadStatistics();
     }
-    
+
     private void initializeViews(View view) {
-        // Initialize TextViews
         totalEntries = view.findViewById(R.id.total_entries);
         currentStreak = view.findViewById(R.id.current_streak);
         lastWeekEntries = view.findViewById(R.id.last_week_entries);
@@ -118,8 +121,8 @@ public class StatisticsFragment extends Fragment {
         int year = cal.get(Calendar.YEAR);
         statsPeriodText.setText(monthName + " " + year);
     }
-    
-    private void setupSpinner() {
+
+    private void setupSpinner(View view) {
         journalTypesPeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -133,18 +136,16 @@ public class StatisticsFragment extends Fragment {
             }
         });
     }
-    
-    private void setupCharts() {
+
+    private void setupCharts(View view) {
         // Configure weekly chart
         configureWeeklyChart();
         
         // Configure mood chart
         configureMoodChart();
     }
-    
+
     private void configureWeeklyChart() {
-        if (weeklyChart == null) return;
-        
         weeklyChart.getDescription().setEnabled(false);
         weeklyChart.setDrawGridBackground(false);
         weeklyChart.setPinchZoom(false);
@@ -174,10 +175,8 @@ public class StatisticsFragment extends Fragment {
         weeklyChart.getAxisRight().setEnabled(false);
         weeklyChart.getLegend().setEnabled(false);
     }
-    
+
     private void configureMoodChart() {
-        if (moodChart == null) return;
-        
         moodChart.getDescription().setEnabled(false);
         moodChart.setDrawGridBackground(false);
         moodChart.setPinchZoom(false);
@@ -247,9 +246,7 @@ public class StatisticsFragment extends Fragment {
         
         // Get average words per entry
         int avgWords = StatisticsUtils.getAverageWordCount(getContext());
-        if (averageWords != null) {
-            averageWords.setText(String.valueOf(avgWords));
-        }
+        averageWords.setText(String.valueOf(avgWords));
 
         // Load journal type counts based on current filter
         loadJournalTypeCounts();
@@ -261,20 +258,12 @@ public class StatisticsFragment extends Fragment {
             averageMood.setText(df.format(avgMood));
             
             // Set mood emoji
-            if (moodEmoji != null) {
-                int moodIndex = Math.min(4, Math.max(0, (int) Math.round(avgMood) - 1));
-                try {
-                    String[] emojis = getResources().getStringArray(R.array.mood_emojis);
-                    moodEmoji.setText(emojis[moodIndex]);
-                } catch (Exception e) {
-                    moodEmoji.setText("");
-                }
-            }
+            int moodIndex = Math.min(4, Math.max(0, (int) Math.round(avgMood) - 1));
+            String[] emojis = getResources().getStringArray(R.array.mood_emojis);
+            moodEmoji.setText(emojis[moodIndex]);
         } else {
             averageMood.setText("N/A");
-            if (moodEmoji != null) {
-                moodEmoji.setText("");
-            }
+            moodEmoji.setText("");
         }
 
         // Load weekly activity chart
@@ -290,30 +279,82 @@ public class StatisticsFragment extends Fragment {
     private void loadJournalTypeCounts() {
         if (getContext() == null) return;
         
-        // Use the StatsMonthlyDataProvider to get filtered journal counts
-        Map<String, Integer> countByType = 
-            StatsMonthlyDataProvider.getJournalCountsByPeriod(getContext(), currentJournalTypesFilter);
+        DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
+        List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
+        
+        Date startDate = null;
+        Date endDate = Calendar.getInstance().getTime();
+        
+        Calendar cal = Calendar.getInstance();
+        
+        // Determine date range based on filter
+        switch (currentJournalTypesFilter) {
+            case THIS_MONTH:
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                break;
+                
+            case LAST_MONTH:
+                cal.add(Calendar.MONTH, -1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                
+                cal.add(Calendar.MONTH, 1);
+                cal.add(Calendar.MILLISECOND, -1);
+                endDate = cal.getTime();
+                break;
+                
+            case THIS_YEAR:
+                cal.set(Calendar.MONTH, Calendar.JANUARY);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = cal.getTime();
+                break;
+                
+            case ALL_TIME:
+                startDate = null; // null means all time
+                break;
+        }
+        
+        Map<String, Integer> countByType = new HashMap<>();
+        countByType.put(ApplicationConstants.REFLECTIVE_JOURNAL, 0);
+        countByType.put(ApplicationConstants.GRATITUDE_JOURNAL, 0);
+        countByType.put(ApplicationConstants.BULLET_JOURNAL, 0);
+        countByType.put(ApplicationConstants.DREAM_JOURNAL, 0);
+        
+        for (Journal journal : allJournals) {
+            // Skip if outside date range
+            if (startDate != null && journal.getJournalCreatedOn().before(startDate)) {
+                continue;
+            }
+            if (endDate != null && journal.getJournalCreatedOn().after(endDate)) {
+                continue;
+            }
+            
+            String type = journal.getJournalCategory();
+            countByType.put(type, countByType.getOrDefault(type, 0) + 1);
+        }
         
         // Update UI
-        if (reflectiveCount != null) {
-            reflectiveCount.setText(String.valueOf(countByType.get(ApplicationConstants.REFLECTIVE_JOURNAL)));
-        }
-        if (gratitudeCount != null) {
-            gratitudeCount.setText(String.valueOf(countByType.get(ApplicationConstants.GRATITUDE_JOURNAL)));
-        }
-        if (dreamCount != null) {
-            dreamCount.setText(String.valueOf(countByType.get(ApplicationConstants.DREAM_JOURNAL)));
-        }
-        if (bulletCount != null) {
-            bulletCount.setText(String.valueOf(countByType.get(ApplicationConstants.BULLET_JOURNAL)));
-        }
+        reflectiveCount.setText(String.valueOf(countByType.get(ApplicationConstants.REFLECTIVE_JOURNAL)));
+        gratitudeCount.setText(String.valueOf(countByType.get(ApplicationConstants.GRATITUDE_JOURNAL)));
+        dreamCount.setText(String.valueOf(countByType.get(ApplicationConstants.DREAM_JOURNAL)));
+        bulletCount.setText(String.valueOf(countByType.get(ApplicationConstants.BULLET_JOURNAL)));
     }
     
     /**
      * Load weekly activity chart data
      */
     private void loadWeeklyActivityChart() {
-        if (getContext() == null || weeklyChart == null) return;
+        if (getContext() == null) return;
         
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
         List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
@@ -352,11 +393,7 @@ public class StatisticsFragment extends Fragment {
         }
         
         BarDataSet dataSet = new BarDataSet(entries, "Daily Journals");
-        try {
-            dataSet.setColor(ContextCompat.getColor(getContext(), R.color.app_blue));
-        } catch (Exception e) {
-            dataSet.setColor(Color.BLUE); // Fallback color
-        }
+        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.app_blue));
         dataSet.setValueTextColor(getTextColor());
         dataSet.setValueTextSize(12f);
         
@@ -373,7 +410,7 @@ public class StatisticsFragment extends Fragment {
      * Load mood trends chart
      */
     private void loadMoodTrendsChart() {
-        if (getContext() == null || moodChart == null) return;
+        if (getContext() == null) return;
         
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
         
@@ -400,13 +437,7 @@ public class StatisticsFragment extends Fragment {
         
         // Create chart data
         List<BarEntry> entries = new ArrayList<>();
-        String[] moodLabels;
-        
-        try {
-            moodLabels = getResources().getStringArray(R.array.mood_levels);
-        } catch (Exception e) {
-            moodLabels = new String[]{"Awful", "Sad", "Good", "Happy", "Excited"};
-        }
+        String[] moodLabels = getResources().getStringArray(R.array.mood_levels);
         
         for (int i = 0; i < 5; i++) {
             entries.add(new BarEntry(i, moodCounts[i]));
@@ -442,11 +473,7 @@ public class StatisticsFragment extends Fragment {
     private int getTextColor() {
         if (getContext() == null) return Color.BLACK;
         
-        try {
-            int[] attrs = new int[]{android.R.attr.textColorPrimary};
-            return ContextCompat.getColor(getContext(), attrs[0]);
-        } catch (Exception e) {
-            return Color.BLACK;
-        }
+        int[] attrs = new int[]{android.R.attr.textColorPrimary};
+        return ContextCompat.getColor(getContext(), attrs[0]);
     }
 }

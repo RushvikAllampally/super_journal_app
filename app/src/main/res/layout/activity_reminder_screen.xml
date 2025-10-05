@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8dff5"
+    android:background="?attr/android:colorBackground"
     android:orientation="vertical"
     tools:context=".screens.settings.ReminderScreen">
 
@@ -21,6 +21,7 @@
             android:layout_marginHorizontal="10dp"
             android:fontFamily="@font/balsamiqsans_regular"
             android:text="Reminders"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="30sp" />
 
     </LinearLayout>
@@ -43,24 +44,26 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="15dp"
                     android:text="Journal"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -68,7 +71,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -77,6 +80,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="My Diary"
                         android:textSize="20sp" />
 
@@ -86,6 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -94,7 +99,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="diary" />
 
@@ -111,7 +116,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -119,7 +124,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -128,6 +133,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Gratitude Journal"
                         android:textSize="20sp" />
 
@@ -137,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -145,7 +152,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="gratitude" />
 
@@ -163,7 +170,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -171,7 +178,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -180,6 +187,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Bullet Journal"
                         android:textSize="20sp" />
 
@@ -189,6 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -197,7 +206,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="bullet" />
 
@@ -214,7 +223,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -222,7 +231,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -231,6 +240,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Dream Journal"
                         android:textSize="20sp" />
 
@@ -240,6 +250,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -248,7 +259,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="dream" />
 
@@ -274,7 +285,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="15dp"
@@ -285,12 +296,13 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -298,7 +310,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -307,6 +319,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Quote of the Day"
                         android:textSize="20sp" />
 
@@ -316,6 +329,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -324,7 +338,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="quote" />
 
@@ -341,7 +355,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -349,7 +363,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -358,6 +372,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Daily Affirmation"
                         android:textSize="20sp" />
 
@@ -367,6 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -375,7 +391,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="affirmation" />
 
@@ -401,7 +417,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="15dp"
@@ -412,12 +428,13 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/colorSurface"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -425,7 +442,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
+                        android:tint="?attr/colorOnSurface"
                         android:src="@drawable/notifications_none_24" />
 
                     <TextView
@@ -434,6 +451,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Today's Mood"
                         android:textSize="20sp" />
 
@@ -443,6 +461,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="8:00 PM"
                         android:textSize="18sp" />
 
@@ -451,7 +470,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="@color/white"
+                        android:background="?attr/colorSurface"
                         android:src="@drawable/access_time_24"
                         android:tag="mood" />
 

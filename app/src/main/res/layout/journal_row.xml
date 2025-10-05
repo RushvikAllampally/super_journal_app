@@ -75,7 +75,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Details"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="0.8"
                         android:layout_marginTop="10dp"
                         android:textSize="15sp"
                         android:maxLines="2"
@@ -96,7 +97,7 @@
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:fontFamily="@font/balsamiqsans_regular"
-                            android:textColor="@color/app_blue"
+                            android:textColor="?attr/colorPrimary"
                             android:ellipsize="end"
                             android:maxLines="1" />
                             
@@ -105,7 +106,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@android:drawable/ic_menu_edit"
-                            android:background="@android:color/transparent"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:tint="?attr/colorPrimary"
                             android:contentDescription="Edit Tags" />
                     </LinearLayout>
                 </LinearLayout>
@@ -114,13 +116,13 @@
             <!-- Bookmark button -->
             <ImageButton
                 android:id="@+id/journal_bookmark_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@android:drawable/btn_star_big_off"
-                android:background="@android:color/transparent"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_bookmark"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 android:contentDescription="Bookmark Journal" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

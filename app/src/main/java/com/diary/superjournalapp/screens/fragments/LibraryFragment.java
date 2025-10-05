@@ -1,26 +1,40 @@
 package com.diary.superjournalapp.screens.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.diary.superjournalapp.R;
+import com.diary.superjournalapp.adapters.LibraryPagerAdapter;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 /**
  * A fragment that provides access to all journal content types (All, Bookmarks, Tags)
+ * Updated with improved UI using ViewPager2 and TabLayout
  */
 public class LibraryFragment extends Fragment {
 
-    private Button allJournalsButton;
-    private Button bookmarksButton;
-    private Button tagsButton;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+    private MaterialCardView searchCard;
+    private EditText searchEditText;
+    private ImageButton searchClearButton;
+    private FloatingActionButton filterFab;
     
     public LibraryFragment() {
         // Required empty public constructor
@@ -34,43 +48,213 @@ public class LibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+        return inflater.inflate(R.layout.fragment_library_improved, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        // Initialize buttons
-        allJournalsButton = view.findViewById(R.id.all_journals_button);
-        bookmarksButton = view.findViewById(R.id.bookmarks_button);
-        tagsButton = view.findViewById(R.id.tags_button);
+        // Initialize views
+        initializeViews(view);
         
-        // Set click listeners
-        allJournalsButton.setOnClickListener(v -> {
-            loadFragment(new JournalListFragment());
-        });
+        // Set up the ViewPager and TabLayout
+        setupViewPagerAndTabs();
         
-        bookmarksButton.setOnClickListener(v -> {
-            loadFragment(BookmarkedJournalsFragment.getInstance());
-        });
+        // Set up the search functionality
+        setupSearch();
         
-        tagsButton.setOnClickListener(v -> {
-            loadFragment(TagSearchFragment.newInstance());
-        });
-        
-        // By default, show the all journals view
-        loadFragment(new JournalListFragment());
+        // Set up the filter FAB
+        setupFilterFab();
     }
     
     /**
-     * Load a fragment within the library container
-     * 
-     * @param fragment The fragment to load
+     * Initialize all views
      */
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.library_content_container, fragment);
-        transaction.commit();
+    private void initializeViews(View view) {
+        tabLayout = view.findViewById(R.id.library_tabs);
+        viewPager = view.findViewById(R.id.library_view_pager);
+        searchCard = view.findViewById(R.id.search_card);
+        searchEditText = view.findViewById(R.id.search_edit_text);
+        searchClearButton = view.findViewById(R.id.search_clear_button);
+        filterFab = view.findViewById(R.id.library_fab);
+    }
+    
+    /**
+     * Set up the ViewPager2 with TabLayout
+     */
+    private void setupViewPagerAndTabs() {
+        // Create the adapter for the ViewPager
+        LibraryPagerAdapter pagerAdapter = new LibraryPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+        
+        // Connect TabLayout with ViewPager
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("All Journals");
+                    tab.setIcon(R.drawable.ic_diary);
+                    break;
+                case 1:
+                    tab.setText("Bookmarks");
+                    tab.setIcon(R.drawable.bookmark_24);
+                    break;
+                case 2:
+                    tab.setText("Tags");
+                    tab.setIcon(R.drawable.tag_24);
+                    break;
+            }
+        }).attach();
+        
+        // Listen for page changes to update UI accordingly
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                updateFabForPage(position);
+            }
+        });
+    }
+    
+    /**
+     * Set up search functionality
+     */
+    private void setupSearch() {
+        // Show/hide search card when scrolling
+        View view = getView();
+        if (view == null) return;
+        
+        // Find the AppBarLayout which is the parent of our TabLayout
+        AppBarLayout appBarLayout = view.findViewById(R.id.app_bar_layout);
+        if (appBarLayout == null) {
+            // Fallback: find the first AppBarLayout in the view hierarchy
+            CoordinatorLayout rootCoordinatorLayout = null;
+            
+            // Try to get the root view as CoordinatorLayout
+            if (view instanceof CoordinatorLayout) {
+                rootCoordinatorLayout = (CoordinatorLayout) view;
+            } else if (view.getParent() instanceof CoordinatorLayout) {
+                rootCoordinatorLayout = (CoordinatorLayout) view.getParent();
+            }
+            
+            // Look for AppBarLayout in the CoordinatorLayout
+            if (rootCoordinatorLayout != null) {
+                for (int i = 0; i < rootCoordinatorLayout.getChildCount(); i++) {
+                    View child = rootCoordinatorLayout.getChildAt(i);
+                    if (child instanceof AppBarLayout) {
+                        appBarLayout = (AppBarLayout) child;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (appBarLayout != null) {
+            AppBarLayout finalAppBarLayout = appBarLayout;
+            appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
+                if (Math.abs(verticalOffset) > finalAppBarLayout.getTotalScrollRange() / 2) {
+                    // Show search when collapsed
+                    searchCard.setVisibility(View.VISIBLE);
+                } else {
+                    // Hide search when expanded
+                    searchCard.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            // If no AppBarLayout is found, just keep the search card visible
+            searchCard.setVisibility(View.VISIBLE);
+        }
+        
+        // Handle search text changes
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed
+            }
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Show/hide clear button
+                searchClearButton.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+                
+                // Filter current fragment based on search text
+                Fragment currentFragment = getCurrentFragment();
+                if (currentFragment instanceof Searchable) {
+                    ((Searchable) currentFragment).onSearch(s.toString());
+                }
+            }
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Not needed
+            }
+        });
+        
+        // Set up clear button
+        searchClearButton.setOnClickListener(v -> {
+            searchEditText.setText("");
+            searchClearButton.setVisibility(View.GONE);
+        });
+    }
+    
+    /**
+     * Set up the filter FAB
+     */
+    private void setupFilterFab() {
+        filterFab.setOnClickListener(v -> {
+            // Show appropriate filter dialog based on current tab
+            int currentPosition = viewPager.getCurrentItem();
+            Fragment currentFragment = getCurrentFragment();
+            
+            if (currentFragment instanceof Filterable) {
+                ((Filterable) currentFragment).showFilterOptions();
+            }
+        });
+        
+        // Set initial FAB icon based on the default tab
+        updateFabForPage(0);
+    }
+    
+    /**
+     * Update FAB icon and behavior based on the current page
+     */
+    private void updateFabForPage(int position) {
+        switch (position) {
+            case 0: // All journals
+                filterFab.setImageResource(R.drawable.filter_24);
+                filterFab.setContentDescription("Filter journals");
+                break;
+            case 1: // Bookmarks
+                filterFab.setImageResource(R.drawable.sort_24);
+                filterFab.setContentDescription("Sort bookmarks");
+                break;
+            case 2: // Tags
+                filterFab.setImageResource(R.drawable.add_24);
+                filterFab.setContentDescription("Add new tag");
+                break;
+        }
+    }
+    
+    /**
+     * Get the currently displayed fragment from the ViewPager
+     * 
+     * @return The current fragment
+     */
+    private Fragment getCurrentFragment() {
+        return getChildFragmentManager().findFragmentByTag("f" + viewPager.getCurrentItem());
+    }
+    
+    /**
+     * Interface for fragments that can be searched
+     */
+    public interface Searchable {
+        void onSearch(String query);
+    }
+    
+    /**
+     * Interface for fragments that can be filtered
+     */
+    public interface Filterable {
+        void showFilterOptions();
     }
 }

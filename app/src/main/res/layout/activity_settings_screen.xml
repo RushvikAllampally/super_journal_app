@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -47,7 +48,10 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/profile_icon" />
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_profile" />
 
                 <TextView
                     android:id="@+id/display_profile_name"
@@ -94,7 +98,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
                 <LinearLayout
                     android:id="@+id/reminder_block"
@@ -108,8 +113,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/access_alarm_24_black" />
+                        android:src="@drawable/access_alarm_24_black"
+                        android:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -126,7 +131,7 @@
                         android:layout_height="40dp"
                         android:background="?attr/colorSurface"
                         android:src="@drawable/navigate_next_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -142,8 +147,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/lock_open_24" />
+                        android:src="@drawable/lock_open_24"
+                        android:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -175,8 +180,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/ic_dark_mode" />
+                        android:src="@drawable/ic_dark_mode"
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -199,7 +204,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="10dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="?attr/colorOnSurface"
+        android:alpha="0.3"/>
         
     <LinearLayout
                     android:id="@+id/daily_prompts_block"
@@ -213,8 +219,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@android:drawable/ic_menu_help" />
+                        android:src="@android:drawable/ic_menu_help"
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -237,7 +243,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="10dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="?attr/colorOnSurface"
+        android:alpha="0.3"/>
         
 
 
@@ -265,7 +272,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
 
 
@@ -281,8 +289,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/message_24" />
+                        android:src="@drawable/message_24"
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -299,7 +307,7 @@
                         android:layout_height="40dp"
                         android:background="?attr/colorSurface"
                         android:src="@drawable/navigate_next_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -315,8 +323,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/card_giftcard_24" />
+                        android:src="@drawable/card_giftcard_24"
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -333,7 +341,7 @@
                         android:layout_height="40dp"
                         android:background="?attr/colorSurface"
                         android:src="@drawable/navigate_next_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -349,8 +357,8 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="?attr/colorOnSurface"
-                        android:src="@drawable/baseline_star_24" />
+                        android:src="@drawable/baseline_star_24"
+                        app:tint="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -367,7 +375,7 @@
                         android:layout_height="40dp"
                         android:background="?attr/colorSurface"
                         android:src="@drawable/navigate_next_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 

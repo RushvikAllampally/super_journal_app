@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,17 +38,16 @@ public class JournalListFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static RecyclerView recyclerView;
-    private static ImageView nothingFoundImage;
-    private static JournalRecyclerAdaptor journalRecyclerAdaptor;
+    private RecyclerView recyclerView;
+    private ImageView nothingFoundImage;
+    private JournalRecyclerAdaptor journalRecyclerAdaptor;
 
-    private static Date[] selectedDateRangeInSpinner;
-
-    private static DatabaseHelper databaseHelper;
-
-    private static Context context;
-
-    private static String selectedCategoryInSpinner;
+    private Date[] selectedDateRangeInSpinner;
+    private DatabaseHelper databaseHelper;
+    private String selectedCategoryInSpinner;
+    
+    // Track all active instances for notification
+    private static final List<JournalListFragment> activeInstances = new ArrayList<>();
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -71,40 +73,101 @@ public class JournalListFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    public static void notifyJournalListFragment() {
-
-        if (databaseHelper != null) {
-            ArrayList<Journal> journalsList = new ArrayList<>();
-            String queryCategory = (selectedCategoryInSpinner == null || selectedCategoryInSpinner.toLowerCase().equals("all")) ? "" : selectedCategoryInSpinner;
-            journalsList = (ArrayList<Journal>) databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], queryCategory);
-            refactorNotFoundImage(journalsList.size());
-
-            journalRecyclerAdaptor = new JournalRecyclerAdaptor(context, journalsList);
-
-            recyclerView.setAdapter(journalRecyclerAdaptor);
-
-            journalRecyclerAdaptor.notifyDataSetChanged();
-        }
-
-    }
-
-    public static void refactorNotFoundImage(Integer sizeOfJournalsList) {
-        if (sizeOfJournalsList == 0) {
-            nothingFoundImage.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            nothingFoundImage.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+    
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        synchronized (activeInstances) {
+            activeInstances.add(this);
+        }
+    }
+    
+    @Override
+    public void onDetach() {
+        synchronized (activeInstances) {
+            activeInstances.remove(this);
+        }
+        super.onDetach();
+    }
+
+    public static void notifyJournalListFragment() {
+        synchronized (activeInstances) {
+            for (JournalListFragment fragment : activeInstances) {
+                if (fragment.isAdded() && fragment.getActivity() != null) {
+                    fragment.getActivity().runOnUiThread(() -> {
+                        fragment.refreshJournalList();
+                    });
+                }
+            }
+        }
+    }
+    
+    /**
+     * Refresh the journal list with current filters
+     */
+    public void refreshJournalList() {
+        if (databaseHelper == null || getContext() == null) return;
+        
+        ArrayList<Journal> journalsList = new ArrayList<>();
+        String queryCategory = (selectedCategoryInSpinner == null || selectedCategoryInSpinner.toLowerCase().equals("all")) ? "" : selectedCategoryInSpinner;
+        
+        if (selectedDateRangeInSpinner != null) {
+            if (selectedDateRangeInSpinner.length == 2) {
+                journalsList.addAll(databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], queryCategory));
+            }
+        } else {
+            // Use getAllJournal and filter manually if needed
+            List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
+            if (queryCategory != null && !queryCategory.isEmpty()) {
+                for (Journal journal : allJournals) {
+                    if (journal.getJournalCategory() != null && 
+                        journal.getJournalCategory().contains(queryCategory)) {
+                        journalsList.add(journal);
+                    }
+                }
+            } else {
+                journalsList.addAll(allJournals);
+            }
+        }
+
+        recyclerView.setVisibility(View.VISIBLE);
+        nothingFoundImage.setVisibility(View.GONE);
+        journalRecyclerAdaptor = new JournalRecyclerAdaptor(getContext(), journalsList);
+        recyclerView.setAdapter(journalRecyclerAdaptor);
+
+        if (journalsList.size() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            nothingFoundImage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Update visibility of the nothingFoundImage for all instances
+     */
+    public static void refactorNotFoundImage(Integer sizeOfJournalsList) {
+        synchronized (activeInstances) {
+            for (JournalListFragment fragment : activeInstances) {
+                if (fragment.isAdded() && fragment.getActivity() != null) {
+                    fragment.getActivity().runOnUiThread(() -> {
+                        if (fragment.nothingFoundImage != null) {
+                            if (sizeOfJournalsList == 0) {
+                                fragment.nothingFoundImage.setVisibility(View.VISIBLE);
+                            } else {
+                                fragment.nothingFoundImage.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+            }
         }
     }
 
@@ -114,22 +177,15 @@ public class JournalListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_journal_list, container, false);
 
-        context = view.getContext();
-
         recyclerView = view.findViewById(R.id.journal_entries_list);
         nothingFoundImage = view.findViewById(R.id.nothing_found_journals_list_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        databaseHelper = DatabaseHelper.getDb(view.getContext());
+        databaseHelper = DatabaseHelper.getDb(getContext());
 
         selectedDateRangeInSpinner = getStartAndEndDates("This Month");
         System.out.println("start date : " + selectedDateRangeInSpinner[0] + " end date : " + selectedDateRangeInSpinner[1]);
-
-//        ArrayList<Journal> journalsList = new ArrayList<>();
-//        String queryCategory = (selectedCategoryInSpinner == null || selectedCategoryInSpinner.toLowerCase().equals("all")) ? "" : selectedCategoryInSpinner;
-//        journalsList = (ArrayList<Journal>) databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], queryCategory);
-//        refactorNotFoundImage(journalsList.size());
 //
 //        journalRecyclerAdaptor = new JournalRecyclerAdaptor(view.getContext(), journalsList);
 //

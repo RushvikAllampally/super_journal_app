@@ -49,7 +49,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_total_entries" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -57,6 +64,7 @@
                         android:layout_weight="1"
                         android:text="Total Entries"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp" />
 
                     <TextView
@@ -64,6 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:text="0" />
@@ -73,7 +82,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_streak_count" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -81,6 +97,7 @@
                         android:layout_weight="1"
                         android:text="Current Streak"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp" />
 
                     <TextView
@@ -88,6 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:text="0" />
@@ -97,7 +115,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_weekly" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -105,6 +130,7 @@
                         android:layout_weight="1"
                         android:text="Last 7 Days"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp" />
 
                     <TextView
@@ -112,6 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:text="0" />
@@ -120,7 +147,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_most_productive" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -128,6 +162,7 @@
                         android:layout_weight="1"
                         android:text="Most Productive Day"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp" />
 
                     <TextView
@@ -135,6 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:text="N/A" />
@@ -154,156 +190,63 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-
+                    
                 <TextView
+                    android:id="@+id/stats_period_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Journal Types"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:text="Stats for Current Month"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="8dp">
+                    
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_mood" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="My Diary"
+                        android:text="Average Mood (Last 30 Days)"
                         android:fontFamily="@font/balsamiqsans_regular"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/reflective_count"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="0" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Gratitude Journal"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/gratitude_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="0" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Dream Journal"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/dream_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="0" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bullet Journal"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/bullet_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="0" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mood Analysis"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:layout_marginBottom="8dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Average Mood (Last Month)"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/average_mood"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="N/A" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        
+                        <TextView
+                            android:id="@+id/average_mood"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="N/A" />
+                            
+                        <TextView
+                            android:id="@+id/mood_emoji"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:textSize="16sp"
+                            android:text="" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

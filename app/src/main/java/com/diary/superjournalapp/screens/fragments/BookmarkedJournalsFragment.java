@@ -28,23 +28,53 @@ public class BookmarkedJournalsFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private ImageView noBookmarksImage;
     private TextView noBookmarksText;
-    private static BookmarkedJournalsFragment instance;
+    private View progressIndicator;
+    
+    // Track all active instances for notification
+    private static final List<BookmarkedJournalsFragment> activeInstances = new ArrayList<>();
 
+    // This method remains for backward compatibility with existing code
     public static BookmarkedJournalsFragment getInstance() {
-        if (instance == null) {
-            instance = new BookmarkedJournalsFragment();
+        BookmarkedJournalsFragment fragment = new BookmarkedJournalsFragment();
+        return fragment;
+    }
+    
+    @Override
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
+        synchronized (activeInstances) {
+            activeInstances.add(this);
         }
-        return instance;
+    }
+    
+    @Override
+    public void onDetach() {
+        synchronized (activeInstances) {
+            activeInstances.remove(this);
+        }
+        super.onDetach();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bookmarked_journals, container, false);
+        View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         
-        recyclerView = view.findViewById(R.id.bookmarked_journals_recycler_view);
-        noBookmarksImage = view.findViewById(R.id.no_bookmarks_image);
-        noBookmarksText = view.findViewById(R.id.no_bookmarks_text);
+        recyclerView = view.findViewById(R.id.bookmarks_recycler_view);
+        View emptyView = view.findViewById(R.id.empty_view);
+        if (emptyView != null) {
+            ImageView imageView = emptyView.findViewById(R.id.no_bookmarks_image);
+            if (imageView != null) {
+                noBookmarksImage = imageView;
+            }
+            
+            TextView textView = emptyView.findViewById(R.id.no_bookmarks_text);
+            if (textView != null) {
+                noBookmarksText = textView;
+            }
+        }
+        
+        progressIndicator = view.findViewById(R.id.progress_indicator);
         
         return view;
     }
@@ -70,31 +100,56 @@ public class BookmarkedJournalsFragment extends Fragment {
      * Load all bookmarked journals from the database
      */
     public void loadBookmarkedJournals() {
+        if (databaseHelper == null || !isAdded()) return;
+        
+        // Show progress indicator while loading
+        if (progressIndicator != null) {
+            progressIndicator.setVisibility(View.VISIBLE);
+        }
+        
         List<Journal> bookmarkedJournals = databaseHelper.journalDao().getBookmarkedJournals();
+        View emptyView = getView() != null ? getView().findViewById(R.id.empty_view) : null;
+        
+        // Hide progress indicator now that loading is complete
+        if (progressIndicator != null) {
+            progressIndicator.setVisibility(View.GONE);
+        }
         
         if (bookmarkedJournals.size() == 0) {
             // Show "no bookmarks" message
-            recyclerView.setVisibility(View.GONE);
-            noBookmarksImage.setVisibility(View.VISIBLE);
-            noBookmarksText.setVisibility(View.VISIBLE);
+            if (recyclerView != null) {
+                recyclerView.setVisibility(View.GONE);
+            }
+            if (emptyView != null) {
+                emptyView.setVisibility(View.VISIBLE);
+            }
         } else {
             // Show recycler view with bookmarked journals
-            recyclerView.setVisibility(View.VISIBLE);
-            noBookmarksImage.setVisibility(View.GONE);
-            noBookmarksText.setVisibility(View.GONE);
-            
-            journalRecyclerAdaptor = new JournalRecyclerAdaptor(requireContext(), 
-                    new ArrayList<>(bookmarkedJournals));
-            recyclerView.setAdapter(journalRecyclerAdaptor);
+            if (recyclerView != null) {
+                recyclerView.setVisibility(View.VISIBLE);
+                journalRecyclerAdaptor = new JournalRecyclerAdaptor(requireContext(), 
+                        new ArrayList<>(bookmarkedJournals));
+                recyclerView.setAdapter(journalRecyclerAdaptor);
+            }
+            if (emptyView != null) {
+                emptyView.setVisibility(View.GONE);
+            }
         }
     }
     
     /**
      * Updates the recycler view when bookmark status changes
+     * Now refreshes all active instances
      */
     public static void notifyBookmarksChanged() {
-        if (instance != null) {
-            instance.loadBookmarkedJournals();
+        synchronized (activeInstances) {
+            for (BookmarkedJournalsFragment fragment : activeInstances) {
+                if (fragment.isAdded() && fragment.getActivity() != null) {
+                    fragment.getActivity().runOnUiThread(() -> {
+                        fragment.loadBookmarkedJournals();
+                    });
+                }
+            }
         }
     }
 }

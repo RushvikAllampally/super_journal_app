@@ -2,20 +2,25 @@ package com.diary.superjournalapp.screens.fragments;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.MoodTracker;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -39,7 +44,7 @@ public class MoodStatisticsFragment extends Fragment {
     // variable for our bar data set.
     BarDataSet barDataSet;
     // array list for storing entries.
-    ArrayList barEntriesArrayList;
+    ArrayList<BarEntry> barEntriesArrayList;
     
     private TextView totalJournalCount;
     private ImageButton leftArrowBtn;
@@ -49,6 +54,10 @@ public class MoodStatisticsFragment extends Fragment {
     private Date endDate;
     private int currentMonthNumber;
     private Calendar calendar;
+    
+    // Chart axis variables
+    private XAxis xAxis;
+    private YAxis leftAxis;
 
     public MoodStatisticsFragment() {
         // Required empty public constructor
@@ -151,7 +160,7 @@ public class MoodStatisticsFragment extends Fragment {
             }
         }
 
-        barEntriesArrayList = new ArrayList();
+        barEntriesArrayList = new ArrayList<BarEntry>();
 
         barEntriesArrayList.add(new BarEntry(0.5f, one));
         barEntriesArrayList.add(new BarEntry(1.5f, two));
@@ -161,57 +170,86 @@ public class MoodStatisticsFragment extends Fragment {
 
         barChart = view.findViewById(R.id.idBarChart);
 
-        barChart.animateXY(1000, 1000);
+        // Check if we're in dark mode and adjust chart colors accordingly
+        boolean isDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        
+        // Get colors from theme attributes for better dark mode support
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        int textColor = typedValue.data;
 
+        // Set chart background color based on theme
+        barChart.setBackgroundColor(Color.TRANSPARENT);
+        
+        barChart.animateXY(1000, 1000);
         barChart.setHighlightPerTapEnabled(true);
         barChart.setDrawMarkers(true);
+        
+        // Customize description
+        barChart.getDescription().setEnabled(false);
+        
+        // Set legend appearance
+        barChart.getLegend().setTextColor(textColor);
+        barChart.getLegend().setTextSize(14f);
+        barChart.getLegend().setTypeface(Typeface.DEFAULT_BOLD);
+        barChart.getLegend().setForm(Legend.LegendForm.CIRCLE);
+        barChart.getLegend().setFormSize(10f);
 
         String[] moods = new String[]{"Awful", "Sad", "Good", "Happy", "Excited"};
 
-        // Customize X Axis
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setAxisMinimum(0f); // Set the minimum value to 0
-        xAxis.setDrawGridLines(false); // Hide grid lines
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(moods));
-        xAxis.setGranularity(1f);
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(moods.length); // Ensure the correct number of labels are displayed
+        // Customize X Axis with better dark mode support
+        this.xAxis = barChart.getXAxis();
+        this.xAxis.setAxisMinimum(0f);
+        this.xAxis.setDrawGridLines(false);
+        this.xAxis.setValueFormatter(new IndexAxisValueFormatter(moods));
+        this.xAxis.setGranularity(1f);
+        this.xAxis.setCenterAxisLabels(true);
+        this.xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        this.xAxis.setLabelCount(moods.length);
+        this.xAxis.setTextColor(textColor);
+        this.xAxis.setTextSize(12f);
+        this.xAxis.setYOffset(10f);
 
-        // Customize Y Axis
-        YAxis leftAxis = barChart.getAxisLeft();
-
-        leftAxis.setAxisMinimum(0f); // Set the minimum value to 0
-        leftAxis.setDrawGridLines(false); // Hide grid lines
-        leftAxis.setDrawZeroLine(true); // Display a zero line
-        leftAxis.setDrawTopYLabelEntry(true); // Show top label entry
+        // Customize Y Axis with better dark mode support
+        this.leftAxis = barChart.getAxisLeft();
+        this.leftAxis.setAxisMinimum(0f);
+        this.leftAxis.setDrawGridLines(false);
+        this.leftAxis.setDrawZeroLine(true);
+        this.leftAxis.setDrawTopYLabelEntry(true);
+        this.leftAxis.setTextColor(textColor);
+        this.leftAxis.setTextSize(12f);
 
         YAxis rightAxis = barChart.getAxisRight();
-        rightAxis.setEnabled(false); // Disable the right Y Axis
+        rightAxis.setEnabled(false);
 
-        // Adjust offsets
-        barChart.setExtraBottomOffset(20f); // Creates space between X-axis labels and bottom of the chart
+        // Create more space for labels
+        barChart.setExtraBottomOffset(20f);
+        barChart.setExtraLeftOffset(10f);
 
-        // creating a new bar data set.
+        // Create the bar data set with better contrast colors that work in both modes
         barDataSet = new BarDataSet(barEntriesArrayList, "Mood Statistics");
-
-        // creating a new bar data and
-        // passing our bar data set.
-        barData = new BarData(barDataSet);
-
-        // below line is to set data
-        // to our bar chart.
-        barChart.setData(barData);
-
-        // adding color to our bar data set.
-        barDataSet.setColors(rgb("#E6E6FA"), rgb("#FFD700"), rgb("#98FB98"), rgb("#ADD8E6"), rgb("#FFB6C1"));
-
-        // setting text color.
-        barDataSet.setValueTextColor(Color.BLACK);
-
-        // setting text size
-        barDataSet.setValueTextSize(16f);
+        
+        // Colors that work well in both light and dark mode
+        int[] colors = new int[]{
+            ContextCompat.getColor(getContext(), R.color.awful_mood),
+            ContextCompat.getColor(getContext(), R.color.sad_mood),
+            ContextCompat.getColor(getContext(), R.color.good_mood),
+            ContextCompat.getColor(getContext(), R.color.happy_mood),
+            ContextCompat.getColor(getContext(), R.color.excited_mood)
+        };
+        
+        barDataSet.setColors(colors);
+        barDataSet.setValueTextColor(textColor);
+        barDataSet.setValueTextSize(14f);
         barDataSet.setValueFormatter(new DefaultAxisValueFormatter(0));
-        barChart.getDescription().setEnabled(false);
+        barDataSet.setValueTypeface(Typeface.DEFAULT_BOLD);
+        
+        // Set data to the chart
+        barData = new BarData(barDataSet);
+        barData.setBarWidth(0.8f);
+        barChart.setData(barData);
+        
+        // Refresh the chart
+        barChart.invalidate();
     }
 }
