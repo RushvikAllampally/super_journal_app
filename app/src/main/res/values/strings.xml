@@ -18,5 +18,6 @@
         <item>This Week</item>
         <item>Last 3 Months</item>
         <item>Last Month</item>
+        <item>All Time</item>
     </string-array>
 </resources>

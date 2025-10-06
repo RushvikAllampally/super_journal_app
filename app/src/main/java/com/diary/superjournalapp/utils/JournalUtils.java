@@ -30,6 +30,18 @@ public class JournalUtils {
 
         return formattedDate;
     }
+    
+    /**
+     * Get a compact date format showing month, day and year
+     * Format: MMM d, yyyy (e.g., "Oct 5, 2025")
+     * 
+     * @param date The date to format
+     * @return Formatted date string
+     */
+    public static String getCompactDateFormat(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yy");
+        return dateFormat.format(date);
+    }
 
     public static String getMonthFromJavaDate(Date date) {
 

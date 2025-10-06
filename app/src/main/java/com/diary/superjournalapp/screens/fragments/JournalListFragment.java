@@ -124,7 +124,24 @@ public class JournalListFragment extends Fragment implements Searchable {
         
         if (selectedDateRangeInSpinner != null) {
             if (selectedDateRangeInSpinner.length == 2) {
-                journalsList.addAll(databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], queryCategory));
+                // For All Time option, the start date is null
+                if (selectedDateRangeInSpinner[0] == null) {
+                    // Get all journals and filter by category if needed
+                    List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
+                    if (queryCategory != null && !queryCategory.isEmpty()) {
+                        for (Journal journal : allJournals) {
+                            if (journal.getJournalCategory() != null && 
+                                journal.getJournalCategory().contains(queryCategory)) {
+                                journalsList.add(journal);
+                            }
+                        }
+                    } else {
+                        journalsList.addAll(allJournals);
+                    }
+                } else {
+                    // Normal date range
+                    journalsList.addAll(databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], queryCategory));
+                }
             }
         } else {
             // Use getAllJournal and filter manually if needed
@@ -270,7 +287,29 @@ public class JournalListFragment extends Fragment implements Searchable {
                 System.out.println("selectedValue : " + selectedValue + "start date : " + selectedDateRangeInSpinner[0] + " end date : " + selectedDateRangeInSpinner[1]);
 
                 ArrayList<Journal> journalsList = new ArrayList<>();
-                journalsList = (ArrayList<Journal>) databaseHelper.journalDao().getAllJournalsByDateAndCategory(selectedDateRangeInSpinner[0], selectedDateRangeInSpinner[1], (selectedCategoryInSpinner == null || selectedCategoryInSpinner.toLowerCase().equals("all")) ? "" : selectedCategoryInSpinner);
+                String queryCategory = (selectedCategoryInSpinner == null || selectedCategoryInSpinner.toLowerCase().equals("all")) ? "" : selectedCategoryInSpinner;
+                
+                // Handle All Time option (null start date)
+                if (selectedDateRangeInSpinner[0] == null) {
+                    // Get all journals and filter by category if needed
+                    List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
+                    if (!queryCategory.isEmpty()) {
+                        for (Journal journal : allJournals) {
+                            if (journal.getJournalCategory() != null && 
+                                journal.getJournalCategory().contains(queryCategory)) {
+                                journalsList.add(journal);
+                            }
+                        }
+                    } else {
+                        journalsList.addAll(allJournals);
+                    }
+                } else {
+                    // Normal date range
+                    journalsList = (ArrayList<Journal>) databaseHelper.journalDao().getAllJournalsByDateAndCategory(
+                        selectedDateRangeInSpinner[0], 
+                        selectedDateRangeInSpinner[1], 
+                        queryCategory);
+                }
 
                 refactorNotFoundImage(journalsList.size());
 
@@ -383,7 +422,14 @@ public class JournalListFragment extends Fragment implements Searchable {
                 calendar.set(Calendar.SECOND, 0);
                 startDate = calendar.getTime();
                 break;
-
+                
+            case "All Time":
+                // Set end date to current time
+                endDate = calendar.getTime();
+                
+                // Set start date to null to indicate no lower bound
+                startDate = null;
+                break;
 
             default:
                 startDate = null;

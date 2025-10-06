@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,7 +41,7 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     @NonNull
     @Override
     public JournalRecyclerAdaptor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.journal_row,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.journal_row_improved, parent, false);
         return new ViewHolder(view);
     }
 
@@ -48,16 +49,21 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     public void onBindViewHolder(@NonNull JournalRecyclerAdaptor.ViewHolder holder, int position) {
         Journal journal = journalArrayList.get(position);
         
-        holder.journalDate.setText(JournalUtils.getDateFromJavaDate(journal.getJournalCreatedOn()));
-        holder.journalMonth.setText(JournalUtils.getMonthFromJavaDate(journal.getJournalCreatedOn()));
+        // Set journal text content
         holder.journalTitle.setText(journal.getTitle());
         holder.journalContent.setText(journal.getJournalStartText());
         
+        // Use the improved date format
+        holder.journalDate.setText(JournalUtils.getCompactDateFormat(journal.getJournalCreatedOn()));
+        
+        // Set journal type icon based on category
+        setJournalTypeIcon(holder.journalTypeIcon, journal.getJournalCategory());
+        
         // Set bookmark icon based on bookmark status
-        updateBookmarkIcon(holder.bookmarkButton, journal.isBookmarked());
+        updateBookmarkIconImproved(holder.bookmarkIcon, journal.isBookmarked());
         
         // Handle tags
-        setupTags(holder, journal);
+        setupTagChips(holder.journalTagsGroup, journal);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,28 +104,26 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView journalDate;
-        TextView journalMonth;
         TextView journalTitle;
         TextView journalContent;
-        ImageButton bookmarkButton;
-        LinearLayout tagsContainer;
-        TextView tagsText;
-        ImageButton tagsButton;
+        TextView journalDate;
+        ImageView journalTypeIcon;
+        ImageView bookmarkIcon;
+        com.google.android.material.chip.ChipGroup journalTagsGroup;
+        com.google.android.material.chip.Chip journalTag; // This is the sample tag in XML
         
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            journalDate = itemView.findViewById(R.id.journal_row_date);
-            journalMonth = itemView.findViewById(R.id.journal_row_month);
-            journalTitle = itemView.findViewById(R.id.journal_row_title);
-            journalContent = itemView.findViewById(R.id.journal_row_details);
-            bookmarkButton = itemView.findViewById(R.id.journal_bookmark_button);
-            tagsContainer = itemView.findViewById(R.id.journal_row_tags_container);
-            tagsText = itemView.findViewById(R.id.journal_row_tags);
-            tagsButton = itemView.findViewById(R.id.journal_tags_button);
+            journalTitle = itemView.findViewById(R.id.journal_title);
+            journalContent = itemView.findViewById(R.id.journal_content);
+            journalDate = itemView.findViewById(R.id.journal_date);
+            journalTypeIcon = itemView.findViewById(R.id.journal_type_icon);
+            bookmarkIcon = itemView.findViewById(R.id.journal_bookmark);
+            journalTagsGroup = itemView.findViewById(R.id.journal_tags_group);
+            journalTag = itemView.findViewById(R.id.journal_tag);
             
-            // Setup bookmark button click listener
-            bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            // Setup bookmark icon click listener
+            bookmarkIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -130,8 +134,8 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
                 }
             });
             
-            // Setup tags button click listener
-            tagsButton.setOnClickListener(new View.OnClickListener() {
+            // Setup tag click listener
+            journalTag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -169,16 +173,16 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     }
     
     /**
-     * Updates the bookmark button appearance based on bookmark status
+     * Updates the bookmark icon appearance based on bookmark status
      * 
-     * @param bookmarkButton The button to update
+     * @param bookmarkIcon The ImageView to update
      * @param isBookmarked Current bookmark status
      */
-    private void updateBookmarkIcon(ImageButton bookmarkButton, boolean isBookmarked) {
+    private void updateBookmarkIconImproved(ImageView bookmarkIcon, boolean isBookmarked) {
         if (isBookmarked) {
-            bookmarkButton.setImageResource(android.R.drawable.btn_star_big_on);
+            bookmarkIcon.setImageResource(R.drawable.ic_bookmark_filled);
         } else {
-            bookmarkButton.setImageResource(android.R.drawable.btn_star_big_off);
+            bookmarkIcon.setImageResource(R.drawable.ic_bookmark);
         }
     }
     
@@ -193,19 +197,73 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     }
     
     /**
-     * Setup tags display for a journal
+     * Setup tag chips for a journal
      * 
-     * @param holder ViewHolder to update
+     * @param chipGroup The ChipGroup to populate
      * @param journal Journal to get tags from
      */
-    private void setupTags(ViewHolder holder, Journal journal) {
+    private void setupTagChips(com.google.android.material.chip.ChipGroup chipGroup, Journal journal) {
         List<String> tags = TagUtils.getTagsForJournal(journal);
         
+        // Clear previous chips
+        chipGroup.removeAllViews();
+        
         if (tags.isEmpty()) {
-            holder.tagsContainer.setVisibility(View.GONE);
+            // If no tags, hide the chip group
+            chipGroup.setVisibility(View.GONE);
         } else {
-            holder.tagsContainer.setVisibility(View.VISIBLE);
-            holder.tagsText.setText("Tags: " + String.join(", ", tags));
+            chipGroup.setVisibility(View.VISIBLE);
+            
+            // Add a chip for each tag
+            for (String tag : tags) {
+                com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(chipGroup.getContext());
+                chip.setText(tag);
+                chip.setTextSize(10);
+                chip.setChipBackgroundColorResource(android.R.color.transparent);
+                chip.setChipStrokeColorResource(R.color.app_blue);
+                chip.setChipStrokeWidth(1);
+                chip.setChipIconResource(R.drawable.tag_24);
+                chip.setChipIconTintResource(R.color.app_blue);
+                chip.setChipIconSize(12);
+                chip.setCloseIconVisible(false);
+                chip.setClickable(true);
+                chip.setCheckable(false);
+                
+                // Set height and ensure min touch target is false for smaller chips
+                chip.setMinHeight(24);
+                chip.setEnsureMinTouchTargetSize(false);
+                
+                // Add click listener for the tag
+                chip.setOnClickListener(v -> {
+                    showTagsDialog(journal.getJournalId());
+                });
+                
+                chipGroup.addView(chip);
+            }
+        }
+    }
+    
+    /**
+     * Sets the journal type icon based on category
+     * 
+     * @param iconView The ImageView to update
+     * @param category The journal category
+     */
+    private void setJournalTypeIcon(ImageView iconView, String category) {
+        switch (category) {
+            case "Gratitude Journal":
+                iconView.setImageResource(R.drawable.ic_gratitude);
+                break;
+            case "Bullet Journal":
+                iconView.setImageResource(R.drawable.ic_bullet);
+                break;
+            case "Dream Journal":
+                iconView.setImageResource(R.drawable.ic_dream);
+                break;
+            case "My Diary":
+            default:
+                iconView.setImageResource(R.drawable.ic_diary);
+                break;
         }
     }
 

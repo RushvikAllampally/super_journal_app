@@ -50,7 +50,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/bookmark_border_24"
+            android:src="@drawable/ic_bookmark"
             android:tint="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +73,7 @@
             app:layout_constraintTop_toBottomOf="@+id/journal_title"
             tools:text="Today I went to the park and saw some beautiful flowers..." />
 
-        <!-- Bottom Row: Date, Tags, Mood -->
+        <!-- Bottom Row: Date and Tags -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -84,12 +84,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/journal_content">
 
-            <!-- Date -->
+            <!-- Date with calendar icon -->
             <TextView
                 android:id="@+id/journal_date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/balsamiqsans_regular"
                 android:gravity="center_vertical"
@@ -98,40 +97,45 @@
                 android:textSize="12sp"
                 app:drawableStartCompat="@android:drawable/ic_menu_my_calendar"
                 app:drawableTint="?attr/colorPrimary"
-                tools:text="October 5, 2025" />
+                tools:text="Oct 5, 2025" />
 
-            <!-- Tags (if any) -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/journal_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:textSize="10sp"
-                android:visibility="visible"
-                app:chipBackgroundColor="?attr/colorSurface"
-                app:chipIcon="@drawable/tag_24"
-                app:chipIconSize="12dp"
-                app:chipIconTint="?attr/colorPrimary"
-                app:chipMinHeight="32dp"
-                app:chipStrokeColor="?attr/colorPrimary"
-                app:chipStrokeWidth="1dp"
-                app:ensureMinTouchTargetSize="false"
-                tools:text="Personal" />
+            <!-- Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-            <!-- Mood (if any) -->
-            <TextView
-                android:id="@+id/journal_mood"
+            <!-- Tags container (horizontal scroll for multiple tags) -->
+            <HorizontalScrollView
+                android:id="@+id/tags_scroll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:background="@drawable/mood_badge_background"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:gravity="center"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:text="😊"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:visibility="visible" />
+                android:scrollbars="none">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/journal_tags_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipSpacing="4dp"
+                    app:singleLine="true">
+
+                    <!-- Tags will be added here programmatically -->
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/journal_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="?attr/colorSurface"
+                        app:chipIcon="@drawable/tag_24"
+                        app:chipIconSize="12dp"
+                        app:chipIconTint="?attr/colorPrimary"
+                        app:chipMinHeight="24dp"
+                        app:chipStrokeColor="?attr/colorPrimary"
+                        app:chipStrokeWidth="1dp"
+                        app:ensureMinTouchTargetSize="false"
+                        tools:text="Personal" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
