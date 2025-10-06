@@ -103,8 +103,21 @@ public class SettingsScreen extends ThemedActivity {
             }
         });
 //        exportDatalock.setOnClickListener(comingSoononClickListener);
-        inviteAFriendBlock.setOnClickListener(comingSoononClickListener);
-        rateOurAppBlock.setOnClickListener(comingSoononClickListener);
+        // Implement Invite a Friend feature
+        inviteAFriendBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inviteFriend();
+            }
+        });
+        
+        // Implement Rate Our App feature
+        rateOurAppBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rateApp();
+            }
+        });
 
         shareFeedBackBlock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -357,5 +370,130 @@ public class SettingsScreen extends ThemedActivity {
         });
         
         dialog.show();
+    }
+    
+    /**
+     * Shows a dialog asking for rating and then opens the app in Google Play Store
+     */
+    private void rateApp() {
+        Dialog rateDialog = new Dialog(this, R.style.RoundedCornersDialog);
+        rateDialog.setContentView(R.layout.rate_app_dialog);
+        rateDialog.setCancelable(true);
+        
+        // Set dialog width to match parent with margins
+        if (rateDialog.getWindow() != null) {
+            rateDialog.getWindow().setLayout(
+                android.view.WindowManager.LayoutParams.MATCH_PARENT,
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+            rateDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        
+        // Get dialog components
+        Button rateNowBtn = rateDialog.findViewById(R.id.rate_now_button);
+        Button laterBtn = rateDialog.findViewById(R.id.rate_later_button);
+        Button neverBtn = rateDialog.findViewById(R.id.rate_never_button);
+        
+        // Rate Now button opens Play Store
+        rateNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPlayStore();
+                rateDialog.dismiss();
+                
+                // Save that user has rated the app
+                SharedPreferences.Editor editor = getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE).edit();
+                editor.putBoolean("app_rated", true);
+                editor.apply();
+                
+                // Thank the user
+                Toast.makeText(SettingsScreen.this, "Thank you for rating our app!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        // Maybe Later button
+        laterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateDialog.dismiss();
+            }
+        });
+        
+        // Never Ask button
+        neverBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Save preference to never ask again
+                SharedPreferences.Editor editor = getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE).edit();
+                editor.putBoolean("never_rate", true);
+                editor.apply();
+                
+                rateDialog.dismiss();
+            }
+        });
+        
+        // Check if user has opted out of rating
+        SharedPreferences prefs = getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
+        if (!prefs.getBoolean("never_rate", false)) {
+            rateDialog.show();
+        } else {
+            // If user previously selected "never ask", just open Play Store directly
+            openPlayStore();
+        }
+    }
+    
+    /**
+     * Opens the app page in the Play Store
+     */
+    private void openPlayStore() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        
+        try {
+            startActivity(goToMarket);
+        } catch (android.content.ActivityNotFoundException e) {
+            // Play Store app is not installed, open in browser
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+            } catch (Exception ex) {
+                Toast.makeText(this, "Could not open Play Store. Please check your internet connection.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    
+    /**
+     * Share app with friends
+     */
+    private void inviteFriend() {
+        try {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+            
+            String shareMessage = "Hey! I've been using Diaryverse App for my journaling needs and thought you might enjoy it too.\n\n";
+            shareMessage += "It has helped me track my thoughts, practice gratitude, and improve my well-being.\n\n";
+            shareMessage += "Download it from Google Play: https://play.google.com/store/apps/details?id=" + getPackageName() + "\n\n";
+            
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            startActivity(Intent.createChooser(shareIntent, "Share Diaryverse App via..."));
+        } catch(Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Couldn't share the app. Please try again.", Toast.LENGTH_SHORT).show();
+            
+            // Fallback method if standard sharing fails
+            try {
+                Intent fallbackIntent = new Intent(Intent.ACTION_VIEW, 
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+                startActivity(fallbackIntent);
+            } catch (Exception ex) {
+                Toast.makeText(this, "Please share this app manually: com.diary.superjournalapp", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
