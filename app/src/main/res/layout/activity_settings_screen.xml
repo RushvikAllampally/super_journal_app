@@ -13,45 +13,56 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:elevation="4dp"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="16dp"
             android:text="Settings"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textSize="30sp" />
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorSurface"
+                android:elevation="2dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="12dp">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_btn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_profile" />
+                    android:src="@drawable/ic_person"
+                    app:tint="?attr/colorPrimary" />
 
                 <TextView
                     android:id="@+id/display_profile_name"
@@ -69,31 +80,35 @@
                     android:id="@+id/edit_profile_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
-                    android:backgroundTint="@color/btn_color"
+                    android:layout_marginHorizontal="16dp"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:text="Edit"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textColor="@color/black" />
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="?attr/colorOnPrimary" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="Preferences"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" 
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <View
                     android:layout_width="match_parent"
@@ -105,16 +120,18 @@
                     android:id="@+id/reminder_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/access_alarm_24_black"
-                        android:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_notifications"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -139,16 +156,18 @@
                     android:id="@+id/passcode_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/lock_open_24"
-                        android:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_security"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -172,16 +191,18 @@
                     android:id="@+id/dark_mode_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_dark_mode"
-                        app:tint="?attr/colorOnSurface" />
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -211,16 +232,18 @@
                     android:id="@+id/daily_prompts_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_help"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_lightbulb"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -253,21 +276,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="More options"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <View
                     android:layout_width="match_parent"
@@ -281,16 +307,18 @@
                     android:id="@+id/feed_back_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/message_24"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_feedback"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -315,16 +343,18 @@
                     android:id="@+id/invite_a_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/card_giftcard_24"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_share"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -349,16 +379,18 @@
                     android:id="@+id/rate_app_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/baseline_star_24"
-                        app:tint="?attr/colorOnSurface" />
+                        android:src="@drawable/ic_rate"
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"

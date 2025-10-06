@@ -13,32 +13,42 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:elevation="4dp"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="16dp"
             android:fontFamily="@font/balsamiqsans_regular"
             android:text="Reminders"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="30sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
+            <!-- Journal Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -46,11 +56,11 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="Journal"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="20sp"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <View
@@ -59,20 +69,22 @@
                     android:background="?attr/colorOnSurface"
                     android:alpha="0.5" />
 
-
+                <!-- My Diary Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_diary" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,8 +111,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="diary" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -110,22 +123,24 @@
                         android:checked="true"
                         android:tag="diary"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
 
+                <!-- Gratitude Journal Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_gratitude" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -152,8 +167,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="gratitude" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -163,23 +179,24 @@
                         android:checked="false"
                         android:tag="gratitude"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
 
-
+                <!-- Bullet Journal Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_bullet" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -206,8 +223,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="bullet" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -217,22 +235,24 @@
                         android:checked="true"
                         android:tag="bullet"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
 
+                <!-- Dream Journal Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_dream" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -259,8 +279,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="dream" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -270,16 +291,17 @@
                         android:checked="true"
                         android:tag="dream"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
-
+            <!-- Notifications Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -287,10 +309,11 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="Notifications"
-                    android:textSize="20sp"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <View
@@ -299,19 +322,22 @@
                     android:background="?attr/colorOnSurface"
                     android:alpha="0.5" />
 
+                <!-- Quote of the Day Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_quote" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -338,8 +364,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="quote" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -349,22 +376,24 @@
                         android:checked="true"
                         android:tag="quote"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
 
+                <!-- Daily Affirmation Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_affirmation" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -391,8 +420,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="affirmation" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -402,16 +432,18 @@
                         android:checked="true"
                         android:tag="affirmation"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
+            <!-- Habits Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -419,10 +451,11 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="Habits"
-                    android:textSize="20sp"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <View
@@ -431,19 +464,22 @@
                     android:background="?attr/colorOnSurface"
                     android:alpha="0.5" />
 
+                <!-- Today's Mood Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tint="?attr/colorOnSurface"
-                        android:src="@drawable/notifications_none_24" />
+                        app:tint="?attr/colorPrimary"
+                        android:src="@drawable/ic_mood" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -470,8 +506,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="3dp"
-                        android:background="?attr/colorSurface"
-                        android:src="@drawable/access_time_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_clock"
+                        app:tint="?attr/colorPrimary"
                         android:tag="mood" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -481,16 +518,8 @@
                         android:checked="true"
                         android:tag="mood"
                         app:thumbTint="@color/switch_thumb_selector" />
-
                 </LinearLayout>
-
-
             </LinearLayout>
-
         </LinearLayout>
-
-
     </ScrollView>
-
-
 </LinearLayout>
