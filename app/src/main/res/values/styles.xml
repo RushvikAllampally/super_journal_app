@@ -4,6 +4,7 @@
     <style name="RoundedFAB" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item> <!-- Adjust the percentage as needed -->
+        <item name="android:alpha">0.95</item>
     </style>
 
     <style name="SwitchCompatStyle" parent="Widget.AppCompat.CompoundButton.Switch">
