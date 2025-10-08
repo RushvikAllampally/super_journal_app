@@ -33,7 +33,6 @@ import com.diary.superjournalapp.utils.JournalUtils;
 import com.diary.superjournalapp.utils.TagManager;
 import com.diary.superjournalapp.utils.TextEditorUtils;
 import com.diary.superjournalapp.dialogs.TagDialogFragment;
-import com.diary.superjournalapp.entity.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +67,7 @@ public class ReflectiveJournal extends AppCompatActivity {
     private ImageButton textStylesBtn;
     private Date selectedDate;
     private TagManager tagManager;
+    private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,17 +112,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         
         // Set up tag management
         manageTagsButton.setOnClickListener(v -> {
-            if (journal != null && journal.getJournalId() > 0) {
-                // Journal already exists, show tag dialog
-                showTagsDialog();
-            } else {
-                // Journal doesn't exist yet, save it first
-                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
-                saveJournalDetails();
-                if (journal.getJournalId() > 0) {
-                    showTagsDialog();
-                }
-            }
+            showTagsDialog();
         });
         
         // Set up emoji popup
@@ -282,6 +272,14 @@ public class ReflectiveJournal extends AppCompatActivity {
 
         JournalUtils.updateStreak(ReflectiveJournal.this);
         HomeFragment.notifyHomeRecyclerViewChanges();
+        
+        // Save temporary tags if journal was just created
+        if (!temporaryTags.isEmpty()) {
+            for (String tagName : temporaryTags) {
+                tagManager.addTagToJournal(journalId, tagName);
+            }
+            temporaryTags.clear();  // Clear after saving
+        }
 
         Toast.makeText(ReflectiveJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }
@@ -316,7 +314,17 @@ public class ReflectiveJournal extends AppCompatActivity {
      */
     private void showTagsDialog() {
         if (journal != null && journal.getJournalId() > 0) {
+            // Saved journal - use database mode
             TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        } else {
+            // Unsaved journal - use temporary mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstanceTemporary(
+                temporaryTags,
+                updatedTags -> {
+                    temporaryTags = updatedTags;
+                }
+            );
             dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         }
     }

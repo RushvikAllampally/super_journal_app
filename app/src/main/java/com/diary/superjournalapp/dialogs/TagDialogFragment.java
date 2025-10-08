@@ -27,7 +27,9 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Dialog fragment for managing tags on a journal entry
@@ -35,11 +37,15 @@ import java.util.List;
 public class TagDialogFragment extends DialogFragment {
     
     private static final String ARG_JOURNAL_ID = "journal_id";
+    private static final String ARG_TEMPORARY_TAGS = "temporary_tags";
     private static final String TAG_SEPARATOR = ",";
     
     private long journalId;
+    private ArrayList<String> temporaryTags;  // For unsaved journals
+    private boolean isTemporaryMode = false;  // True when journal is not yet saved
     private TagManager tagManager;
     private TagRepository tagRepository;
+    private TagUpdateListener tagUpdateListener;
     
     private EditText tagInputField;
     private Button addTagButton;
@@ -49,7 +55,14 @@ public class TagDialogFragment extends DialogFragment {
     private TextView emptyTagsMessage;
     
     /**
-     * Create a new instance of the dialog
+     * Interface for updating temporary tags
+     */
+    public interface TagUpdateListener {
+        void onTagsUpdated(ArrayList<String> tags);
+    }
+    
+    /**
+     * Create a new instance of the dialog for a saved journal
      * 
      * @param journalId The journal ID to manage tags for
      * @return A new instance of TagDialogFragment
@@ -62,16 +75,46 @@ public class TagDialogFragment extends DialogFragment {
         return fragment;
     }
     
+    /**
+     * Create a new instance of the dialog for an unsaved journal
+     * Uses temporary tag storage that will be persisted when journal is saved
+     * 
+     * @param temporaryTags Current temporary tags for the unsaved journal
+     * @param listener Listener to receive tag updates
+     * @return A new instance of TagDialogFragment
+     */
+    public static TagDialogFragment newInstanceTemporary(ArrayList<String> temporaryTags, TagUpdateListener listener) {
+        TagDialogFragment fragment = new TagDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_JOURNAL_ID, 0);  // 0 indicates unsaved journal
+        args.putStringArrayList(ARG_TEMPORARY_TAGS, temporaryTags != null ? temporaryTags : new ArrayList<>());
+        fragment.setArguments(args);
+        fragment.tagUpdateListener = listener;
+        return fragment;
+    }
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         if (getArguments() != null) {
             journalId = getArguments().getLong(ARG_JOURNAL_ID);
+            temporaryTags = getArguments().getStringArrayList(ARG_TEMPORARY_TAGS);
+            
+            // If journalId is 0, we're in temporary mode
+            isTemporaryMode = (journalId == 0);
+            
+            if (!isTemporaryMode) {
+                tagManager = new TagManager(requireContext());
+                tagRepository = new TagRepository(requireContext());
+            } else {
+                // Still need these for suggested tags even in temporary mode
+                tagManager = new TagManager(requireContext());
+                if (temporaryTags == null) {
+                    temporaryTags = new ArrayList<>();
+                }
+            }
         }
-        
-        tagManager = new TagManager(requireContext());
-        tagRepository = new TagRepository(requireContext());
     }
     
     @Nullable
@@ -128,8 +171,22 @@ public class TagDialogFragment extends DialogFragment {
             return;
         }
         
-        // Add the tags
-        tagManager.addTagsToJournal(journalId, input);
+        if (isTemporaryMode) {
+            // Add to temporary list
+            List<String> newTags = Arrays.stream(input.split(TAG_SEPARATOR))
+                    .map(String::trim)
+                    .filter(tag -> !tag.isEmpty() && !temporaryTags.contains(tag))
+                    .collect(Collectors.toList());
+            temporaryTags.addAll(newTags);
+            
+            // Notify listener
+            if (tagUpdateListener != null) {
+                tagUpdateListener.onTagsUpdated(temporaryTags);
+            }
+        } else {
+            // Add to database
+            tagManager.addTagsToJournal(journalId, input);
+        }
         
         // Clear the input
         tagInputField.setText("");
@@ -143,26 +200,54 @@ public class TagDialogFragment extends DialogFragment {
      * Load and display the current tags for the journal
      */
     private void loadCurrentTags() {
-        List<Tag> currentTags = tagManager.getTagsForJournal(journalId);
-        
-        // Setup the chip adapter
-        TagChipAdapter adapter = new TagChipAdapter(requireContext(), currentTagsGroup)
-                .setShowCloseIcon(true)
-                .setOnTagCloseListener(tag -> {
-                    // Remove the tag when the close icon is clicked
-                    tagRepository.removeTagFromJournal(journalId, tag.getTagId());
+        if (isTemporaryMode) {
+            // Show temporary tags
+            currentTagsGroup.removeAllViews();
+            
+            for (String tagName : temporaryTags) {
+                com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
+                chip.setText(tagName);
+                chip.setCloseIconVisible(true);
+                chip.setOnCloseIconClickListener(v -> {
+                    temporaryTags.remove(tagName);
+                    if (tagUpdateListener != null) {
+                        tagUpdateListener.onTagsUpdated(temporaryTags);
+                    }
                     loadCurrentTags();
                     loadSuggestedTags();
                 });
-        
-        // Set the tags
-        adapter.setTags(currentTags);
-        
-        // Show empty message if needed
-        if (currentTags.isEmpty()) {
-            emptyTagsMessage.setVisibility(View.VISIBLE);
+                currentTagsGroup.addView(chip);
+            }
+            
+            // Show empty message if needed
+            if (temporaryTags.isEmpty()) {
+                emptyTagsMessage.setVisibility(View.VISIBLE);
+            } else {
+                emptyTagsMessage.setVisibility(View.GONE);
+            }
         } else {
-            emptyTagsMessage.setVisibility(View.GONE);
+            // Load from database
+            List<Tag> currentTags = tagManager.getTagsForJournal(journalId);
+            
+            // Setup the chip adapter
+            TagChipAdapter adapter = new TagChipAdapter(requireContext(), currentTagsGroup)
+                    .setShowCloseIcon(true)
+                    .setOnTagCloseListener(tag -> {
+                        // Remove the tag when the close icon is clicked
+                        tagRepository.removeTagFromJournal(journalId, tag.getTagId());
+                        loadCurrentTags();
+                        loadSuggestedTags();
+                    });
+            
+            // Set the tags
+            adapter.setTags(currentTags);
+            
+            // Show empty message if needed
+            if (currentTags.isEmpty()) {
+                emptyTagsMessage.setVisibility(View.VISIBLE);
+            } else {
+                emptyTagsMessage.setVisibility(View.GONE);
+            }
         }
     }
     
@@ -170,34 +255,59 @@ public class TagDialogFragment extends DialogFragment {
      * Load and display suggested tags
      */
     private void loadSuggestedTags() {
-        List<Tag> currentTags = tagManager.getTagsForJournal(journalId);
         List<Tag> allTags = tagManager.getAllTags();
         
-        // Filter out tags that are already added to the journal
-        List<Tag> suggestedTags = new ArrayList<>();
-        for (Tag tag : allTags) {
-            boolean isAlreadyAdded = false;
-            for (Tag currentTag : currentTags) {
-                if (currentTag.getTagId() == tag.getTagId()) {
-                    isAlreadyAdded = true;
-                    break;
+        if (isTemporaryMode) {
+            // Filter out tags already in temporary list
+            suggestedTagsGroup.removeAllViews();
+            
+            for (Tag tag : allTags) {
+                if (!temporaryTags.contains(tag.getName())) {
+                    com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
+                    chip.setText(tag.getName());
+                    chip.setClickable(true);
+                    chip.setCheckable(false);
+                    chip.setOnClickListener(v -> {
+                        temporaryTags.add(tag.getName());
+                        if (tagUpdateListener != null) {
+                            tagUpdateListener.onTagsUpdated(temporaryTags);
+                        }
+                        loadCurrentTags();
+                        loadSuggestedTags();
+                    });
+                    suggestedTagsGroup.addView(chip);
                 }
             }
-            if (!isAlreadyAdded) {
-                suggestedTags.add(tag);
+        } else {
+            // Load from database
+            List<Tag> currentTags = tagManager.getTagsForJournal(journalId);
+            
+            // Filter out tags that are already added to the journal
+            List<Tag> suggestedTags = new ArrayList<>();
+            for (Tag tag : allTags) {
+                boolean isAlreadyAdded = false;
+                for (Tag currentTag : currentTags) {
+                    if (currentTag.getTagId() == tag.getTagId()) {
+                        isAlreadyAdded = true;
+                        break;
+                    }
+                }
+                if (!isAlreadyAdded) {
+                    suggestedTags.add(tag);
+                }
             }
+            
+            // Setup the chip adapter
+            TagChipAdapter adapter = new TagChipAdapter(requireContext(), suggestedTagsGroup)
+                    .setOnTagClickListener(tag -> {
+                        // Add the tag when clicked
+                        tagManager.addTagToJournal(journalId, tag.getName());
+                        loadCurrentTags();
+                        loadSuggestedTags();
+                    });
+            
+            // Set the tags
+            adapter.setTags(suggestedTags);
         }
-        
-        // Setup the chip adapter
-        TagChipAdapter adapter = new TagChipAdapter(requireContext(), suggestedTagsGroup)
-                .setOnTagClickListener(tag -> {
-                    // Add the tag when clicked
-                    tagManager.addTagToJournal(journalId, tag.getName());
-                    loadCurrentTags();
-                    loadSuggestedTags();
-                });
-        
-        // Set the tags
-        adapter.setTags(suggestedTags);
     }
 }

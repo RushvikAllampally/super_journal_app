@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -61,6 +62,7 @@ public class DreamJournal extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private DreamJournalEntity dreamJournalEntity;
     private TagManager tagManager;
+    private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,21 +223,18 @@ public class DreamJournal extends AppCompatActivity {
      */
     private void showTagsDialog() {
         if (journal != null && journal.getJournalId() > 0) {
-            // Journal already exists, use the TagDialogFragment
+            // Saved journal - use database mode
             TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
             dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         } else {
-            // Journal hasn't been saved yet, save it first then show tags dialog
-            Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
-            
-            // Create a new journal entry
-            saveDreamJournal();
-            
-            if (journal.getJournalId() > 0) {
-                // Now that journal is saved, show the tag dialog
-                TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
-                dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
-            }
+            // Unsaved journal - use temporary mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstanceTemporary(
+                temporaryTags,
+                updatedTags -> {
+                    temporaryTags = updatedTags;
+                }
+            );
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         }
     }
 
@@ -283,6 +282,14 @@ public class DreamJournal extends AppCompatActivity {
 
         JournalUtils.updateStreak(DreamJournal.this);
         HomeFragment.notifyHomeRecyclerViewChanges();
+        
+        // Save temporary tags if journal was just created
+        if (!temporaryTags.isEmpty()) {
+            for (String tagName : temporaryTags) {
+                tagManager.addTagToJournal(journalId, tagName);
+            }
+            temporaryTags.clear();  // Clear after saving
+        }
 
         Toast.makeText(DreamJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }

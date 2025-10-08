@@ -37,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -64,6 +65,7 @@ public class GratitudeJournal extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private TagManager tagManager;
     private Date selectedDate = null;
+    private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +94,7 @@ public class GratitudeJournal extends AppCompatActivity {
         
         // Set up tag management
         manageTagsButton.setOnClickListener(v -> {
-            if (journal != null && journal.getJournalId() > 0) {
-                // Journal already exists, show tag dialog
-                showTagsDialog();
-            } else {
-                // Journal doesn't exist yet, save it first
-                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
-                saveJournalDetails();
-                if (journal.getJournalId() > 0) {
-                    showTagsDialog();
-                }
-            }
+            showTagsDialog();
         });
 
         EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.gratitude_journal_root)).build(journalContent);
@@ -264,6 +256,15 @@ public class GratitudeJournal extends AppCompatActivity {
 
         }
         JournalUtils.updateStreak(GratitudeJournal.this);
+        
+        // Save temporary tags if journal was just created
+        if (!temporaryTags.isEmpty()) {
+            for (String tagName : temporaryTags) {
+                tagManager.addTagToJournal(journalId, tagName);
+            }
+            temporaryTags.clear();  // Clear after saving
+        }
+        
         Toast.makeText(GratitudeJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
 
         HomeFragment.notifyHomeRecyclerViewChanges();
@@ -297,7 +298,17 @@ public class GratitudeJournal extends AppCompatActivity {
      */
     private void showTagsDialog() {
         if (journal != null && journal.getJournalId() > 0) {
+            // Saved journal - use database mode
             TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        } else {
+            // Unsaved journal - use temporary mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstanceTemporary(
+                temporaryTags,
+                updatedTags -> {
+                    temporaryTags = updatedTags;
+                }
+            );
             dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         }
     }

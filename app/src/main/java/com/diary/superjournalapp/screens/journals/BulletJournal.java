@@ -69,6 +69,7 @@ public class BulletJournal extends AppCompatActivity {
     private List<BulletEntryDetails> tasksList = new ArrayList<>();
     private TagManager tagManager;
     private ImageButton manageTagsButton;
+    private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,17 +95,7 @@ public class BulletJournal extends AppCompatActivity {
         
         // Set up tag management
         manageTagsButton.setOnClickListener(v -> {
-            if (journal != null && journal.getJournalId() > 0) {
-                // Journal already exists, show tag dialog
-                showTagsDialog();
-            } else {
-                // Journal doesn't exist yet, save it first
-                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
-                saveJournalDetails();
-                if (journal.getJournalId() > 0) {
-                    showTagsDialog();
-                }
-            }
+            showTagsDialog();
         });
 
 
@@ -296,6 +287,15 @@ public class BulletJournal extends AppCompatActivity {
         JournalUtils.updateStreak(BulletJournal.this);
         HomeFragment.notifyHomeRecyclerViewChanges();
         HomeFragment.notifyHomeBulletChanges();
+        
+        // Save temporary tags if journal was just created
+        // Note: journal.getJournalId() is updated by saveBulletJournal, so we check the temporaryTags list
+        if (!temporaryTags.isEmpty() && journal.getJournalId() > 0) {
+            for (String tagName : temporaryTags) {
+                tagManager.addTagToJournal(journal.getJournalId(), tagName);
+            }
+            temporaryTags.clear();  // Clear after saving
+        }
 
         Toast.makeText(BulletJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }
@@ -328,7 +328,17 @@ public class BulletJournal extends AppCompatActivity {
      */
     private void showTagsDialog() {
         if (journal != null && journal.getJournalId() > 0) {
+            // Saved journal - use database mode
             TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        } else {
+            // Unsaved journal - use temporary mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstanceTemporary(
+                temporaryTags,
+                updatedTags -> {
+                    temporaryTags = updatedTags;
+                }
+            );
             dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         }
     }
