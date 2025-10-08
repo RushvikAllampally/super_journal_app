@@ -100,15 +100,11 @@ public class TagSearchFragment extends Fragment implements Searchable {
         // Refresh tags when returning to this fragment
         loadAllTags();
         
-        // Add a clear button to the top
-        if (getView() != null && !selectedTagIds.isEmpty()) {
-            View clearButton = getView().findViewById(R.id.clear_tags_button);
-            if (clearButton != null) {
-                clearButton.setVisibility(View.VISIBLE);
-                clearButton.setOnClickListener(v -> showClearTagsDialog());
-            }
-            
-            // Refresh search results with current selection
+        // Update clear button visibility
+        updateClearButtonVisibility();
+        
+        // Refresh search results with current selection if any tags are selected
+        if (!selectedTagIds.isEmpty()) {
             performSearch();
         }
     }
@@ -168,6 +164,9 @@ public class TagSearchFragment extends Fragment implements Searchable {
             
             // Update the visual state
             updateTagViewState(tagView, tag);
+            
+            // Update clear button visibility
+            updateClearButtonVisibility();
             
             // Show toast with current selection
             if (selectedTagIds.isEmpty()) {
@@ -270,13 +269,8 @@ public class TagSearchFragment extends Fragment implements Searchable {
                     searchResults.clear();
                     updateUIForResults();
                     
-                    // Hide clear button
-                    if (getView() != null) {
-                        View clearButton = getView().findViewById(R.id.clear_tags_button);
-                        if (clearButton != null) {
-                            clearButton.setVisibility(View.GONE);
-                        }
-                    }
+                    // Update clear button visibility
+                    updateClearButtonVisibility();
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -311,6 +305,23 @@ public class TagSearchFragment extends Fragment implements Searchable {
             tagView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
             TextView textView = tagView.findViewById(R.id.tag_text);
             textView.setTextColor(getResources().getColor(android.R.color.white));
+        }
+    }
+    
+    /**
+     * Update clear button visibility based on whether tags are selected
+     */
+    private void updateClearButtonVisibility() {
+        if (getView() != null) {
+            View clearButton = getView().findViewById(R.id.clear_tags_button);
+            if (clearButton != null) {
+                if (!selectedTagIds.isEmpty()) {
+                    clearButton.setVisibility(View.VISIBLE);
+                    clearButton.setOnClickListener(v -> showClearTagsDialog());
+                } else {
+                    clearButton.setVisibility(View.GONE);
+                }
+            }
         }
     }
 }

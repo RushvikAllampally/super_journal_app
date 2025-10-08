@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     android:background="?attr/android:colorBackground"
     tools:context=".screens.fragments.TagSearchFragment">
 
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
         android:layout_marginBottom="16dp">
 
         <TextView
@@ -52,12 +54,14 @@
         android:text="Select one or more tags to search for journals"
         android:textSize="14sp"
         android:fontFamily="@font/balsamiqsans_regular"
+        android:paddingHorizontal="16dp"
         android:layout_marginBottom="8dp" />
         
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/all_tags_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:padding="8dp"
         android:background="#f5f5f5"
@@ -67,6 +71,7 @@
         android:id="@+id/search_results_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:text="Journal Results"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -78,7 +83,7 @@
         android:id="@+id/tag_search_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="4dp" />
+         />
 
     <TextView
         android:id="@+id/no_results_text"
@@ -88,6 +93,7 @@
         android:textSize="16sp"
         android:fontFamily="@font/balsamiqsans_regular"
         android:gravity="center"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="32dp"
         android:visibility="gone" />
 
