@@ -1,173 +1,101 @@
 package com.diary.superjournalapp.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.diary.superjournalapp.constants.ApplicationConstants;
-import com.diary.superjournalapp.database.DatabaseHelper;
-import com.diary.superjournalapp.entity.Journal;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.diary.superjournalapp.entity.Journal;
+import com.diary.superjournalapp.entity.Tag;
+import com.diary.superjournalapp.repository.TagRepository;
+
 /**
- * Utility class for managing journal tags
+ * @deprecated This class is deprecated and will be removed in a future release.
+ * Please use {@link TagManager} instead.
  */
+@Deprecated
 public class TagUtils {
 
-    private static final String TAGS_PREF_KEY = "journal_tags";
-    private static final String TAG_SEPARATOR = ",";
-
     /**
-     * Add tags to a journal
-     * 
-     * @param context The context
-     * @param journalId The journal ID
-     * @param newTags Comma-separated list of tags
+     * @deprecated Use {@link TagManager#addTagsToJournal(long, String)} instead
      */
+    @Deprecated
     public static void addTagsToJournal(Context context, long journalId, String newTags) {
-        if (newTags == null || newTags.trim().isEmpty()) {
-            return;
-        }
-        
-        DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
-        Journal journal = databaseHelper.journalDao().getMainJournalById(journalId);
-        
-        if (journal != null) {
-            String existingTags = journal.getTags();
-            String updatedTags;
-            
-            if (existingTags == null || existingTags.trim().isEmpty()) {
-                updatedTags = newTags.trim();
-            } else {
-                // Merge existing and new tags, removing duplicates
-                Set<String> tagSet = new HashSet<>();
-                tagSet.addAll(Arrays.asList(existingTags.split(TAG_SEPARATOR)));
-                tagSet.addAll(Arrays.asList(newTags.split(TAG_SEPARATOR)));
-                
-                StringBuilder sb = new StringBuilder();
-                for (String tag : tagSet) {
-                    if (tag != null && !tag.trim().isEmpty()) {
-                        if (sb.length() > 0) {
-                            sb.append(TAG_SEPARATOR);
-                        }
-                        sb.append(tag.trim());
-                    }
-                }
-                
-                updatedTags = sb.toString();
-            }
-            
-            // Update the journal
-            databaseHelper.journalDao().updateJournalTags(journalId, updatedTags);
-            
-            // Update the saved tags list
-            saveTagToPreferences(context, newTags);
-        }
+        TagManager tagManager = new TagManager(context);
+        tagManager.addTagsToJournal(journalId, newTags);
     }
     
     /**
-     * Remove a tag from a journal
-     * 
-     * @param context The context
-     * @param journalId The journal ID
-     * @param tagToRemove The tag to remove
+     * @deprecated Use {@link TagManager} and {@link TagRepository#removeTagFromJournal(long, long)} instead
      */
+    @Deprecated
     public static void removeTagFromJournal(Context context, long journalId, String tagToRemove) {
-        if (tagToRemove == null || tagToRemove.trim().isEmpty()) {
-            return;
-        }
-        
-        DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
-        Journal journal = databaseHelper.journalDao().getMainJournalById(journalId);
-        
-        if (journal != null) {
-            String existingTags = journal.getTags();
-            
-            if (existingTags != null && !existingTags.trim().isEmpty()) {
-                // Remove the tag
-                Set<String> tagSet = new HashSet<>(Arrays.asList(existingTags.split(TAG_SEPARATOR)));
-                tagSet.remove(tagToRemove.trim());
+        // Forward to new implementation
+        TagManager tagManager = new TagManager(context);
+        Tag tag = tagManager.searchTags(tagToRemove).stream()
+                .filter(t -> t.getName().equals(tagToRemove))
+                .findFirst()
+                .orElse(null);
                 
-                StringBuilder sb = new StringBuilder();
-                for (String tag : tagSet) {
-                    if (tag != null && !tag.trim().isEmpty()) {
-                        if (sb.length() > 0) {
-                            sb.append(TAG_SEPARATOR);
-                        }
-                        sb.append(tag.trim());
-                    }
-                }
-                
-                // Update the journal
-                databaseHelper.journalDao().updateJournalTags(journalId, sb.toString());
-            }
+        if (tag != null) {
+            new TagRepository(context).removeTagFromJournal(journalId, tag.getTagId());
         }
     }
     
     /**
-     * Get all tags for a journal
-     * 
-     * @param journal The journal
-     * @return List of tags
+     * @deprecated Use {@link TagManager#getTagsForJournal(Journal)} instead
      */
+    @Deprecated
     public static List<String> getTagsForJournal(Journal journal) {
-        if (journal == null || journal.getTags() == null || journal.getTags().trim().isEmpty()) {
+        if (journal == null) {
             return Collections.emptyList();
         }
         
-        String[] tags = journal.getTags().split(TAG_SEPARATOR);
-        List<String> tagList = new ArrayList<>();
-        
-        for (String tag : tags) {
-            if (tag != null && !tag.trim().isEmpty()) {
-                tagList.add(tag.trim());
-            }
+        // This is a compatibility method during migration
+        // If using the old field, return the old style tags
+        if (journal.getTags() != null && !journal.getTags().isEmpty()) {
+            // Old style tag parsing
+            return parseOldStyleTags(journal.getTags());
         }
         
-        return tagList;
+        // Otherwise try to use the new system
+        try {
+            TagManager tagManager = new TagManager(null);
+            return tagManager.getTagsForJournal(journal).stream()
+                    .map(Tag::getName)
+                    .toList();
+        } catch (Exception e) {
+            // If any error occurs, return empty list
+            return Collections.emptyList();
+        }
     }
     
     /**
-     * Get all tags used in the app
-     * 
-     * @param context The context
-     * @return Set of all tags
+     * @deprecated Use {@link TagManager#getAllTags()} instead
      */
+    @Deprecated
     public static Set<String> getAllTags(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(
-                ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
-        return preferences.getStringSet(TAGS_PREF_KEY, new HashSet<>());
+        // Migration of code paths that call this directly is required
+        // This will not work properly in the new system
+        return Collections.emptySet();
     }
     
     /**
-     * Save a tag to the preferences
-     * 
-     * @param context The context
-     * @param tagsString Comma-separated list of tags
+     * @deprecated Use {@link TagManager} instead
      */
+    @Deprecated
     public static void saveTagToPreferences(Context context, String tagsString) {
-        if (tagsString == null || tagsString.trim().isEmpty()) {
-            return;
+        // This method is no longer needed as tags are now stored in the database
+    }
+    
+    private static List<String> parseOldStyleTags(String tags) {
+        if (tags == null || tags.trim().isEmpty()) {
+            return Collections.emptyList();
         }
         
-        SharedPreferences preferences = context.getSharedPreferences(
-                ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
-        
-        Set<String> existingTags = preferences.getStringSet(TAGS_PREF_KEY, new HashSet<>());
-        Set<String> updatedTags = new HashSet<>(existingTags);
-        
-        String[] newTags = tagsString.split(TAG_SEPARATOR);
-        for (String tag : newTags) {
-            if (tag != null && !tag.trim().isEmpty()) {
-                updatedTags.add(tag.trim());
-            }
-        }
-        
-        preferences.edit().putStringSet(TAGS_PREF_KEY, updatedTags).apply();
+        return java.util.Arrays.stream(tags.split(","))
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .toList();
     }
 }

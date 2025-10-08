@@ -21,8 +21,9 @@ import com.diary.superjournalapp.screens.journals.GratitudeJournal;
 import com.diary.superjournalapp.screens.journals.ReflectiveJournal;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.utils.JournalUtils;
-import com.diary.superjournalapp.utils.TagDialogHelper;
-import com.diary.superjournalapp.utils.TagUtils;
+import com.diary.superjournalapp.adapters.TagChipAdapter;
+import com.diary.superjournalapp.entity.Tag;
+import com.diary.superjournalapp.utils.TagManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,13 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
 
     Context context;
     ArrayList<Journal> journalArrayList;
+    private TagManager tagManager;
 
     public JournalRecyclerAdaptor(Context context,ArrayList<Journal> journalsList){
         this.context=context;
         System.out.println(journalsList);
         this.journalArrayList =journalsList;
+        this.tagManager = new TagManager(context);
     }
 
     @NonNull
@@ -192,8 +195,10 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
      * @param journalId The journal ID to edit tags for
      */
     private void showTagsDialog(long journalId) {
-        TagDialogHelper tagDialogHelper = new TagDialogHelper(context, journalId);
-        tagDialogHelper.showTagDialog();
+        // Use the new TagDialogFragment instead of TagDialogHelper
+        com.diary.superjournalapp.dialogs.TagDialogFragment dialogFragment = 
+            com.diary.superjournalapp.dialogs.TagDialogFragment.newInstance(journalId);
+        dialogFragment.show(((androidx.fragment.app.FragmentActivity)context).getSupportFragmentManager(), "tag_dialog");
     }
     
     /**
@@ -203,44 +208,15 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
      * @param journal Journal to get tags from
      */
     private void setupTagChips(com.google.android.material.chip.ChipGroup chipGroup, Journal journal) {
-        List<String> tags = TagUtils.getTagsForJournal(journal);
+        List<Tag> tags = tagManager.getTagsForJournal(journal);
         
-        // Clear previous chips
-        chipGroup.removeAllViews();
+        // Use TagChipAdapter to handle chip creation and display
+        TagChipAdapter tagChipAdapter = new TagChipAdapter(context, chipGroup)
+            .setSmallChips(true)
+            .setShowCloseIcon(false)
+            .setOnTagClickListener(tag -> showTagsDialog(journal.getJournalId()));
         
-        if (tags.isEmpty()) {
-            // If no tags, hide the chip group
-            chipGroup.setVisibility(View.GONE);
-        } else {
-            chipGroup.setVisibility(View.VISIBLE);
-            
-            // Add a chip for each tag
-            for (String tag : tags) {
-                com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(chipGroup.getContext());
-                chip.setText(tag);
-                chip.setTextSize(10);
-                chip.setChipBackgroundColorResource(android.R.color.transparent);
-                chip.setChipStrokeColorResource(R.color.app_blue);
-                chip.setChipStrokeWidth(1);
-                chip.setChipIconResource(R.drawable.tag_24);
-                chip.setChipIconTintResource(R.color.app_blue);
-                chip.setChipIconSize(12);
-                chip.setCloseIconVisible(false);
-                chip.setClickable(true);
-                chip.setCheckable(false);
-                
-                // Set height and ensure min touch target is false for smaller chips
-                chip.setMinHeight(24);
-                chip.setEnsureMinTouchTargetSize(false);
-                
-                // Add click listener for the tag
-                chip.setOnClickListener(v -> {
-                    showTagsDialog(journal.getJournalId());
-                });
-                
-                chipGroup.addView(chip);
-            }
-        }
+        tagChipAdapter.setTags(tags);
     }
     
     /**

@@ -46,6 +46,15 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="5dp"
                 android:src="@drawable/pin_icon" />
+                
+            <ImageButton
+                android:id="@+id/manage_tags_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="5dp"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_sort_by_size" />
 
             <Button
                 android:id="@+id/save_journal_bullet"

@@ -30,7 +30,9 @@ import com.diary.superjournalapp.entity.JournalCategories.GratitudeJournalEntity
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.TagManager;
 import com.diary.superjournalapp.utils.TextEditorUtils;
+import com.diary.superjournalapp.dialogs.TagDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
@@ -58,7 +60,9 @@ public class GratitudeJournal extends AppCompatActivity {
     private ImageButton textStylesBtn;
     private ImageButton emojiesBtn;
     private ImageButton promptIcon;
+    private ImageButton manageTagsButton;
     private DatabaseHelper databaseHelper;
+    private TagManager tagManager;
     private Date selectedDate = null;
 
     @Override
@@ -70,6 +74,7 @@ public class GratitudeJournal extends AppCompatActivity {
         journal = new Journal();
 
         databaseHelper = DatabaseHelper.getDb(this);
+        tagManager = new TagManager(this);
 
         closeJournalButton = findViewById(R.id.close_journal);
         saveJournalButton = findViewById(R.id.save_journal);
@@ -83,6 +88,22 @@ public class GratitudeJournal extends AppCompatActivity {
         textStylesBtn = findViewById(R.id.gratitude_text_style_icon);
         emojiesBtn = findViewById(R.id.gratitude_emoji_icon);
         promptIcon = findViewById(R.id.prompt_icon);
+        manageTagsButton = findViewById(R.id.manage_tags_button);
+        
+        // Set up tag management
+        manageTagsButton.setOnClickListener(v -> {
+            if (journal != null && journal.getJournalId() > 0) {
+                // Journal already exists, show tag dialog
+                showTagsDialog();
+            } else {
+                // Journal doesn't exist yet, save it first
+                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
+                saveJournalDetails();
+                if (journal.getJournalId() > 0) {
+                    showTagsDialog();
+                }
+            }
+        });
 
         EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.gratitude_journal_root)).build(journalContent);
         emojiesBtn.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +292,16 @@ public class GratitudeJournal extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Show the tags management dialog
+     */
+    private void showTagsDialog() {
+        if (journal != null && journal.getJournalId() > 0) {
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        }
+    }
+    
     private void showDeleteConfirmationDialog(DatabaseHelper databaseHelper, GratitudeJournalEntity gratitudeJournalEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete Journal");

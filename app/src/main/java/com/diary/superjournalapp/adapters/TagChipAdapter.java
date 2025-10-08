@@ -1,0 +1,162 @@
+package com.diary.superjournalapp.adapters;
+
+import android.content.Context;
+import android.view.View;
+
+import com.diary.superjournalapp.R;
+import com.diary.superjournalapp.entity.Tag;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+/**
+ * Adapter for displaying tags as chips
+ */
+public class TagChipAdapter {
+
+    private Context context;
+    private ChipGroup chipGroup;
+    private Consumer<Tag> onTagClickListener;
+    private Consumer<Tag> onTagCloseListener;
+    private boolean showCloseIcon;
+    private boolean smallChips;
+
+    /**
+     * Constructor
+     * 
+     * @param context Context
+     * @param chipGroup ChipGroup to display tags in
+     */
+    public TagChipAdapter(Context context, ChipGroup chipGroup) {
+        this.context = context;
+        this.chipGroup = chipGroup;
+        this.showCloseIcon = false;
+        this.smallChips = false;
+    }
+
+    /**
+     * Set whether to show close icon on chips
+     * 
+     * @param showCloseIcon True to show close icon, false otherwise
+     * @return This adapter for chaining
+     */
+    public TagChipAdapter setShowCloseIcon(boolean showCloseIcon) {
+        this.showCloseIcon = showCloseIcon;
+        return this;
+    }
+
+    /**
+     * Set whether to use small chips (for journal cards)
+     * 
+     * @param smallChips True to use small chips, false for standard size
+     * @return This adapter for chaining
+     */
+    public TagChipAdapter setSmallChips(boolean smallChips) {
+        this.smallChips = smallChips;
+        return this;
+    }
+
+    /**
+     * Set click listener for tags
+     * 
+     * @param listener Listener to call when a tag is clicked
+     * @return This adapter for chaining
+     */
+    public TagChipAdapter setOnTagClickListener(Consumer<Tag> listener) {
+        this.onTagClickListener = listener;
+        return this;
+    }
+
+    /**
+     * Set close listener for tags
+     * 
+     * @param listener Listener to call when a tag's close icon is clicked
+     * @return This adapter for chaining
+     */
+    public TagChipAdapter setOnTagCloseListener(Consumer<Tag> listener) {
+        this.onTagCloseListener = listener;
+        return this;
+    }
+
+    /**
+     * Set tags to display
+     * 
+     * @param tags List of tags
+     */
+    public void setTags(List<Tag> tags) {
+        chipGroup.removeAllViews();
+        
+        if (tags == null || tags.isEmpty()) {
+            chipGroup.setVisibility(View.GONE);
+            return;
+        }
+        
+        chipGroup.setVisibility(View.VISIBLE);
+        
+        for (Tag tag : tags) {
+            addTagChip(tag);
+        }
+    }
+
+    /**
+     * Add a single tag chip
+     * 
+     * @param tag Tag to add
+     */
+    private void addTagChip(Tag tag) {
+        Chip chip = new Chip(context);
+        
+        // Set text and basic properties
+        chip.setText(tag.getName());
+        chip.setClickable(onTagClickListener != null);
+        chip.setCheckable(false);
+        
+        // Set chip appearance
+        chip.setChipBackgroundColorResource(android.R.color.transparent);
+        chip.setChipStrokeColorResource(R.color.app_blue);
+        chip.setChipStrokeWidth(1);
+        chip.setChipIconResource(R.drawable.tag_24);
+        chip.setChipIconTintResource(R.color.app_blue);
+        
+        // Handle small chips (for journal cards)
+        if (smallChips) {
+            chip.setTextSize(10);
+            chip.setChipIconSize(12);
+            chip.setMinHeight(24);
+            chip.setEnsureMinTouchTargetSize(false);
+        }
+        
+        // Handle close icon
+        if (showCloseIcon && onTagCloseListener != null) {
+            chip.setCloseIconVisible(true);
+            chip.setCloseIconTintResource(R.color.app_blue);
+            if (smallChips) {
+                chip.setCloseIconSize(12);
+            }
+        } else {
+            chip.setCloseIconVisible(false);
+        }
+        
+        // Set up listeners
+        if (onTagClickListener != null) {
+            chip.setOnClickListener(v -> onTagClickListener.accept(tag));
+        }
+        
+        if (showCloseIcon && onTagCloseListener != null) {
+            chip.setOnCloseIconClickListener(v -> onTagCloseListener.accept(tag));
+        }
+        
+        // Add to chip group
+        chipGroup.addView(chip);
+    }
+    
+    /**
+     * Clear all tags
+     */
+    public void clearTags() {
+        chipGroup.removeAllViews();
+        chipGroup.setVisibility(View.GONE);
+    }
+}

@@ -29,8 +29,9 @@ import com.diary.superjournalapp.entity.JournalCategories.DreamJournalEntity;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.JournalUtils;
-import com.diary.superjournalapp.utils.TagDialogHelper;
+import com.diary.superjournalapp.utils.TagManager;
 import com.diary.superjournalapp.utils.TextEditorUtils;
+import com.diary.superjournalapp.dialogs.TagDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
@@ -59,6 +60,7 @@ public class DreamJournal extends AppCompatActivity {
     private Journal journal;
     private DatabaseHelper databaseHelper;
     private DreamJournalEntity dreamJournalEntity;
+    private TagManager tagManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class DreamJournal extends AppCompatActivity {
         journal = new Journal();
 
         databaseHelper = DatabaseHelper.getDb(this);
+        tagManager = new TagManager(this);
 
         closeJournalButton = findViewById(R.id.close_journal_dream);
         saveJournalButton = findViewById(R.id.save_journal_dream);
@@ -218,9 +221,9 @@ public class DreamJournal extends AppCompatActivity {
      */
     private void showTagsDialog() {
         if (journal != null && journal.getJournalId() > 0) {
-            // Journal already exists, use the TagDialogHelper normally
-            TagDialogHelper tagDialogHelper = new TagDialogHelper(this, journal.getJournalId());
-            tagDialogHelper.showTagDialog();
+            // Journal already exists, use the TagDialogFragment
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         } else {
             // Journal hasn't been saved yet, save it first then show tags dialog
             Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
@@ -230,8 +233,8 @@ public class DreamJournal extends AppCompatActivity {
             
             if (journal.getJournalId() > 0) {
                 // Now that journal is saved, show the tag dialog
-                TagDialogHelper tagDialogHelper = new TagDialogHelper(this, journal.getJournalId());
-                tagDialogHelper.showTagDialog();
+                TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+                dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
             }
         }
     }

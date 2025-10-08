@@ -13,15 +13,18 @@ import com.diary.superjournalapp.dao.GratitudeJournalContentDao;
 import com.diary.superjournalapp.dao.JournalDao;
 import com.diary.superjournalapp.dao.MoodTrackerDao;
 import com.diary.superjournalapp.dao.ReflectiveJournalContentDao;
+import com.diary.superjournalapp.dao.TagDao;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.JournalCategories.BulletJournalEntity;
 import com.diary.superjournalapp.entity.JournalCategories.DreamJournalEntity;
 import com.diary.superjournalapp.entity.JournalCategories.GratitudeJournalEntity;
 import com.diary.superjournalapp.entity.JournalCategories.ReflectiveJournalEntity;
+import com.diary.superjournalapp.entity.JournalTag;
 import com.diary.superjournalapp.entity.MoodTracker;
+import com.diary.superjournalapp.entity.Tag;
 
 
-@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class}, exportSchema = false, version = 13)
+@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class, Tag.class, JournalTag.class}, exportSchema = false, version = 14)
 @TypeConverters({Converters.class})
 public abstract class DatabaseHelper extends RoomDatabase {
 
@@ -47,7 +50,7 @@ public abstract class DatabaseHelper extends RoomDatabase {
     public abstract DreamJournalContentDao dreamJournalContentDao();
 
     public abstract MoodTrackerDao moodTrackerDao();
-
-
+    
+    public abstract TagDao tagDao();
 }
 

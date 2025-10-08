@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Manage Tags"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Tag input section -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/tag_24"
+            app:startIconTint="?attr/colorPrimary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tag_input_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Add tags (comma-separated)"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_tag_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Tags"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Current tags section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Tags"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/empty_tags_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No tags added yet"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/current_tags_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:chipSpacingHorizontal="4dp"
+            app:chipSpacingVertical="4dp" />
+
+        <!-- Suggested tags section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suggested Tags"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/suggested_tags_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:chipSpacingHorizontal="4dp"
+            app:chipSpacingVertical="4dp" />
+
+        <!-- Done button -->
+        <Button
+            android:id="@+id/done_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Done" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

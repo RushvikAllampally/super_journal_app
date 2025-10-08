@@ -29,15 +29,14 @@ import com.diary.superjournalapp.entity.JournalCategories.ReflectiveJournalEntit
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.LiveTextStyler;
-import com.diary.superjournalapp.utils.TagUtils;
-import com.google.android.flexbox.FlexboxLayout;
+import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.TagManager;
+import com.diary.superjournalapp.utils.TextEditorUtils;
+import com.diary.superjournalapp.dialogs.TagDialogFragment;
+import com.diary.superjournalapp.entity.Tag;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import com.diary.superjournalapp.utils.JournalUtils;
-import com.diary.superjournalapp.utils.TagDialogHelper;
-import com.diary.superjournalapp.utils.TextEditorUtils;
+import java.util.List;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
@@ -68,6 +67,7 @@ public class ReflectiveJournal extends AppCompatActivity {
     private ImageButton colorPalette;
     private ImageButton textStylesBtn;
     private Date selectedDate;
+    private TagManager tagManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         
         journal = new Journal();
         databaseHelper = DatabaseHelper.getDb(this);
+        tagManager = new TagManager(this);
 
         // Initialize UI components
         closeJournalButton = findViewById(R.id.close_journal_reflective);
@@ -109,12 +110,18 @@ public class ReflectiveJournal extends AppCompatActivity {
             promptIcon.setVisibility(View.GONE);
         }
         
-        // Set up tag management with temporary tags support
+        // Set up tag management
         manageTagsButton.setOnClickListener(v -> {
             if (journal != null && journal.getJournalId() > 0) {
-                showTagsDialog(journal.getJournalId());
+                // Journal already exists, show tag dialog
+                showTagsDialog();
             } else {
-                showTemporaryTagsDialog();
+                // Journal doesn't exist yet, save it first
+                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
+                saveJournalDetails();
+                if (journal.getJournalId() > 0) {
+                    showTagsDialog();
+                }
             }
         });
         
@@ -268,18 +275,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         if (journal.getJournalId() == 0) {
             databaseHelper.reflectiveJournalContentDao().insert(reflectiveJournal);
             
-            // Apply any temporary tags to the newly saved journal
-            if (!tempTags.isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (String tag : tempTags) {
-                    if (sb.length() > 0) {
-                        sb.append(",");
-                    }
-                    sb.append(tag);
-                }
-                TagUtils.addTagsToJournal(this, journalId, sb.toString());
-                tempTags.clear();
-            }
+            // No need for temporary tag handling - the new system manages this directly
         } else {
             databaseHelper.reflectiveJournalContentDao().updateReflectiveJournalEntity(reflectiveJournal);
         }
@@ -290,8 +286,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         Toast.makeText(ReflectiveJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
     }
 
-    // Temporary storage for tags before journal is saved
-    private Set<String> tempTags = new HashSet<>();
+    // No need for temporary tags with the new system
     
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -318,100 +313,12 @@ public class ReflectiveJournal extends AppCompatActivity {
 
         /**
      * Show the tags management dialog
-     * 
-     * @param journalId The journal ID to manage tags for
      */
-    private void showTagsDialog(long journalId) {
-        TagDialogHelper tagDialogHelper = new TagDialogHelper(this, journalId);
-        tagDialogHelper.showTagDialog();
-    }
-    
-    /**
-     * Show a dialog to collect tags before the journal is saved
-     */
-    private void showTemporaryTagsDialog() {
-        android.app.Dialog dialog = new android.app.Dialog(this);
-        dialog.setContentView(R.layout.tags_dialog);
-        
-        // Initialize views
-        EditText tagInput = dialog.findViewById(R.id.tag_input);
-        FlexboxLayout tagsContainer = dialog.findViewById(R.id.tags_container);
-        FlexboxLayout suggestedTagsContainer = dialog.findViewById(R.id.suggested_tags_container);
-        Button addTagButton = dialog.findViewById(R.id.add_tag_button);
-        Button doneButton = dialog.findViewById(R.id.done_button);
-        
-        // Set up button click listeners
-        addTagButton.setOnClickListener(v -> {
-            String tags = tagInput.getText().toString().trim();
-            if (!tags.isEmpty()) {
-                // Add to temporary storage
-                String[] tagArray = tags.split(",");
-                Collections.addAll(tempTags, tagArray);
-                tagInput.setText("");
-                refreshTempTags(tagsContainer, suggestedTagsContainer);
-                // Also add to preferences for future suggestions
-                TagUtils.saveTagToPreferences(this, tags);
-            }
-        });
-        
-        doneButton.setOnClickListener(v -> dialog.dismiss());
-        
-        // Show current temp tags and suggested tags
-        refreshTempTags(tagsContainer, suggestedTagsContainer);
-        
-        dialog.show();
-    }
-    
-    /**
-     * Refresh the temporary tags display
-     */
-    private void refreshTempTags(FlexboxLayout tagsContainer, FlexboxLayout suggestedTagsContainer) {
-        tagsContainer.removeAllViews();
-        
-        for (String tag : tempTags) {
-            addTempTagChip(tagsContainer, tag);
+    private void showTagsDialog() {
+        if (journal != null && journal.getJournalId() > 0) {
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
         }
-        
-        // Update suggested tags
-        suggestedTagsContainer.removeAllViews();
-        Set<String> allTags = TagUtils.getAllTags(this);
-        
-        for (String tag : allTags) {
-            if (!tempTags.contains(tag)) {
-                // Add as suggestion
-                View tagView = getLayoutInflater().inflate(R.layout.tag_chip_item, suggestedTagsContainer, false);
-                TextView tagText = tagView.findViewById(R.id.tag_text);
-                tagText.setText(tag);
-                tagView.findViewById(R.id.tag_remove_button).setVisibility(View.GONE);
-                
-                // For suggested tags, clicking adds it
-                tagView.setOnClickListener(v -> {
-                    tempTags.add(tag);
-                    refreshTempTags(tagsContainer, suggestedTagsContainer);
-                });
-                
-                suggestedTagsContainer.addView(tagView);
-            }
-        }
-    }
-    
-    /**
-     * Add a tag chip to the temporary container
-     */
-    private void addTempTagChip(FlexboxLayout container, String tag) {
-        View tagView = getLayoutInflater().inflate(R.layout.tag_chip_item, container, false);
-        
-        TextView tagText = tagView.findViewById(R.id.tag_text);
-        ImageView removeButton = tagView.findViewById(R.id.tag_remove_button);
-        
-        tagText.setText(tag);
-        removeButton.setVisibility(View.VISIBLE);
-        removeButton.setOnClickListener(v -> {
-            tempTags.remove(tag);
-            container.removeView(tagView);
-        });
-        
-        container.addView(tagView);
     }
     
     private void showDeleteConfirmationDialog(DatabaseHelper dbHelper, ReflectiveJournalEntity journalEntity) {

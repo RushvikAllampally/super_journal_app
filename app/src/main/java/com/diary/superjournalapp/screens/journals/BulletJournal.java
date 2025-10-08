@@ -33,6 +33,8 @@ import com.diary.superjournalapp.recyclerviews.BulletRecyclerRowMoveCallback;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.TagManager;
+import com.diary.superjournalapp.dialogs.TagDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -65,6 +67,8 @@ public class BulletJournal extends AppCompatActivity {
     private Date selectedDate = null;
     private DatabaseHelper databaseHelper;
     private List<BulletEntryDetails> tasksList = new ArrayList<>();
+    private TagManager tagManager;
+    private ImageButton manageTagsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class BulletJournal extends AppCompatActivity {
         journal = new Journal();
 
         databaseHelper = DatabaseHelper.getDb(this);
+        tagManager = new TagManager(this);
 
         closeJournalButton = findViewById(R.id.close_journal_bullet);
         saveJournalButton = findViewById(R.id.save_journal_bullet);
@@ -85,6 +90,22 @@ public class BulletJournal extends AppCompatActivity {
         addTaskBtn = findViewById(R.id.addBulletTask);
         pinImage = findViewById(R.id.journal_pin_icon);
         deleteIcon = findViewById(R.id.bullet_delete_icon);
+        manageTagsButton = findViewById(R.id.manage_tags_button);
+        
+        // Set up tag management
+        manageTagsButton.setOnClickListener(v -> {
+            if (journal != null && journal.getJournalId() > 0) {
+                // Journal already exists, show tag dialog
+                showTagsDialog();
+            } else {
+                // Journal doesn't exist yet, save it first
+                Toast.makeText(this, "Saving journal before adding tags...", Toast.LENGTH_SHORT).show();
+                saveJournalDetails();
+                if (journal.getJournalId() > 0) {
+                    showTagsDialog();
+                }
+            }
+        });
 
 
         // Retrieve the data from the Intent
@@ -302,6 +323,16 @@ public class BulletJournal extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Show the tags management dialog
+     */
+    private void showTagsDialog() {
+        if (journal != null && journal.getJournalId() > 0) {
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        }
+    }
+    
     private void showDeleteConfirmationDialog(DatabaseHelper databaseHelper, BulletJournalEntity bulletJournalEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete Journal");
