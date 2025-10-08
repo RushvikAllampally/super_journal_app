@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
+import com.diary.superjournalapp.entity.Tag;
 import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
+import com.diary.superjournalapp.repository.TagRepository;
 import com.diary.superjournalapp.screens.fragments.LibraryFragment.Searchable;
-import com.diary.superjournalapp.utils.TagUtils;
+import com.diary.superjournalapp.utils.TagManager;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
@@ -39,7 +41,9 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private TextView searchResultsLabel;
     private TextView noResultsText;
     private DatabaseHelper databaseHelper;
-    private Set<String> selectedTags = new HashSet<>();
+    private TagManager tagManager;
+    private TagRepository tagRepository;
+    private Set<Long> selectedTagIds = new HashSet<>();
     private List<Journal> searchResults = new ArrayList<>();
     private String currentSearchQuery = "";
     
@@ -63,6 +67,8 @@ public class TagSearchFragment extends Fragment implements Searchable {
         super.onViewCreated(view, savedInstanceState);
         
         databaseHelper = DatabaseHelper.getDb(requireContext());
+        tagManager = new TagManager(requireContext());
+        tagRepository = new TagRepository(requireContext());
         
         // Initialize views
         allTagsContainer = view.findViewById(R.id.all_tags_container);
@@ -76,7 +82,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
         
         // Set up search button
         searchByTagButton.setOnClickListener(v -> {
-            if (selectedTags.isEmpty()) {
+            if (selectedTagIds.isEmpty()) {
                 Toast.makeText(requireContext(), "Please select at least one tag", Toast.LENGTH_SHORT).show();
             } else {
                 performSearch();
@@ -95,7 +101,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
         loadAllTags();
         
         // Add a clear button to the top
-        if (getView() != null && !selectedTags.isEmpty()) {
+        if (getView() != null && !selectedTagIds.isEmpty()) {
             View clearButton = getView().findViewById(R.id.clear_tags_button);
             if (clearButton != null) {
                 clearButton.setVisibility(View.VISIBLE);
@@ -113,18 +119,23 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private void loadAllTags() {
         allTagsContainer.removeAllViews();
         
-        Set<String> allTags = TagUtils.getAllTags(requireContext());
+        // Make sure we're getting ALL tags from the database
+        List<Tag> allTags = tagRepository.getAllTags();
         
-        if (allTags.isEmpty()) {
+        if (allTags == null || allTags.isEmpty()) {
             // No tags available yet
             TextView noTagsText = new TextView(requireContext());
             noTagsText.setText("No tags available yet");
             noTagsText.setTextSize(16);
             allTagsContainer.addView(noTagsText);
         } else {
-            // Add tag chips
-            for (String tag : allTags) {
+            // Log the number of tags found for debugging
+            System.out.println("Found " + allTags.size() + " tags");
+            
+            // Add tag chips - make sure we're displaying all of them
+            for (Tag tag : allTags) {
                 addTagChip(tag);
+                System.out.println("Adding tag: " + tag.getName() + " (ID: " + tag.getTagId() + ")");
             }
         }
     }
@@ -132,14 +143,14 @@ public class TagSearchFragment extends Fragment implements Searchable {
     /**
      * Add a tag chip to the container
      * 
-     * @param tag The tag text
+     * @param tag The tag entity
      */
-    private void addTagChip(String tag) {
+    private void addTagChip(Tag tag) {
         LayoutInflater inflater = LayoutInflater.from(requireContext());
         View tagView = inflater.inflate(R.layout.tag_chip_item, allTagsContainer, false);
         
         TextView tagText = tagView.findViewById(R.id.tag_text);
-        tagText.setText(tag);
+        tagText.setText(tag.getName());
         
         // Hide the remove button
         tagView.findViewById(R.id.tag_remove_button).setVisibility(View.GONE);
@@ -149,20 +160,20 @@ public class TagSearchFragment extends Fragment implements Searchable {
         
         // Toggle selection on click
         tagView.setOnClickListener(v -> {
-            if (selectedTags.contains(tag)) {
-                selectedTags.remove(tag);
+            if (selectedTagIds.contains(tag.getTagId())) {
+                selectedTagIds.remove(tag.getTagId());
             } else {
-                selectedTags.add(tag);
+                selectedTagIds.add(tag.getTagId());
             }
             
             // Update the visual state
             updateTagViewState(tagView, tag);
             
             // Show toast with current selection
-            if (selectedTags.isEmpty()) {
+            if (selectedTagIds.isEmpty()) {
                 Toast.makeText(requireContext(), "No tags selected", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(requireContext(), selectedTags.size() + " tag(s) selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), selectedTagIds.size() + " tag(s) selected", Toast.LENGTH_SHORT).show();
             }
         });
         
@@ -175,18 +186,20 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private void performSearch() {
         searchResults.clear();
         
-        if (selectedTags.isEmpty()) {
+        if (selectedTagIds.isEmpty()) {
             updateUIForResults();
             return;
         }
         
-        // Search for journals that contain ALL selected tags (AND operation)
-        List<Journal> allJournals = databaseHelper.journalDao().getAllJournal();
-        for (Journal journal : allJournals) {
-            if (journalContainsAllTags(journal, selectedTags)) {
-                searchResults.add(journal);
-            }
-        }
+        // Get all journals with the selected tags using the new tag system
+        List<Journal> journalsWithTags = new ArrayList<>();
+        
+        // Convert set to list for the repository method
+        List<Long> tagIdsList = new ArrayList<>(selectedTagIds);
+        
+        // Get journals with ALL selected tags (AND operation)
+        journalsWithTags = databaseHelper.journalDao().getJournalsWithAllTags(tagIdsList, tagIdsList.size());
+        searchResults.addAll(journalsWithTags);
         
         // Apply text search filter if it exists
         if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
@@ -252,7 +265,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
                 .setTitle("Clear Tags")
                 .setMessage("Do you want to clear all selected tags?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    selectedTags.clear();
+                    selectedTagIds.clear();
                     loadAllTags();
                     searchResults.clear();
                     updateUIForResults();
@@ -270,44 +283,15 @@ public class TagSearchFragment extends Fragment implements Searchable {
     }
     
     /**
-     * Check if a journal contains all the given tags
-     * 
-     * @param journal The journal to check
-     * @param tags The set of tags to look for
-     * @return True if the journal has all the specified tags
-     */
-    private boolean journalContainsAllTags(Journal journal, Set<String> tags) {
-        // If journal doesn't have tags or tags is empty
-        if (journal.getTags() == null || journal.getTags().isEmpty() || tags.isEmpty()) {
-            return false;
-        }
-        
-        // Split journal tags and convert to set for efficient lookup
-        Set<String> journalTags = new HashSet<>();
-        String[] tagArray = journal.getTags().split(",");
-        for (String tag : tagArray) {
-            journalTags.add(tag.trim());
-        }
-        
-        // Check if all required tags are in the journal's tags
-        for (String tag : tags) {
-            if (!journalTags.contains(tag)) {
-                return false; // Missing at least one required tag
-            }
-        }
-        
-        return true; // All tags were found
-    }
-    
-    /**
-     * Implementation of Searchable interface
+     * Implementation of Searchable interface for the Library search functionality
      * 
      * @param query The search query to filter journals by
      */
+    
     @Override
     public void onSearch(String query) {
         this.currentSearchQuery = query;
-        if (selectedTags != null && !selectedTags.isEmpty()) {
+        if (selectedTagIds != null && !selectedTagIds.isEmpty()) {
             performSearch(); // Refresh search with the new query
         }
     }
@@ -318,8 +302,8 @@ public class TagSearchFragment extends Fragment implements Searchable {
      * @param tagView The tag view to update
      * @param tag The tag text
      */
-    private void updateTagViewState(View tagView, String tag) {
-        if (selectedTags.contains(tag)) {
+    private void updateTagViewState(View tagView, Tag tag) {
+        if (selectedTagIds.contains(tag.getTagId())) {
             tagView.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
             TextView textView = tagView.findViewById(R.id.tag_text);
             textView.setTextColor(getResources().getColor(android.R.color.white));

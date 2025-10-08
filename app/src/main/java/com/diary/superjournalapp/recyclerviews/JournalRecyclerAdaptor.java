@@ -59,14 +59,13 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
         // Use the improved date format
         holder.journalDate.setText(JournalUtils.getCompactDateFormat(journal.getJournalCreatedOn()));
         
-        // Set journal type icon based on category
         setJournalTypeIcon(holder.journalTypeIcon, journal.getJournalCategory());
         
         // Set bookmark icon based on bookmark status
         updateBookmarkIconImproved(holder.bookmarkIcon, journal.isBookmarked());
         
-        // Handle tags
-        setupTagChips(holder.journalTagsGroup, journal);
+        // Setup tag chips for a journal - don't allow editing on click
+        setupTagChips(holder.journalTagsGroup, journal, false);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,17 +136,8 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
                 }
             });
             
-            // Setup tag click listener
-            journalTag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        Journal journal = journalArrayList.get(position);
-                        showTagsDialog(journal.getJournalId());
-                    }
-                }
-            });
+            // We don't need a click listener for the example tag in XML 
+            // since we're dynamically creating all tags
         }
     }
 
@@ -206,15 +196,21 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
      * 
      * @param chipGroup The ChipGroup to populate
      * @param journal Journal to get tags from
+     * @param allowClickToEdit Whether clicking the tags should open the tag editor
      */
-    private void setupTagChips(com.google.android.material.chip.ChipGroup chipGroup, Journal journal) {
+    private void setupTagChips(com.google.android.material.chip.ChipGroup chipGroup, Journal journal, boolean allowClickToEdit) {
         List<Tag> tags = tagManager.getTagsForJournal(journal);
         
         // Use TagChipAdapter to handle chip creation and display
         TagChipAdapter tagChipAdapter = new TagChipAdapter(context, chipGroup)
             .setSmallChips(true)
             .setShowCloseIcon(false)
-            .setOnTagClickListener(tag -> showTagsDialog(journal.getJournalId()));
+            .setMaxVisibleTags(2); // Only show 2 tags max on card, rest as overflow
+            
+        // Only set click listener if editing is allowed
+        if (allowClickToEdit) {
+            tagChipAdapter.setOnTagClickListener(tag -> showTagsDialog(journal.getJournalId()));
+        }
         
         tagChipAdapter.setTags(tags);
     }

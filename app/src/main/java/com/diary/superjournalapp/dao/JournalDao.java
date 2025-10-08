@@ -12,6 +12,7 @@ import com.diary.superjournalapp.entity.Journal;
 import java.util.Date;
 import java.util.List;
 
+
 @Dao
 public interface JournalDao {
 
@@ -62,4 +63,19 @@ public interface JournalDao {
     @Transaction
     @Query("select * from journals where journal_created_on >= datetime('now', '-' || :days || ' days') order by journal_created_on desc")
     public List<Journal> getJournalsInLastDays(int days);
+    
+    /**
+     * Get journals that have all the specified tags
+     * This uses the new tag system with JournalTag junction table
+     * 
+     * @param tagIds List of tag IDs to search for
+     * @param tagCount Number of tags that must be matched (all of them)
+     * @return List of journals that have all the specified tags
+     */
+    @Transaction
+    @Query("SELECT j.* FROM journals j WHERE "
+          + "(SELECT COUNT(DISTINCT jt.tagId) FROM journal_tags jt "
+          + "WHERE jt.journalId = j.journalId AND jt.tagId IN (:tagIds)) = :tagCount "
+          + "ORDER BY j.journal_created_on DESC")
+    public List<Journal> getJournalsWithAllTags(List<Long> tagIds, int tagCount);
 }

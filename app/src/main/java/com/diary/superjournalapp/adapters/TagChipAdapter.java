@@ -22,6 +22,7 @@ public class TagChipAdapter {
     private Consumer<Tag> onTagCloseListener;
     private boolean showCloseIcon;
     private boolean smallChips;
+    private int maxVisibleTags = Integer.MAX_VALUE; // Default to show all tags
 
     /**
      * Constructor
@@ -55,6 +56,17 @@ public class TagChipAdapter {
      */
     public TagChipAdapter setSmallChips(boolean smallChips) {
         this.smallChips = smallChips;
+        return this;
+    }
+    
+    /**
+     * Set maximum number of visible tags
+     * 
+     * @param maxVisibleTags Maximum number of tags to display before showing a "+X more" chip
+     * @return This adapter for chaining
+     */
+    public TagChipAdapter setMaxVisibleTags(int maxVisibleTags) {
+        this.maxVisibleTags = maxVisibleTags;
         return this;
     }
 
@@ -95,8 +107,18 @@ public class TagChipAdapter {
         
         chipGroup.setVisibility(View.VISIBLE);
         
-        for (Tag tag : tags) {
-            addTagChip(tag);
+        // If we have more tags than maxVisibleTags, we'll show a +X more chip
+        int overflowCount = tags.size() > maxVisibleTags ? tags.size() - maxVisibleTags : 0;
+        int tagsToShow = Math.min(tags.size(), maxVisibleTags);
+        
+        // Add visible tags
+        for (int i = 0; i < tagsToShow; i++) {
+            addTagChip(tags.get(i));
+        }
+        
+        // Add overflow chip if needed
+        if (overflowCount > 0) {
+            addOverflowChip(overflowCount);
         }
     }
 
@@ -146,6 +168,34 @@ public class TagChipAdapter {
         
         if (showCloseIcon && onTagCloseListener != null) {
             chip.setOnCloseIconClickListener(v -> onTagCloseListener.accept(tag));
+        }
+        
+        // Add to chip group
+        chipGroup.addView(chip);
+    }
+    
+    /**
+     * Add an overflow chip indicating there are more tags
+     * 
+     * @param overflowCount Number of additional tags not shown
+     */
+    private void addOverflowChip(int overflowCount) {
+        Chip chip = new Chip(context);
+        
+        // Set text and basic properties
+        chip.setText("+" + overflowCount + " more");
+        chip.setClickable(onTagClickListener != null);
+        chip.setCheckable(false);
+        
+        // Set chip appearance - different style for overflow
+        chip.setChipBackgroundColorResource(R.color.app_blue);
+        chip.setTextColor(context.getResources().getColor(android.R.color.white));
+        
+        // Handle small chips (for journal cards)
+        if (smallChips) {
+            chip.setTextSize(10);
+            chip.setMinHeight(24);
+            chip.setEnsureMinTouchTargetSize(false);
         }
         
         // Add to chip group
