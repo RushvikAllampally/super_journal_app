@@ -267,15 +267,21 @@ public class HomeFragment extends Fragment {
                 Dialog dialog = new Dialog(view.getContext());
                 dialog.setContentView(R.layout.activity_rate_your_day);
                 dialog.show();
+                
+                // Set dialog width to 90% of screen width for better spacing
+                if (dialog.getWindow() != null) {
+                    int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
+                    dialog.getWindow().setLayout(width, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
 
                 TextView moodLevelMessage = dialog.findViewById(R.id.mood_level_msg);
                 TextView moodLevelText = dialog.findViewById(R.id.mood_level_text);
                 TextView moodLevelName = dialog.findViewById(R.id.mood_level_name);
-                ImageButton moodOne = dialog.findViewById(R.id.mood_one);
-                ImageButton moodTwo = dialog.findViewById(R.id.mood_two);
-                ImageButton moodThree = dialog.findViewById(R.id.mood_three);
-                ImageButton moodFour = dialog.findViewById(R.id.mood_four);
-                ImageButton moodFive = dialog.findViewById(R.id.mood_five);
+                TextView moodOne = dialog.findViewById(R.id.mood_one);
+                TextView moodTwo = dialog.findViewById(R.id.mood_two);
+                TextView moodThree = dialog.findViewById(R.id.mood_three);
+                TextView moodFour = dialog.findViewById(R.id.mood_four);
+                TextView moodFive = dialog.findViewById(R.id.mood_five);
                 Button saveMoodBtn = dialog.findViewById(R.id.save_mood);
 //                EditText reasonForMoodTxt = dialog.findViewById(R.id.reason_for_mood);
 

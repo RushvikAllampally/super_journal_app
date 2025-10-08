@@ -3,27 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp"
-    android:elevation="4dp"
-    >
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingVertical="5dp"
-        android:paddingHorizontal="15dp">
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="20dp"
+        android:background="?attr/colorSurface">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:text="How Was Your Day Today !!"
+            android:text="How Was Your Day?"
             android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:text="Rate your mood today"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnSurface"
+            android:alpha="0.7"
+            android:textSize="14sp"
+            android:layout_marginBottom="20dp" />
 
 <!--        <ImageButton-->
 <!--            android:layout_width="wrap_content"-->
@@ -34,53 +48,175 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:layout_marginBottom="20dp">
 
-            <ImageButton
-                android:id="@+id/mood_one"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="7dp"
-                android:layout_marginTop="20dp"
+            <!-- Mood 1: Awful -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/very_sad" />
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp"
+                android:gravity="center">
+                
+                <TextView
+                    android:id="@+id/mood_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😢"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/mood_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Awful"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/balsamiqsans_regular" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/mood_two"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="7dp"
-                android:layout_marginTop="20dp"
+            <!-- Mood 2: Sad -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/sad" />
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp"
+                android:gravity="center">
+                
+                <TextView
+                    android:id="@+id/mood_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😕"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/mood_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sad"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/balsamiqsans_regular" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/mood_three"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="7dp"
-                android:layout_marginTop="20dp"
+            <!-- Mood 3: Good -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/neutral" />
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp"
+                android:gravity="center">
+                
+                <TextView
+                    android:id="@+id/mood_three"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😐"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/mood_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Good"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/balsamiqsans_regular" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/mood_four"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="7dp"
-                android:layout_marginTop="20dp"
+            <!-- Mood 4: Happy -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/happy" />
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp"
+                android:gravity="center">
+                
+                <TextView
+                    android:id="@+id/mood_four"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😊"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/mood_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Happy"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/balsamiqsans_regular" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/mood_five"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="7dp"
-                android:layout_marginTop="20dp"
+            <!-- Mood 5: Excited -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/very_happy" />
-
+                android:orientation="vertical"
+                android:paddingHorizontal="2dp"
+                android:gravity="center">
+                
+                <TextView
+                    android:id="@+id/mood_five"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="😄"
+                    android:textSize="36sp"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/mood_button_background"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Excited"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/balsamiqsans_regular" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -92,22 +228,20 @@
                 android:id="@+id/mood_level_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:fontFamily="@font/balsamiqsans_regular"
-                android:text="Current Day Mood Level : "
-                android:textSize="12sp"
-                android:textStyle="bold"
+                android:text="Current mood: "
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mood_level_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:fontFamily="@font/balsamiqsans_regular"
                 android:text=""
-                android:textColor="@color/app_blue"
-                android:textSize="12sp"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -118,9 +252,12 @@
             android:id="@+id/mood_level_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/balsamiqsans_regular"
             android:text=""
+            android:textColor="?attr/colorOnSurface"
+            android:alpha="0.8"
             android:textSize="14sp"
             android:gravity="center"
             android:visibility="gone"/>
@@ -138,13 +275,16 @@
 
         <Button
             android:id="@+id/save_mood"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="@color/black"
-            android:layout_marginVertical="10dp"
-            android:backgroundTint="@color/btn_color"
-            android:text="Save" />
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:paddingVertical="12dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Save Mood" />
 
     </LinearLayout>
 
