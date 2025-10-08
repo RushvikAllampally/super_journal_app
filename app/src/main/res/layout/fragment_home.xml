@@ -24,7 +24,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_profile" />
+            android:src="@drawable/transparent_profile_icon" />
 
         <Space
             android:layout_width="0dp"
@@ -34,25 +34,43 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_streak" />
+            <FrameLayout
+                android:layout_width="42dp"
+                android:layout_height="42dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/transparent_streak_img" />
+
+                <TextView
+                    android:id="@+id/streak_edit_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9dp"
+                    android:text="45"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/streak_edit_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:gravity="center"
-                android:text="45"
+                android:layout_marginTop="1dp"
+                android:text="Streak"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/balsamiqsans_regular" />
         </LinearLayout>
 
         <ImageButton

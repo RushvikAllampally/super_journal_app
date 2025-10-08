@@ -55,14 +55,13 @@
 
                 <ImageView
                     android:id="@+id/profile_btn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:layout_margin="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
+                    android:padding="4dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_person"
-                    app:tint="?attr/colorPrimary" />
+                    android:src="@drawable/transparent_profile_icon" />
 
                 <TextView
                     android:id="@+id/display_profile_name"
