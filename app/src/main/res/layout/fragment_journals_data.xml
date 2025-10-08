@@ -57,7 +57,16 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="8dp" />
+                    
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="All-time stats and monthly averages"
+                    android:textSize="12sp"
+                    android:textColor="#888888"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Stats Grid Layout -->
                 <GridLayout
@@ -88,7 +97,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Entries"
+                                android:text="📔 Total Entries"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -123,7 +132,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Current Streak"
+                                android:text="⚡ Current Streak"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -158,7 +167,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Last Week"
+                                android:text="📅 Last Week"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -193,7 +202,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Best Day"
+                                android:text="🌟 Best Day"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -228,7 +237,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Average Mood"
+                                android:text="😊 Mood (Current month avg)"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -263,7 +272,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Avg Words"
+                                android:text="✍️ Words (Current month avg)"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -298,7 +307,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Best Streak 🔥"
+                                android:text="🔥 Best Streak"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -333,7 +342,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Words"
+                                android:text="📝 Total Words"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/balsamiqsans_regular" />
                                 
@@ -368,7 +377,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Journal Types"
+                    android:text="Journal Types (All Time)"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/balsamiqsans_regular"

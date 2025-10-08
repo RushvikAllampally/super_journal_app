@@ -138,7 +138,7 @@ public class JournalsDataFragment extends Fragment {
 
         // Get total entries
         int totalEntryCount = StatisticsUtils.getTotalJournalCount(getContext());
-        totalEntries.setText(String.valueOf(totalEntryCount));
+        totalEntries.setText(formatNumber(totalEntryCount));
 
         // Get current streak
         int streak = StatisticsUtils.getCurrentStreak(getContext());
@@ -168,7 +168,7 @@ public class JournalsDataFragment extends Fragment {
         // Get average word count
         int avgWordCount = StatisticsUtils.getAverageWordCount(getContext());
         if (avgWordCount > 0) {
-            averageWordCount.setText(String.valueOf(avgWordCount));
+            averageWordCount.setText(formatNumber(avgWordCount));
         } else {
             averageWordCount.setText("N/A");
         }
@@ -179,11 +179,7 @@ public class JournalsDataFragment extends Fragment {
         
         // Get total words written
         int totalWordsCount = getTotalWordsWritten();
-        if (totalWordsCount > 1000) {
-            totalWords.setText(String.format(Locale.getDefault(), "%.1fk", totalWordsCount / 1000.0));
-        } else {
-            totalWords.setText(String.valueOf(totalWordsCount));
-        }
+        totalWords.setText(formatNumber(totalWordsCount));
         
         // Get bookmarked entries count
         int bookmarkedCountValue = getBookmarkedCount();
@@ -528,5 +524,22 @@ public class JournalsDataFragment extends Fragment {
         }
         
         return maxCount > 0 ? favoriteType : "N/A";
+    }
+    
+    /**
+     * Format large numbers with k suffix for better display
+     * Examples: 1234 -> "1.2k", 999 -> "999", 10000 -> "10k"
+     */
+    private String formatNumber(int number) {
+        if (number >= 10000) {
+            // For numbers >= 10k, show without decimal (e.g., "10k")
+            return String.format(Locale.getDefault(), "%dk", number / 1000);
+        } else if (number >= 1000) {
+            // For numbers >= 1k, show one decimal (e.g., "1.2k")
+            return String.format(Locale.getDefault(), "%.1fk", number / 1000.0);
+        } else {
+            // For numbers < 1k, show as-is
+            return String.valueOf(number);
+        }
     }
 }
