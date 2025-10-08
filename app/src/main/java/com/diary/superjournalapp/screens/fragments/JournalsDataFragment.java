@@ -19,16 +19,12 @@ import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.MoodTracker;
 import com.diary.superjournalapp.utils.StatisticsUtils;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -61,11 +57,19 @@ public class JournalsDataFragment extends Fragment {
     private TextView mostProductiveDay;
     private TextView averageMood;
     private TextView averageWordCount;
+    private TextView longestStreak;
+    private TextView totalWords;
+    private TextView bookmarkedCount;
+    private TextView mostActiveMonth;
+    private TextView favoriteJournalType;
     
     // Charts
     private PieChart journalTypesChart;
-    private BarChart weeklyActivityChart;
-    private LineChart moodTrendsChart;
+    private BarChart moodTrendsChart;
+    
+    // Spinner
+    private android.widget.Spinner moodMonthSpinner;
+    private int selectedMoodPeriod = StatisticsUtils.THIS_MONTH;
 
     public JournalsDataFragment() {
         // Required empty public constructor
@@ -98,16 +102,23 @@ public class JournalsDataFragment extends Fragment {
         mostProductiveDay = view.findViewById(R.id.most_productive_day);
         averageMood = view.findViewById(R.id.average_mood);
         averageWordCount = view.findViewById(R.id.average_word_count);
+        longestStreak = view.findViewById(R.id.longest_streak);
+        totalWords = view.findViewById(R.id.total_words);
+        bookmarkedCount = view.findViewById(R.id.bookmarked_count);
+        mostActiveMonth = view.findViewById(R.id.most_active_month);
+        favoriteJournalType = view.findViewById(R.id.favorite_journal_type);
         
         // Initialize charts
         journalTypesChart = view.findViewById(R.id.journal_types_chart);
-        weeklyActivityChart = view.findViewById(R.id.weekly_activity_chart);
         moodTrendsChart = view.findViewById(R.id.mood_trends_chart);
+        
+        // Initialize spinner
+        moodMonthSpinner = view.findViewById(R.id.mood_month_spinner);
+        setupMoodMonthSpinner();
         
         // Load all statistics
         loadStatistics();
         setupJournalTypesChart();
-        setupWeeklyActivityChart();
         setupMoodTrendsChart();
     }
     
@@ -116,7 +127,6 @@ public class JournalsDataFragment extends Fragment {
         super.onResume();
         loadStatistics();
         setupJournalTypesChart();
-        setupWeeklyActivityChart();
         setupMoodTrendsChart();
     }
 
@@ -162,6 +172,30 @@ public class JournalsDataFragment extends Fragment {
         } else {
             averageWordCount.setText("N/A");
         }
+        
+        // Get longest streak
+        int longestStreakCount = getLongestStreak();
+        longestStreak.setText(String.valueOf(longestStreakCount));
+        
+        // Get total words written
+        int totalWordsCount = getTotalWordsWritten();
+        if (totalWordsCount > 1000) {
+            totalWords.setText(String.format(Locale.getDefault(), "%.1fk", totalWordsCount / 1000.0));
+        } else {
+            totalWords.setText(String.valueOf(totalWordsCount));
+        }
+        
+        // Get bookmarked entries count
+        int bookmarkedCountValue = getBookmarkedCount();
+        bookmarkedCount.setText(String.valueOf(bookmarkedCountValue));
+        
+        // Get most active month
+        String mostActiveMonthValue = getMostActiveMonth();
+        mostActiveMonth.setText(mostActiveMonthValue);
+        
+        // Get favorite journal type
+        String favoriteType = getFavoriteJournalType();
+        favoriteJournalType.setText(favoriteType);
     }
     
     /**
@@ -219,167 +253,280 @@ public class JournalsDataFragment extends Fragment {
     }
     
     /**
-     * Setup the mood trends line chart
+     * Setup mood month spinner
+     */
+    private void setupMoodMonthSpinner() {
+        if (getContext() == null) return;
+        
+        android.widget.ArrayAdapter<CharSequence> adapter = android.widget.ArrayAdapter.createFromResource(
+            getContext(),
+            R.array.time_period_options,
+            android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        moodMonthSpinner.setAdapter(adapter);
+        
+        moodMonthSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                selectedMoodPeriod = position;
+                setupMoodTrendsChart();
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+    }
+    
+    /**
+     * Setup the mood trends bar chart
      */
     private void setupMoodTrendsChart() {
         if (getContext() == null) return;
         
-        // Get mood data from the past month
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
         
-        // Calculate date range for the past month
-        Calendar calendarEnd = Calendar.getInstance();
-        Date endDate = calendarEnd.getTime();
+        // Get date range based on selected period
+        Date[] dateRange = StatisticsUtils.getDateRangeForPeriod(selectedMoodPeriod);
+        Date startDate = dateRange[0];
+        Date endDate = dateRange[1];
         
-        Calendar calendarStart = Calendar.getInstance();
-        calendarStart.add(Calendar.MONTH, -1);
-        Date startDate = calendarStart.getTime();
-        
-        // Get all mood entries from the past month
-        List<MoodTracker> moodEntries = databaseHelper.moodTrackerDao().getAllMoods(startDate, endDate);
-        
-        // Use created date for sorting
-        Collections.sort(moodEntries, new Comparator<MoodTracker>() {
-            @Override
-            public int compare(MoodTracker o1, MoodTracker o2) {
-                return o1.getCreatedDate().compareTo(o2.getCreatedDate());
-            }
-        });
-        
-        // Create entries for the chart
-        ArrayList<Entry> entries = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM", Locale.getDefault());
-        ArrayList<String> dateLabels = new ArrayList<>();
-        
-        // If there are mood entries, add them to the chart
-        if (!moodEntries.isEmpty()) {
-            int day = 0;
-            for (MoodTracker mood : moodEntries) {
-                entries.add(new Entry(day, mood.getMoodLevel()));
-                // Use created date for labels
-                dateLabels.add(dateFormat.format(mood.getCreatedDate()));
-                day++;
-            }
+        // Get all mood entries for the selected period
+        List<MoodTracker> moodEntries;
+        if (startDate == null) {
+            moodEntries = databaseHelper.moodTrackerDao().getAllMoods();
         } else {
-            // Add placeholder data if no mood entries
-            entries.add(new Entry(0, 3)); // Neutral mood
-            dateLabels.add("No Data");
+            moodEntries = databaseHelper.moodTrackerDao().getAllMoods(startDate, endDate);
         }
         
-        LineDataSet dataSet = new LineDataSet(entries, "Mood Level");
-        dataSet.setColor(Color.BLUE);
-        dataSet.setCircleColor(Color.BLUE);
-        dataSet.setLineWidth(2f);
-        dataSet.setCircleRadius(4f);
-        dataSet.setValueTextSize(10f);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Makes the line curve smoothly
+        // Group by mood level (1-5)
+        int[] moodCounts = new int[5];
         
-        LineData lineData = new LineData(dataSet);
+        for (MoodTracker entry : moodEntries) {
+            int moodLevel = entry.getMoodLevel();
+            if (moodLevel >= 1 && moodLevel <= 5) {
+                moodCounts[moodLevel - 1]++;
+            }
+        }
+        
+        // Create chart data
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        String[] moodLabels = getResources().getStringArray(R.array.mood_levels);
+        
+        for (int i = 0; i < 5; i++) {
+            entries.add(new BarEntry(i, moodCounts[i]));
+        }
+        
+        BarDataSet dataSet = new BarDataSet(entries, "Mood Frequency");
+        
+        // Colors representing different moods
+        int[] colors = new int[]{
+            Color.rgb(220, 53, 69),   // Red (Awful)
+            Color.rgb(253, 126, 20),  // Orange (Sad)
+            Color.rgb(255, 193, 7),   // Yellow (Good)
+            Color.rgb(40, 167, 69),   // Green (Happy)
+            Color.rgb(111, 66, 193)   // Purple (Excited)
+        };
+        
+        dataSet.setColors(colors);
+        dataSet.setValueTextSize(12f);
+        
+        BarData barData = new BarData(dataSet);
         
         // Configure chart
-        moodTrendsChart.setData(lineData);
+        moodTrendsChart.setData(barData);
         moodTrendsChart.getDescription().setEnabled(false);
         
         // X-axis styling
         XAxis xAxis = moodTrendsChart.getXAxis();
-        if (moodEntries.size() > 0) {
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(dateLabels));
-        }
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(moodLabels));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
+        xAxis.setDrawGridLines(false);
         
-        // Y-axis limits and labels
+        // Y-axis styling
         YAxis leftAxis = moodTrendsChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0.5f);
-        leftAxis.setAxisMaximum(5.5f);
+        leftAxis.setAxisMinimum(0f);
         leftAxis.setGranularity(1f);
-        
-        // Labels for the mood levels
+        leftAxis.setDrawGridLines(true);
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                switch ((int)value) {
-                    case 1: return "Very Bad";
-                    case 2: return "Bad";
-                    case 3: return "Neutral";
-                    case 4: return "Good";
-                    case 5: return "Excellent";
-                    default: return "";
-                }
+                return String.valueOf((int) value);
             }
         });
         
-        // Disable right y-axis
         moodTrendsChart.getAxisRight().setEnabled(false);
-        
-        // Enable touch gestures
-        moodTrendsChart.setTouchEnabled(true);
-        moodTrendsChart.setDragEnabled(true);
-        moodTrendsChart.setScaleEnabled(true);
+        moodTrendsChart.getLegend().setEnabled(false);
         
         // Animate
         moodTrendsChart.animateY(1000);
         moodTrendsChart.invalidate();
     }
-
+    
     /**
-     * Setup the weekly activity bar chart with real data
+     * Get the longest streak ever achieved
      */
-    private void setupWeeklyActivityChart() {
-        if (getContext() == null) return;
+    private int getLongestStreak() {
+        if (getContext() == null) return 0;
         
-        // Get the real data for journal entries by day of week
-        int[] entriesByDayOfWeek = new int[7]; // Sunday to Saturday
-        
-        // Query the database for journals created in the last 30 days
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
-        List<Journal> recentJournals = databaseHelper.journalDao().getJournalsInLastDays(30);
+        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
         
-        // Count entries by day of week
-        Calendar calendar = Calendar.getInstance();
-        for (Journal journal : recentJournals) {
-            calendar.setTime(journal.getJournalCreatedOn());
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 0 = Sunday
-            entriesByDayOfWeek[dayOfWeek]++;
+        if (journals.isEmpty()) return 0;
+        
+        // Sort journals by date
+        Collections.sort(journals, new Comparator<Journal>() {
+            @Override
+            public int compare(Journal o1, Journal o2) {
+                return o1.getJournalCreatedOn().compareTo(o2.getJournalCreatedOn());
+            }
+        });
+        
+        int longestStreak = 0;
+        int currentStreak = 1;
+        
+        Calendar prevCal = Calendar.getInstance();
+        prevCal.setTime(journals.get(0).getJournalCreatedOn());
+        
+        for (int i = 1; i < journals.size(); i++) {
+            Calendar currCal = Calendar.getInstance();
+            currCal.setTime(journals.get(i).getJournalCreatedOn());
+            
+            // Check if dates are consecutive days
+            int prevDay = prevCal.get(Calendar.DAY_OF_YEAR);
+            int prevYear = prevCal.get(Calendar.YEAR);
+            int currDay = currCal.get(Calendar.DAY_OF_YEAR);
+            int currYear = currCal.get(Calendar.YEAR);
+            
+            if ((currYear == prevYear && currDay == prevDay + 1) || 
+                (currYear == prevYear + 1 && prevCal.get(Calendar.MONTH) == Calendar.DECEMBER && 
+                 prevDay == prevCal.getActualMaximum(Calendar.DAY_OF_YEAR) && currDay == 1)) {
+                currentStreak++;
+            } else if (currYear == prevYear && currDay == prevDay) {
+                // Same day, don't break streak
+            } else {
+                longestStreak = Math.max(longestStreak, currentStreak);
+                currentStreak = 1;
+            }
+            
+            prevCal = currCal;
         }
         
-        // Create entries for the chart
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            entries.add(new BarEntry(i, entriesByDayOfWeek[i]));
-        }
+        return Math.max(longestStreak, currentStreak);
+    }
+    
+    /**
+     * Get total words written across all journals
+     */
+    private int getTotalWordsWritten() {
+        if (getContext() == null) return 0;
         
-        // If no data, add minimal placeholder data
-        if (entries.isEmpty()) {
-            for (int i = 0; i < 7; i++) {
-                entries.add(new BarEntry(i, 0));
+        DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
+        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
+        
+        int totalWords = 0;
+        for (Journal journal : journals) {
+            String content = journal.getJournalStartText();
+            if (content != null && !content.trim().isEmpty()) {
+                totalWords += content.trim().split("\\s+").length;
             }
         }
         
-        BarDataSet barDataSet = new BarDataSet(entries, "Weekly Journal Activity");
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        barDataSet.setValueTextSize(14f);
+        return totalWords;
+    }
+    
+    /**
+     * Get count of bookmarked entries
+     */
+    private int getBookmarkedCount() {
+        if (getContext() == null) return 0;
         
-        BarData barData = new BarData(barDataSet);
+        DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
+        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
         
-        // Set X axis labels (days of week)
-        final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        int count = 0;
+        for (Journal journal : journals) {
+            if (journal.isBookmarked()) {
+                count++;
+            }
+        }
         
-        XAxis xAxis = weeklyActivityChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
+        return count;
+    }
+    
+    /**
+     * Get the most active month
+     */
+    private String getMostActiveMonth() {
+        if (getContext() == null) return "N/A";
         
-        // Configure chart
-        weeklyActivityChart.setData(barData);
-        weeklyActivityChart.getDescription().setEnabled(true);
-        weeklyActivityChart.getDescription().setText("From the last 30 days");
-        weeklyActivityChart.getDescription().setTextSize(12f);
-        weeklyActivityChart.getDescription().setTextColor(Color.GRAY);
-        weeklyActivityChart.animateY(1000);
-        weeklyActivityChart.invalidate();
+        DatabaseHelper databaseHelper = DatabaseHelper.getDb(getContext());
+        List<Journal> journals = databaseHelper.journalDao().getAllJournal();
+        
+        if (journals.isEmpty()) return "N/A";
+        
+        // Count entries by month-year
+        Map<String, Integer> monthCounts = new java.util.HashMap<>();
+        SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMM yyyy", Locale.getDefault());
+        
+        for (Journal journal : journals) {
+            String monthYear = monthYearFormat.format(journal.getJournalCreatedOn());
+            monthCounts.put(monthYear, monthCounts.getOrDefault(monthYear, 0) + 1);
+        }
+        
+        // Find month with max entries
+        String mostActiveMonth = "N/A";
+        int maxCount = 0;
+        
+        for (Map.Entry<String, Integer> entry : monthCounts.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostActiveMonth = entry.getKey();
+            }
+        }
+        
+        return mostActiveMonth;
+    }
+    
+    /**
+     * Get favorite journal type (most used)
+     */
+    private String getFavoriteJournalType() {
+        if (getContext() == null) return "N/A";
+        
+        Map<String, Integer> journalCounts = StatisticsUtils.getJournalCountByType(getContext());
+        
+        String favoriteType = "N/A";
+        int maxCount = 0;
+        
+        for (Map.Entry<String, Integer> entry : journalCounts.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                String type = entry.getKey();
+                
+                // Convert type to friendly name
+                switch (type) {
+                    case ApplicationConstants.REFLECTIVE_JOURNAL:
+                        favoriteType = "My Diary";
+                        break;
+                    case ApplicationConstants.GRATITUDE_JOURNAL:
+                        favoriteType = "Gratitude";
+                        break;
+                    case ApplicationConstants.DREAM_JOURNAL:
+                        favoriteType = "Dream";
+                        break;
+                    case ApplicationConstants.BULLET_JOURNAL:
+                        favoriteType = "Bullet";
+                        break;
+                    default:
+                        favoriteType = type;
+                }
+            }
+        }
+        
+        return maxCount > 0 ? favoriteType : "N/A";
     }
 }
