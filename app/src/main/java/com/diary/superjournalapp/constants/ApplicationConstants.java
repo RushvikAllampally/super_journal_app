@@ -137,7 +137,119 @@ public class ApplicationConstants {
                     "I am in harmony with the flow of life.",
                     "I am a channel for divine love and light.",
                     "I am focused on my goals and dreams.",
-                    "I am free from negative thoughts and beliefs."};
+                    "I am free from negative thoughts and beliefs.",
+                    // Extended affirmation collection
+                    "I trust the journey even when I don't understand it.",
+                    "I am becoming the best version of myself.",
+                    "Every day I am getting better and better.",
+                    "I have the power to create the life I desire.",
+                    "I am worthy of my dreams.",
+                    "I choose to be happy right now.",
+                    "I am enough just as I am.",
+                    "My potential is unlimited.",
+                    "I trust my intuition and inner wisdom.",
+                    "I am proud of myself and my achievements.",
+                    "I embrace change and welcome new opportunities.",
+                    "I am mentally and physically strong.",
+                    "I radiate confidence and self-assurance.",
+                    "I am in perfect health and abundant wealth.",
+                    "I choose to focus on what I can control.",
+                    "I am learning valuable lessons from my challenges.",
+                    "I attract positive energy and positive people.",
+                    "I am calm, peaceful, and centered.",
+                    "My life is filled with love, joy, and abundance.",
+                    "I release all worry and embrace faith.",
+                    "I am making a positive difference in the world.",
+                    "I trust the timing of my life.",
+                    "I am capable of amazing things.",
+                    "My mind is clear and focused.",
+                    "I choose progress over perfection.",
+                    "I am patient with myself and my journey.",
+                    "I celebrate every small victory.",
+                    "I am deserving of rest and relaxation.",
+                    "My voice matters and I speak my truth.",
+                    "I am releasing all negative thoughts and emotions.",
+                    "I attract abundance in all areas of my life.",
+                    "I am brave enough to take risks.",
+                    "I trust myself to make good decisions.",
+                    "I am surrounded by beauty and inspiration.",
+                    "I choose to see the good in every situation.",
+                    "I am a powerful force for positive change.",
+                    "My body is healthy and strong.",
+                    "I am grateful for this moment.",
+                    "I choose love over fear.",
+                    "I am creating my own happiness.",
+                    "I believe in my ability to succeed.",
+                    "I am constantly expanding my comfort zone.",
+                    "I am a unique and valuable person.",
+                    "My past does not define my future.",
+                    "I am open to receiving abundance.",
+                    "I have everything I need within me.",
+                    "I am worthy of all good things.",
+                    "I choose to be optimistic and hopeful.",
+                    "I am making wise and healthy choices.",
+                    "I trust that everything is working out for my highest good.",
+                    "I am confident in my unique gifts and talents.",
+                    "I am resilient and bounce back from setbacks.",
+                    "I choose joy and positivity in every moment.",
+                    "I am financially secure and prosperous.",
+                    "I honor my commitments to myself.",
+                    "I am worthy of success and abundance.",
+                    "I create opportunities wherever I go.",
+                    "I am peaceful and at ease.",
+                    "My possibilities are endless.",
+                    "I choose to be kind to myself.",
+                    "I am attracting my ideal life.",
+                    "I have all the energy I need to accomplish my goals.",
+                    "I am living my life with purpose and passion.",
+                    "I release all self-doubt and believe in myself.",
+                    "I am confident in my ability to learn and grow.",
+                    "I choose to see obstacles as opportunities.",
+                    "I am grateful for my body and treat it with respect.",
+                    "I am creating the life of my dreams.",
+                    "I trust in my abilities and express my true self.",
+                    "I am worthy of happiness and fulfillment.",
+                    "I choose thoughts that support my success.",
+                    "I am deserving of peace and harmony.",
+                    "I embrace my uniqueness and individuality.",
+                    "I am making a meaningful contribution.",
+                    "I choose to live in the present moment.",
+                    "I am confident, capable, and strong.",
+                    "I trust the process of life.",
+                    "I am open to new ideas and perspectives.",
+                    "I choose to focus on solutions, not problems.",
+                    "I am worthy of love, respect, and kindness.",
+                    "I am creating positive change in my life.",
+                    "I have the courage to follow my heart.",
+                    "I am grateful for all that I have.",
+                    "I choose to be authentic and true to myself.",
+                    "I am at peace with who I am.",
+                    "I trust my path and walk it with joy.",
+                    "I am deserving of all the blessings coming my way.",
+                    "I choose to be present and mindful.",
+                    "I am strong enough to face any challenge.",
+                    "I believe in my dreams and my ability to achieve them.",
+                    "I am transforming my life one day at a time.",
+                    "I choose self-love and self-care.",
+                    "I am worthy of beautiful and healthy relationships.",
+                    "I trust my journey is unfolding perfectly.",
+                    "I am grateful for the opportunity to grow.",
+                    "I choose to let go of what no longer serves me.",
+                    "I am creating a life that feels good on the inside.",
+                    "I trust in divine timing.",
+                    "I am surrounded by supportive and loving people.",
+                    "I choose to be gentle with myself.",
+                    "I am excited about the future.",
+                    "I believe in the power of positive thinking.",
+                    "I am worthy of taking up space.",
+                    "I choose to honor my feelings and emotions.",
+                    "I am continuously learning and evolving.",
+                    "I trust my inner guidance.",
+                    "I am proud of how far I've come.",
+                    "I choose courage over comfort.",
+                    "I am deserving of good health and vitality.",
+                    "I trust that I am on the right path.",
+                    "I am enough, I have enough, I do enough."};
     public static List<QuoteDto> QUOTES_ARRAY = new ArrayList<>();
 
     static {
@@ -195,6 +307,118 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("Don't watch the clock; do what it does. Keep going.", "Sam Levenson"));
         QUOTES_ARRAY.add(createQuote("The only limit to our realization of tomorrow will be our doubts of today.", "Franklin D. Roosevelt"));
         QUOTES_ARRAY.add(createQuote("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"));
+        
+        // Extended quote collection
+        QUOTES_ARRAY.add(createQuote("The only impossible journey is the one you never begin.", "Tony Robbins"));
+        QUOTES_ARRAY.add(createQuote("Everything you've ever wanted is on the other side of fear.", "George Addair"));
+        QUOTES_ARRAY.add(createQuote("Dream big and dare to fail.", "Norman Vaughan"));
+        QUOTES_ARRAY.add(createQuote("Courage is grace under pressure.", "Ernest Hemingway"));
+        QUOTES_ARRAY.add(createQuote("Life shrinks or expands in proportion to one's courage.", "Anaïs Nin"));
+        QUOTES_ARRAY.add(createQuote("What we fear doing most is usually what we most need to do.", "Tim Ferriss"));
+        QUOTES_ARRAY.add(createQuote("The mind is everything. What you think you become.", "Buddha"));
+        QUOTES_ARRAY.add(createQuote("Strive not to be a success, but rather to be of value.", "Albert Einstein"));
+        QUOTES_ARRAY.add(createQuote("I have not failed. I've just found 10,000 ways that won't work.", "Thomas Edison"));
+        QUOTES_ARRAY.add(createQuote("Twenty years from now you will be more disappointed by the things you didn't do.", "Mark Twain"));
+        QUOTES_ARRAY.add(createQuote("It is during our darkest moments that we must focus to see the light.", "Aristotle"));
+        QUOTES_ARRAY.add(createQuote("The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb"));
+        QUOTES_ARRAY.add(createQuote("An unexamined life is not worth living.", "Socrates"));
+        QUOTES_ARRAY.add(createQuote("Eighty percent of success is showing up.", "Woody Allen"));
+        QUOTES_ARRAY.add(createQuote("Your life does not get better by chance, it gets better by change.", "Jim Rohn"));
+        QUOTES_ARRAY.add(createQuote("People who are crazy enough to think they can change the world, are the ones who do.", "Rob Siltanen"));
+        QUOTES_ARRAY.add(createQuote("We must balance conspicuous consumption with conscious capitalism.", "Kevin Kruse"));
+        QUOTES_ARRAY.add(createQuote("Do what you can, with what you have, where you are.", "Theodore Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("Everything has beauty, but not everyone can see.", "Confucius"));
+        QUOTES_ARRAY.add(createQuote("How wonderful it is that nobody need wait a single moment before starting to improve the world.", "Anne Frank"));
+        QUOTES_ARRAY.add(createQuote("When I let go of what I am, I become what I might be.", "Lao Tzu"));
+        QUOTES_ARRAY.add(createQuote("The secret of getting ahead is getting started.", "Mark Twain"));
+        QUOTES_ARRAY.add(createQuote("It's not whether you get knocked down, it's whether you get up.", "Vince Lombardi"));
+        QUOTES_ARRAY.add(createQuote("If you are working on something that you really care about, you don't have to be pushed.", "Steve Jobs"));
+        QUOTES_ARRAY.add(createQuote("The most difficult thing is the decision to act, the rest is merely tenacity.", "Amelia Earhart"));
+        QUOTES_ARRAY.add(createQuote("Fall seven times and stand up eight.", "Japanese Proverb"));
+        QUOTES_ARRAY.add(createQuote("When everything seems to be going against you, remember that the airplane takes off against the wind.", "Henry Ford"));
+        QUOTES_ARRAY.add(createQuote("We generate fears while we sit. We overcome them by action.", "Dr. Henry Link"));
+        QUOTES_ARRAY.add(createQuote("Whether you think you can or you think you can't, you're right.", "Henry Ford"));
+        QUOTES_ARRAY.add(createQuote("The only person you should try to be better than is the person you were yesterday.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("I didn't fail the test. I just found 100 ways to do it wrong.", "Benjamin Franklin"));
+        QUOTES_ARRAY.add(createQuote("A person who never made a mistake never tried anything new.", "Albert Einstein"));
+        QUOTES_ARRAY.add(createQuote("If you can dream it, you can do it.", "Walt Disney"));
+        QUOTES_ARRAY.add(createQuote("The battles that count aren't the ones for gold medals.", "Jesse Owens"));
+        QUOTES_ARRAY.add(createQuote("Do one thing every day that scares you.", "Eleanor Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("Good things come to people who wait, but better things come to those who go out and get them.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("If you do what you always did, you will get what you always got.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("Success is walking from failure to failure with no loss of enthusiasm.", "Winston Churchill"));
+        QUOTES_ARRAY.add(createQuote("Just when the caterpillar thought the world was ending, he turned into a butterfly.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("The difference between ordinary and extraordinary is that little extra.", "Jimmy Johnson"));
+        QUOTES_ARRAY.add(createQuote("Don't be afraid to give up the good to go for the great.", "John D. Rockefeller"));
+        QUOTES_ARRAY.add(createQuote("I find that the harder I work, the more luck I seem to have.", "Thomas Jefferson"));
+        QUOTES_ARRAY.add(createQuote("Success is the sum of small efforts repeated day in and day out.", "Robert Collier"));
+        QUOTES_ARRAY.add(createQuote("If you want to lift yourself up, lift up someone else.", "Booker T. Washington"));
+        QUOTES_ARRAY.add(createQuote("The real test is not whether you avoid this failure, but whether you let it harden or shame you.", "Oprah Winfrey"));
+        QUOTES_ARRAY.add(createQuote("It is never too late to be what you might have been.", "George Eliot"));
+        QUOTES_ARRAY.add(createQuote("You become what you believe.", "Oprah Winfrey"));
+        QUOTES_ARRAY.add(createQuote("I would rather die of passion than of boredom.", "Vincent van Gogh"));
+        QUOTES_ARRAY.add(createQuote("A truly rich man is one whose children run into his arms when his hands are empty.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("It is not what you do for your children, but what you have taught them to do for themselves.", "Ann Landers"));
+        QUOTES_ARRAY.add(createQuote("The only way to have a friend is to be one.", "Ralph Waldo Emerson"));
+        QUOTES_ARRAY.add(createQuote("Build your own dreams, or someone else will hire you to build theirs.", "Farrah Gray"));
+        QUOTES_ARRAY.add(createQuote("The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty.", "Winston Churchill"));
+        QUOTES_ARRAY.add(createQuote("Don't let yesterday take up too much of today.", "Will Rogers"));
+        QUOTES_ARRAY.add(createQuote("You learn more from failure than from success. Don't let it stop you.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("It's not what happens to you, but how you react to it that matters.", "Epictetus"));
+        QUOTES_ARRAY.add(createQuote("Make each day your masterpiece.", "John Wooden"));
+        QUOTES_ARRAY.add(createQuote("Life is 10% what happens to you and 90% how you react to it.", "Charles R. Swindoll"));
+        QUOTES_ARRAY.add(createQuote("Nothing is impossible, the word itself says 'I'm possible'!", "Audrey Hepburn"));
+        QUOTES_ARRAY.add(createQuote("Keep your face always toward the sunshine and shadows will fall behind you.", "Walt Whitman"));
+        QUOTES_ARRAY.add(createQuote("What lies behind us and what lies before us are tiny matters compared to what lies within us.", "Ralph Waldo Emerson"));
+        QUOTES_ARRAY.add(createQuote("The question isn't who is going to let me; it's who is going to stop me.", "Ayn Rand"));
+        QUOTES_ARRAY.add(createQuote("I alone cannot change the world, but I can cast a stone across the water to create many ripples.", "Mother Teresa"));
+        QUOTES_ARRAY.add(createQuote("Remember no one can make you feel inferior without your consent.", "Eleanor Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("Life is not measured by the number of breaths we take, but by the moments that take our breath away.", "Maya Angelou"));
+        QUOTES_ARRAY.add(createQuote("Happiness is not by chance, but by choice.", "Jim Rohn"));
+        QUOTES_ARRAY.add(createQuote("If you want to go fast, go alone. If you want to go far, go together.", "African Proverb"));
+        QUOTES_ARRAY.add(createQuote("The only limit to our realization of tomorrow is our doubts of today.", "Franklin D. Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("You are never too old to set another goal or to dream a new dream.", "C.S. Lewis"));
+        QUOTES_ARRAY.add(createQuote("Try to be a rainbow in someone else's cloud.", "Maya Angelou"));
+        QUOTES_ARRAY.add(createQuote("You are braver than you believe, stronger than you seem, and smarter than you think.", "A.A. Milne"));
+        QUOTES_ARRAY.add(createQuote("Challenges are what make life interesting. Overcoming them is what makes life meaningful.", "Joshua J. Marine"));
+        QUOTES_ARRAY.add(createQuote("If you can't explain it simply, you don't understand it well enough.", "Albert Einstein"));
+        QUOTES_ARRAY.add(createQuote("Blessed are those who can give without remembering and take without forgetting.", "Anonymous"));
+        QUOTES_ARRAY.add(createQuote("Do not go where the path may lead, go instead where there is no path and leave a trail.", "Ralph Waldo Emerson"));
+        QUOTES_ARRAY.add(createQuote("Be yourself; everyone else is already taken.", "Oscar Wilde"));
+        QUOTES_ARRAY.add(createQuote("The best revenge is massive success.", "Frank Sinatra"));
+        QUOTES_ARRAY.add(createQuote("People often say that motivation doesn't last. Well, neither does bathing.", "Zig Ziglar"));
+        QUOTES_ARRAY.add(createQuote("Life is what we make it, always has been, always will be.", "Grandma Moses"));
+        QUOTES_ARRAY.add(createQuote("Dreaming, after all, is a form of planning.", "Gloria Steinem"));
+        QUOTES_ARRAY.add(createQuote("Whatever the mind of man can conceive and believe, it can achieve.", "Napoleon Hill"));
+        QUOTES_ARRAY.add(createQuote("First, have a definite, clear practical ideal; a goal, an objective.", "Aristotle"));
+        QUOTES_ARRAY.add(createQuote("Either write something worth reading or do something worth writing.", "Benjamin Franklin"));
+        QUOTES_ARRAY.add(createQuote("The only way to do great work is to love what you do.", "Steve Jobs"));
+        QUOTES_ARRAY.add(createQuote("If you can dream it, you can achieve it.", "Zig Ziglar"));
+        QUOTES_ARRAY.add(createQuote("Don't let what you cannot do interfere with what you can do.", "John Wooden"));
+        QUOTES_ARRAY.add(createQuote("You can't use up creativity. The more you use, the more you have.", "Maya Angelou"));
+        QUOTES_ARRAY.add(createQuote("Dream as if you'll live forever, live as if you'll die today.", "James Dean"));
+        QUOTES_ARRAY.add(createQuote("What you lack in talent can be made up with desire, hustle and giving 110% all the time.", "Don Zimmer"));
+        QUOTES_ARRAY.add(createQuote("Do what you can with all you have, wherever you are.", "Theodore Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("You are never too old to set another goal or to dream a new dream.", "Les Brown"));
+        QUOTES_ARRAY.add(createQuote("Life is short, and it is up to you to make it sweet.", "Sarah Louise Delany"));
+        QUOTES_ARRAY.add(createQuote("The power of imagination makes us infinite.", "John Muir"));
+        QUOTES_ARRAY.add(createQuote("The purpose of our lives is to be happy.", "Dalai Lama"));
+        QUOTES_ARRAY.add(createQuote("May you live every day of your life.", "Jonathan Swift"));
+        QUOTES_ARRAY.add(createQuote("Not how long, but how well you have lived is the main thing.", "Seneca"));
+        QUOTES_ARRAY.add(createQuote("The whole secret of a successful life is to find out what is one's destiny to do.", "Henry Ford"));
+        QUOTES_ARRAY.add(createQuote("In order to write about life first you must live it.", "Ernest Hemingway"));
+        QUOTES_ARRAY.add(createQuote("Keep smiling, because life is a beautiful thing and there's so much to smile about.", "Marilyn Monroe"));
+        QUOTES_ARRAY.add(createQuote("Life is a long lesson in humility.", "James M. Barrie"));
+        QUOTES_ARRAY.add(createQuote("In three words I can sum up everything about life: it goes on.", "Robert Frost"));
+        QUOTES_ARRAY.add(createQuote("Love the life you live. Live the life you love.", "Bob Marley"));
+        QUOTES_ARRAY.add(createQuote("Life is either a daring adventure or nothing at all.", "Helen Keller"));
+        QUOTES_ARRAY.add(createQuote("You have brains in your head. You have feet in your shoes.", "Dr. Seuss"));
+        QUOTES_ARRAY.add(createQuote("Good friends, good books, and a sleepy conscience: this is the ideal life.", "Mark Twain"));
+        QUOTES_ARRAY.add(createQuote("To live is the rarest thing in the world. Most people exist, that is all.", "Oscar Wilde"));
+        QUOTES_ARRAY.add(createQuote("Live in the sunshine, swim the sea, drink the wild air.", "Ralph Waldo Emerson"));
+        QUOTES_ARRAY.add(createQuote("Go confidently in the direction of your dreams! Live the life you've imagined.", "Henry David Thoreau"));
+        QUOTES_ARRAY.add(createQuote("The greatest glory in living lies not in never failing, but in rising every time we fail.", "Ralph Waldo Emerson"));
+        QUOTES_ARRAY.add(createQuote("You only live once, but if you do it right, once is enough.", "Mae West"));
 
     }
 

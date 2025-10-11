@@ -37,6 +37,7 @@ import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
 import com.diary.superjournalapp.screens.journals.BulletJournal;
 import com.diary.superjournalapp.screens.settings.SettingsScreen;
 import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.QuoteManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -220,9 +221,12 @@ public class HomeFragment extends Fragment {
         int streak = JournalUtils.updateStreakOnLoad(view.getContext());
         streakCount.setText(String.valueOf(streak));
 
-        quote.setText(getQuoteOfTheDay().getQuote());
-        quoteAuthor.setText(getQuoteOfTheDay().getAuthor());
-        affirmation.setText(getAffirmationOfTheDay());
+        // Use QuoteManager for smart quote/affirmation tracking
+        QuoteManager quoteManager = new QuoteManager(view.getContext());
+        QuoteDto dailyQuote = quoteManager.getQuoteOfTheDay();
+        quote.setText(dailyQuote.getQuote());
+        quoteAuthor.setText(dailyQuote.getAuthor());
+        affirmation.setText(quoteManager.getAffirmationOfTheDay());
 
         SharedPreferences preferences = getActivity().getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
         String appUserName = preferences.getString(ApplicationConstants.APP_USER_NAME, "Dude");
@@ -419,53 +423,11 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private QuoteDto getQuoteOfTheDay() {
-        // Get the current day of the year
-        int dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-
-        SharedPreferences preferences = getActivity().getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
-        // Retrieve the stored quote index for the current day
-        int storedIndex = preferences.getInt("quoteIndex" + dayOfYear, -1);
-
-        // If there is no stored index for the current day, select a random one
-        if (storedIndex == -1) {
-            storedIndex = getRandomQuoteIndex();
-            // Store the selected index for the current day
-            preferences.edit().putInt("quoteIndex" + dayOfYear, storedIndex).apply();
-        }
-
-        // Return the quote corresponding to the selected index
-        return ApplicationConstants.QUOTES_ARRAY.get(storedIndex);
-    }
-
-    private int getRandomQuoteIndex() {
-        // Generate a random index within the range of the quotes array
-        return new Random().nextInt(ApplicationConstants.QUOTES_ARRAY.size());
-    }
-
-    private String getAffirmationOfTheDay() {
-        // Get the current day of the year
-        int dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-
-        SharedPreferences preferences = getActivity().getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
-        // Retrieve the stored quote index for the current day
-        int storedIndex = preferences.getInt("affirmationIndex" + dayOfYear, -1);
-
-        // If there is no stored index for the current day, select a random one
-        if (storedIndex == -1) {
-            storedIndex = getRandomAffirmationIndex();
-            // Store the selected index for the current day
-            preferences.edit().putInt("affirmationIndex" + dayOfYear, storedIndex).apply();
-        }
-
-        // Return the quote corresponding to the selected index
-        return ApplicationConstants.AFFIRMATIONS[storedIndex];
-    }
-
-    private int getRandomAffirmationIndex() {
-        // Generate a random index within the range of the quotes array
-        return new Random().nextInt(ApplicationConstants.AFFIRMATIONS.length);
-    }
+    // Old methods removed - now using QuoteManager utility class
+    // QuoteManager handles:
+    // - Same quote/affirmation throughout the day
+    // - Smart tracking to never repeat until all are used
+    // - Automatic reset when exhausted
 
     public void saveMood(int moodLevel, String reasonForMood, DatabaseHelper databaseHelper) {
 
