@@ -298,13 +298,13 @@ public class TagSearchFragment extends Fragment implements Searchable {
      */
     private void updateTagViewState(View tagView, Tag tag) {
         if (selectedTagIds.contains(tag.getTagId())) {
-            tagView.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+            tagView.setBackgroundColor(getResources().getColor(R.color.tag_selected));
             TextView textView = tagView.findViewById(R.id.tag_text);
-            textView.setTextColor(getResources().getColor(android.R.color.white));
+            textView.setTextColor(getResources().getColor(R.color.white));
         } else {
-            tagView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+            tagView.setBackgroundColor(getResources().getColor(R.color.tag_unselected));
             TextView textView = tagView.findViewById(R.id.tag_text);
-            textView.setTextColor(getResources().getColor(android.R.color.white));
+            textView.setTextColor(getResources().getColor(R.color.on_surface));
         }
     }
     

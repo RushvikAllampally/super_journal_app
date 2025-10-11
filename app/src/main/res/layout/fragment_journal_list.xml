@@ -20,7 +20,7 @@
             android:layout_marginLeft="5dp"
             android:text="All Journals"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="@color/app_blue"
+            android:textColor="@color/text_primary"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
             android:layout_width="150dp"
             android:layout_height="30dp"
             android:textAlignment="center"
-            android:backgroundTint="@color/btn_color"
+            android:backgroundTint="?attr/colorSecondary"
             android:fontFamily="@font/balsamiqsans_regular"
             android:background="@drawable/custom_spinner_item_background"
             android:layout_margin="10dp" />
@@ -53,7 +53,7 @@
             android:layout_width="110dp"
             android:layout_height="30dp"
             android:textAlignment="center"
-            android:backgroundTint="@color/btn_color"
+            android:backgroundTint="?attr/colorSecondary"
             android:fontFamily="@font/balsamiqsans_regular"
             android:background="@drawable/custom_spinner_item_background"
             android:layout_margin="10dp" />

@@ -27,7 +27,7 @@
             android:id="@+id/bullet_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/app_blue"
+            android:buttonTint="?attr/colorSecondary"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingStart="8dp"

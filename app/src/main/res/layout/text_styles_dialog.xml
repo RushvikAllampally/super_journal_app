@@ -82,7 +82,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DDDDDD"
+            android:background="?attr/colorOnSurface"
+            android:alpha="0.2"
             android:layout_marginBottom="16dp" />
             
         <!-- Text Alignment Section -->
@@ -133,7 +134,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DDDDDD"
+            android:background="?attr/colorOnSurface"
+            android:alpha="0.2"
             android:layout_marginBottom="16dp" />
             
         <!-- List Options Section -->
@@ -174,7 +176,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DDDDDD"
+            android:background="?attr/colorOnSurface"
+            android:alpha="0.2"
             android:layout_marginBottom="16dp" />
             
         <!-- Font Selection Section -->

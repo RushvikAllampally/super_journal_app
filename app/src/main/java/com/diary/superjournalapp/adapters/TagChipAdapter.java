@@ -188,8 +188,8 @@ public class TagChipAdapter {
         chip.setCheckable(false);
         
         // Set chip appearance - different style for overflow
-        chip.setChipBackgroundColorResource(R.color.app_blue);
-        chip.setTextColor(context.getResources().getColor(android.R.color.white));
+        chip.setChipBackgroundColorResource(R.color.secondary);
+        chip.setTextColor(context.getResources().getColor(R.color.on_secondary));
         
         // Handle small chips (for journal cards)
         if (smallChips) {

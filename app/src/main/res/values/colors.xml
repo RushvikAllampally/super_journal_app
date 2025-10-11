@@ -8,7 +8,13 @@
     <color name="primary">#5B8BDF</color> <!-- App blue -->
     <color name="primary_variant">#3F6ABF</color> <!-- Darker blue -->
     <color name="secondary">#b3a0e6</color> <!-- Button color -->
+    <color name="bottom_nav_select_color">#7153ac</color> <!-- Button color -->
+    <color name="icons_color">#B8A6E9</color>
     <color name="secondary_variant">#9380C6</color> <!-- Darker secondary -->
+    <color name="text_primary">#654b9b</color> <!-- Darker purple for text in light mode -->
+    <color name="text_secondary">#7B5FB3</color> <!-- Medium purple for secondary text -->
+    <color name="stat_card_text">#1a1a1a</color> <!-- Dark text for colored stat cards in light mode -->
+    <color name="stat_card_heading">#1a1a1a</color> <!-- Dark text for colored stat cards in light mode -->
     
     <color name="background">#e8dff5</color> <!-- App background -->
     <color name="surface">#FFFFFF</color> <!-- Surface elements background -->
@@ -42,8 +48,12 @@
     <color name="yellow">#FFFF00</color>
     <color name="grey">#808080</color>
     
+    <!-- Tag colors -->
+    <color name="tag_unselected">#E0D7F5</color> <!-- Light purple for unselected tags -->
+    <color name="tag_selected">#A797D9</color> <!-- Darker purple for selected tags -->
+    
     <!-- Legacy color references (for backward compatibility) -->
-    <color name="app_blue">@color/primary</color>
+    <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->
     <color name="btn_color">@color/secondary</color>
     <color name="jounral_list_bg_color">@color/journal_list_bg_color</color>
 </resources>

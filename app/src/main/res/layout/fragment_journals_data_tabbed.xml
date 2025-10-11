@@ -19,7 +19,7 @@
             android:layout_marginLeft="5dp"
             android:text="Journal Analytics"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="@color/app_blue"
+            android:textColor="@color/text_primary"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -32,8 +32,8 @@
         app:tabMode="fixed"
         app:tabGravity="fill"
         app:tabTextColor="?attr/colorOnSurface"
-        app:tabSelectedTextColor="@color/app_blue"
-        app:tabIndicatorColor="@color/app_blue"
+        app:tabSelectedTextColor="@color/text_primary"
+        app:tabIndicatorColor="@color/text_primary"
         android:background="?attr/colorSurface" />
 
     <androidx.viewpager2.widget.ViewPager2

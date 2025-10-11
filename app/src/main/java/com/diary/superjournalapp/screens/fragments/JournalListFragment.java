@@ -243,8 +243,8 @@ public class JournalListFragment extends Fragment implements Searchable {
         notifyJournalListFragment();
 
         Spinner journalListOptionsSpinner = view.findViewById(R.id.journal_options_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.journal_list_btn_items, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.journal_list_btn_items, R.layout.custom_spinner_item);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         journalListOptionsSpinner.setAdapter(adapter);
 
         journalListOptionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -273,8 +273,8 @@ public class JournalListFragment extends Fragment implements Searchable {
 
 
         Spinner journalListDurationSpinner = view.findViewById(R.id.journal_list_duration_spinner);
-        ArrayAdapter<CharSequence> journalListDurationAdapter = ArrayAdapter.createFromResource(getContext(), R.array.journal_list_duration_items, android.R.layout.simple_spinner_item);
-        journalListDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> journalListDurationAdapter = ArrayAdapter.createFromResource(getContext(), R.array.journal_list_duration_items, R.layout.custom_spinner_item);
+        journalListDurationAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         journalListDurationSpinner.setAdapter(journalListDurationAdapter);
 
         journalListDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

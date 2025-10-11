@@ -59,7 +59,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="16dp"
                     android:text="Journal"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -83,7 +83,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_diary" />
 
                     <TextView
@@ -113,7 +113,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="diary" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -139,7 +139,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_gratitude" />
 
                     <TextView
@@ -169,7 +169,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="gratitude" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -195,7 +195,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_bullet" />
 
                     <TextView
@@ -225,7 +225,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="bullet" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -251,7 +251,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_dream" />
 
                     <TextView
@@ -281,7 +281,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="dream" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -312,7 +312,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="16dp"
                     android:text="Notifications"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -336,7 +336,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_quote" />
 
                     <TextView
@@ -366,7 +366,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="quote" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -392,7 +392,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_affirmation" />
 
                     <TextView
@@ -422,7 +422,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="affirmation" />
 
                     <androidx.appcompat.widget.SwitchCompat
@@ -454,7 +454,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="16dp"
                     android:text="Habits"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -478,7 +478,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:src="@drawable/ic_mood" />
 
                     <TextView
@@ -508,7 +508,7 @@
                         android:layout_marginHorizontal="3dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_clock"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorSecondary"
                         android:tag="mood" />
 
                     <androidx.appcompat.widget.SwitchCompat

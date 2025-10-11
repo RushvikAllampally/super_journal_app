@@ -21,7 +21,7 @@
             android:layout_marginLeft="5dp"
             android:text="Calender View"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="@color/app_blue"
+            android:textColor="@color/text_primary"
             android:textSize="30sp"
             android:textStyle="bold" />
 

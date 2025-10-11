@@ -5,7 +5,13 @@
     <color name="primary_variant">#5686F0</color> <!-- Mid-tone blue for dark theme -->
     <color name="secondary">#C9B7FA</color> <!-- Lighter purple for dark theme -->
     <color name="secondary_variant">#A797D9</color> <!-- Mid-tone purple for dark theme -->
-    
+    <color name="bottom_nav_select_color">#C9B7FA</color>
+    <color name="icons_color">#B8A6E9</color>
+    <color name="text_primary">#C9B7FA</color> <!-- Same as secondary for dark mode -->
+    <color name="text_secondary">#B8A6E9</color> <!-- Slightly dimmer for secondary text -->
+    <color name="stat_card_text">#1a1a1a</color> <!-- Light text for colored stat cards in dark mode -->
+    <color name="stat_card_heading">#ffffff</color> <!-- Dark text for colored stat cards in light mode -->
+
     <color name="background">#121212</color> <!-- Dark background -->
     <color name="surface">#1E1E1E</color> <!-- Dark surface -->
     <color name="error">#CF6679</color> <!-- Error color for dark theme -->
@@ -25,4 +31,8 @@
     <color name="prompt_button_bg">#1A5889</color> <!-- Darker blue for prompt button -->
     <color name="thumb_tint">#3A3A3A</color> <!-- Dark gray -->
     <color name="thumb_tint_on">#9547B7</color> <!-- Lighter purple -->
+    
+    <!-- Tag colors - Dark theme -->
+    <color name="tag_unselected">#4A3F5C</color> <!-- Darker purple for unselected tags -->
+    <color name="tag_selected">#8B76B3</color> <!-- Medium purple for selected tags -->
 </resources>
