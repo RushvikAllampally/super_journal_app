@@ -21,7 +21,7 @@
             android:id="@+id/journal_type_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:tint="?attr/colorPrimary"
+            app:tint="@color/text_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_diary" />
@@ -51,7 +51,7 @@
             android:layout_height="28dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_bookmark"
-            android:tint="?attr/colorPrimary"
+            app:tint="@color/text_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -96,7 +96,7 @@
                 android:alpha="0.7"
                 android:textSize="12sp"
                 app:drawableStartCompat="@android:drawable/ic_menu_my_calendar"
-                app:drawableTint="?attr/colorPrimary"
+                app:drawableTint="@color/text_primary"
                 tools:text="Oct 5, 2025" />
 
             <!-- Spacer -->
@@ -125,12 +125,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
                         android:textSize="10sp"
+                        android:textColor="@color/text_primary"
                         app:chipBackgroundColor="?attr/colorSurface"
                         app:chipIcon="@drawable/tag_24"
                         app:chipIconSize="12dp"
-                        app:chipIconTint="?attr/colorPrimary"
+                        app:chipIconTint="@color/text_primary"
                         app:chipMinHeight="24dp"
-                        app:chipStrokeColor="?attr/colorPrimary"
+                        app:chipStrokeColor="@color/text_primary"
                         app:chipStrokeWidth="1dp"
                         app:ensureMinTouchTargetSize="false"
                         tools:text="Personal" />

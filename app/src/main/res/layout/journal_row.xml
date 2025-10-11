@@ -97,7 +97,7 @@
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:fontFamily="@font/balsamiqsans_regular"
-                            android:textColor="?attr/colorPrimary"
+                            android:textColor="@color/text_primary"
                             android:ellipsize="end"
                             android:maxLines="1" />
                             
@@ -107,7 +107,7 @@
                             android:layout_height="24dp"
                             android:src="@android:drawable/ic_menu_edit"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="?attr/colorPrimary"
+                            app:tint="@color/text_primary"
                             android:contentDescription="Edit Tags" />
                     </LinearLayout>
                 </LinearLayout>
@@ -123,6 +123,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
+                app:tint="@color/text_primary"
                 android:contentDescription="Bookmark Journal" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
