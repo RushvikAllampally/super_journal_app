@@ -8,4 +8,6 @@
     android:fontFamily="@font/balsamiqsans_regular"
     android:singleLine="true"
     android:textColor="?attr/colorOnSurface"
-    android:textSize="14sp" />
+    android:textSize="14sp"
+    android:background="?attr/colorSurface"
+    android:padding="12dp" />
