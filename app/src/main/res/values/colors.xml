@@ -3,6 +3,8 @@
     <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="intro_screen_primary">#5E17EB</color>
     
     <!-- Theme colors - Light theme defaults -->
     <color name="primary">#5B8BDF</color> <!-- App blue -->
