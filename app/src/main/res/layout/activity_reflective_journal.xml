@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reflective_journal_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/reflective_journal_root"
-    android:background="@color/journal_bg_reflective">
+    android:background="@color/journal_bg_reflective"
+    android:orientation="vertical">
 
+    <!-- Top Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingBottom="8dp"
+        android:elevation="2dp"
+        android:background="@color/journal_bg_reflective"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/close_journal_reflective"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="4dp"
             android:src="@drawable/icons8_multiply_24"
-            android:layout_margin="5dp"/>
+            android:contentDescription="Close"
+            android:background="?attr/selectableItemBackgroundBorderless" />
 
         <Space
             android:layout_width="0dp"
@@ -28,160 +35,375 @@
 
         <ImageButton
             android:id="@+id/reflective_delete_icon"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="5dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/delete_icon_24"
-            android:background="@android:color/transparent" />
-            
+            android:contentDescription="Delete"
+            android:padding="4dp" />
+
         <ImageButton
             android:id="@+id/manage_tags_button"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="5dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_sort_by_size"
-            android:background="@android:color/transparent" />
-            
+            android:contentDescription="Manage Tags"
+            android:padding="4dp" />
+
         <ImageButton
             android:id="@+id/save_journal_reflective"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="5dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginHorizontal="4dp"
             android:src="@android:drawable/ic_menu_save"
-            android:background="@android:color/transparent" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Save"
+            android:padding="4dp"
+            android:tint="@color/secondary" />
+
     </LinearLayout>
-            
+
+    <!-- Date Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/journal_date_state_reflective"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_marginLeft="10dp"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:text="Today" />
+            android:text="Today"
+            android:textSize="15sp"
+            android:textColor="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/selected_journal_date_reflective"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="24th September 2023"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textSize="15sp" />
+            android:text="24th September 2023"
+            android:textSize="15sp"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/journal_calender_icon_reflective"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/calender_view_icon" />
+            android:src="@drawable/calender_view_icon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Select Date" />
 
     </LinearLayout>
 
-    <!-- Title Input -->
-    <com.vanniktech.emoji.EmojiEditText
-        android:id="@+id/journal_title_reflective"
+    <!-- Title Section with Prompt -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp"
-        android:textSize="@dimen/text_size_medium"
-        android:hint="Title"
-        android:inputType="text" />
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
 
-    <!-- Journal Entry Form -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.vanniktech.emoji.EmojiEditText
+            android:id="@+id/journal_title_reflective"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:hint="Title"
+            android:inputType="text"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnBackground"
+            android:textColorHint="?attr/colorOnBackground"
+            android:alpha="0.8"
+            android:textStyle="bold" />
 
-            <!-- Content Input -->
-            <com.vanniktech.emoji.EmojiEditText
-                android:id="@+id/journal_content_reflective"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:textSize="@dimen/text_size_medium"
-                android:hint="Journal Content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/icons_color">
+
+            <ImageButton
+                android:id="@+id/reflective_prompt_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:background="@android:color/transparent"
-                android:inputType="textMultiLine" />
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_help"
+                android:scaleType="fitCenter"
+                android:contentDescription="Get Prompt" />
 
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    </ScrollView>
+    </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="?attr/colorOnBackground"
+        android:alpha="0.2" />
+
+    <!-- Rich Text Formatting Toolbar -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        >
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingVertical="6dp"
-            >
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp">
 
             <ImageButton
-                android:id="@+id/reflective_color_palette"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:background="@drawable/color_palette"
-                />
+                android:id="@+id/action_undo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/edit_black"
+                android:tint="?attr/colorOnSurface"
+                android:contentDescription="Undo"
+                android:scaleType="centerInside"
+                android:padding="10dp" />
 
             <ImageButton
-                android:id="@+id/reflective_text_style_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:background="@drawable/text_style_icon"
-                />
+                android:id="@+id/action_redo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/edit_black"
+                android:tint="?attr/colorOnSurface"
+                android:contentDescription="Redo"
+                android:scaleType="centerInside"
+                android:padding="10dp"
+                android:rotation="180" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/colorOnSurface"
+                android:alpha="0.3" />
+
+            <Button
+                android:id="@+id/action_bold"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="B"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <Button
+                android:id="@+id/action_italic"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="I"
+                android:textStyle="italic"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <Button
+                android:id="@+id/action_underline"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="U"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/colorOnSurface"
+                android:alpha="0.3" />
+
+            <Button
+                android:id="@+id/action_heading1"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="44dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="H1"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <Button
+                android:id="@+id/action_heading2"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="44dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="H2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/colorOnSurface"
+                android:alpha="0.3" />
 
             <ImageButton
-                android:id="@+id/reflective_emoji_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="@drawable/emoji_icon"
-                />
-                
-            <ImageButton
-                android:id="@+id/reflective_prompt_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="@android:drawable/ic_menu_help"
-                android:contentDescription="Writing Prompts"
-                />
+                android:id="@+id/action_bullet"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_bullet"
+                android:tint="?attr/colorOnSurface"
+                android:contentDescription="Bullet List"
+                android:scaleType="centerInside"
+                android:padding="10dp" />
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/reflective_sticker_icon"-->
-<!--                android:layout_width="31dp"-->
-<!--                android:layout_height="31dp"-->
-<!--                android:layout_marginHorizontal="15dp"-->
-<!--                android:background="@drawable/sticker_icon"-->
-<!--                />-->
+            <Button
+                android:id="@+id/action_numbers"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="123"
+                android:textSize="11sp"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/colorOnSurface"
+                android:alpha="0.3" />
+
+            <Button
+                android:id="@+id/action_text_color"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="A"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/icons_color"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <Button
+                android:id="@+id/action_font_size"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="44dp"
+                android:layout_height="40dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Aa"
+                android:textSize="14sp"
+                android:textColor="?attr/colorOnSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-    
+    </HorizontalScrollView>
+
+    <!-- Rich Text Editor -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp">
+
+        <jp.wasabeef.richeditor.RichEditor
+            android:id="@+id/journal_content_reflective"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/editor_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Reflect on your day..."
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface"
+            android:alpha="0.4"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:clickable="false"
+            android:focusable="false" />
+
+    </FrameLayout>
+
+    <!-- Word Count -->
+    <TextView
+        android:id="@+id/word_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 words"
+        android:textSize="12sp"
+        android:textColor="?attr/colorOnSurface"
+        android:alpha="0.6"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/balsamiqsans_regular" />
 
 </LinearLayout>
