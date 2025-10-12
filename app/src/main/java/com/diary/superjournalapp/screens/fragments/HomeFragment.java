@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static JournalRecyclerAdaptor journalRecyclerAdaptor;
     private static ImageView nothingFoundImage;
+    private static TextView nothingFoundText;
     private static RecyclerView recyclerView;
     private static RecyclerView tasksRecyclerView;
     private static CardView tasksCard;
@@ -122,9 +123,11 @@ public class HomeFragment extends Fragment {
         if (journalsList.size() == 0) {
             recyclerView.setVisibility(View.GONE);
             nothingFoundImage.setVisibility(View.VISIBLE);
+            nothingFoundText.setVisibility(View.VISIBLE);
         } else {
             recyclerView.setVisibility(View.VISIBLE);
             nothingFoundImage.setVisibility(View.GONE);
+            nothingFoundText.setVisibility(View.GONE);
         }
         int index = journalsList.size() > 5 ? 5 : journalsList.size();
 
@@ -212,6 +215,7 @@ public class HomeFragment extends Fragment {
         quoteAuthor = view.findViewById(R.id.quote_author);
         affirmation = view.findViewById(R.id.affirmation);
         nothingFoundImage = view.findViewById(R.id.nothing_found_home_view);
+        nothingFoundText = view.findViewById(R.id.nothing_found_text);
         streakCount = view.findViewById(R.id.streak_edit_txt);
         linearLayoutContainer = view.findViewById(R.id.linear_layout_container);
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,7 @@ public class CalenderViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private JournalRecyclerAdaptor journalRecyclerAdaptor;
     private ImageView notFoundImageView;
+    private TextView notFoundTextView;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -79,7 +81,8 @@ public class CalenderViewFragment extends Fragment {
         // Inflate the layout for this fragment
         calender_view = view.findViewById(R.id.calender_view);
         recyclerView = view.findViewById(R.id.calender_recycler_view);
-        notFoundImageView=view.findViewById(R.id.nothing_found_calender_view);
+        notFoundImageView = view.findViewById(R.id.nothing_found_calender_view);
+        notFoundTextView = view.findViewById(R.id.nothing_found_calender_text);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         DatabaseHelper databaseHelper = DatabaseHelper.getDb(view.getContext());
@@ -120,9 +123,11 @@ public class CalenderViewFragment extends Fragment {
                 if(journalsList.size()==0){
                     recyclerView.setVisibility(View.GONE);
                     notFoundImageView.setVisibility(View.VISIBLE);
+                    notFoundTextView.setVisibility(View.VISIBLE);
                 }else{
                     recyclerView.setVisibility(View.VISIBLE);
                     notFoundImageView.setVisibility(View.GONE);
+                    notFoundTextView.setVisibility(View.GONE);
                 }
 
                 journalRecyclerAdaptor = new JournalRecyclerAdaptor(view.getContext(), journalsList);
@@ -158,9 +163,11 @@ public class CalenderViewFragment extends Fragment {
         if(journalsList.size()==0){
             recyclerView.setVisibility(View.GONE);
             notFoundImageView.setVisibility(View.VISIBLE);
+            notFoundTextView.setVisibility(View.VISIBLE);
         }else{
             recyclerView.setVisibility(View.VISIBLE);
             notFoundImageView.setVisibility(View.GONE);
+            notFoundTextView.setVisibility(View.GONE);
         }
 
         journalRecyclerAdaptor = new JournalRecyclerAdaptor(view.getContext(), journalsList);

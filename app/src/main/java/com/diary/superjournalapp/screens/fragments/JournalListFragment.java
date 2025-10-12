@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class JournalListFragment extends Fragment implements Searchable {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView recyclerView;
     private ImageView nothingFoundImage;
+    private TextView nothingFoundText;
     private JournalRecyclerAdaptor journalRecyclerAdaptor;
 
     private Date[] selectedDateRangeInSpinner;
@@ -190,12 +192,14 @@ public class JournalListFragment extends Fragment implements Searchable {
 
         recyclerView.setVisibility(View.VISIBLE);
         nothingFoundImage.setVisibility(View.GONE);
+        nothingFoundText.setVisibility(View.GONE);
         journalRecyclerAdaptor = new JournalRecyclerAdaptor(getContext(), journalsList);
         recyclerView.setAdapter(journalRecyclerAdaptor);
 
         if (journalsList.size() == 0) {
             recyclerView.setVisibility(View.GONE);
             nothingFoundImage.setVisibility(View.VISIBLE);
+            nothingFoundText.setVisibility(View.VISIBLE);
         }
     }
 
@@ -210,8 +214,14 @@ public class JournalListFragment extends Fragment implements Searchable {
                         if (fragment.nothingFoundImage != null) {
                             if (sizeOfJournalsList == 0) {
                                 fragment.nothingFoundImage.setVisibility(View.VISIBLE);
+                                if (fragment.nothingFoundText != null) {
+                                    fragment.nothingFoundText.setVisibility(View.VISIBLE);
+                                }
                             } else {
                                 fragment.nothingFoundImage.setVisibility(View.GONE);
+                                if (fragment.nothingFoundText != null) {
+                                    fragment.nothingFoundText.setVisibility(View.GONE);
+                                }
                             }
                         }
                     });
@@ -228,6 +238,7 @@ public class JournalListFragment extends Fragment implements Searchable {
 
         recyclerView = view.findViewById(R.id.journal_entries_list);
         nothingFoundImage = view.findViewById(R.id.nothing_found_journals_list_view);
+        nothingFoundText = view.findViewById(R.id.nothing_found_journals_text);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
