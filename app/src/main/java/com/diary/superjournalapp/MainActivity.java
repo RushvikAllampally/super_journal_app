@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.diary.superjournalapp.applock.AppLock;
 import com.diary.superjournalapp.base.ThemedActivity;
+import com.diary.superjournalapp.adapters.JournalPopupAdapter;
 import com.diary.superjournalapp.constants.ApplicationConstants;
 import com.diary.superjournalapp.screens.fragments.BookmarkedJournalsFragment;
 import com.diary.superjournalapp.screens.fragments.CalenderViewFragment;
@@ -137,8 +138,8 @@ public class MainActivity extends ThemedActivity {
         // Set up your ListView and its adapter here
         String[] journalListViewData = {ApplicationConstants.REFLECTIVE_JOURNAL,ApplicationConstants.GRATITUDE_JOURNAL, ApplicationConstants.BULLET_JOURNAL, ApplicationConstants.DREAM_JOURNAL};
 
-        // Create an ArrayAdapter to populate the ListView with data
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.textView, journalListViewData);
+        // Create the custom JournalPopupAdapter to populate the ListView with data and appropriate icons
+        JournalPopupAdapter adapter = new JournalPopupAdapter(this, journalListViewData);
 
         // Set the adapter for the ListView
         journalsListView.setAdapter(adapter);

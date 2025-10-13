@@ -20,6 +20,12 @@ import android.widget.Toast;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.graphics.Color;
+import android.app.Dialog;
+
+import java.util.List;
+import java.util.Random;
+
+import com.diary.superjournalapp.utils.PromptUtils;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -118,8 +124,12 @@ public class DreamJournal extends AppCompatActivity {
         // Set up prompt icon click listener  
         promptIcon.setVisibility(View.VISIBLE);
         promptIcon.setOnClickListener(v -> {
-            // TODO: Implement rich text compatible prompt system
-            Toast.makeText(this, "Prompt feature coming soon for rich editor!", Toast.LENGTH_SHORT).show();
+            // Only show prompts if they're enabled in settings
+            if (PromptUtils.arePromptsEnabled(this)) {
+                showRichEditorPrompt();
+            } else {
+                Toast.makeText(this, "Prompts are disabled in settings", Toast.LENGTH_SHORT).show();
+            }
         });
         
         // Set up tag management
@@ -219,6 +229,66 @@ public class DreamJournal extends AppCompatActivity {
         saveDreamJournal();
     }
     
+    /**
+     * Shows a prompt dialog for the rich editor
+     */
+    private void showRichEditorPrompt() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.prompt_dialog_layout);
+        
+        TextView dialogTitle = dialog.findViewById(R.id.dialog_title);
+        TextView promptText = dialog.findViewById(R.id.prompt_text);
+        Button newPromptButton = dialog.findViewById(R.id.new_prompt_button);
+        Button usePromptButton = dialog.findViewById(R.id.use_prompt_button);
+        
+        // Set dialog title
+        dialogTitle.setText(ApplicationConstants.DREAM_JOURNAL + " Prompt");
+        
+        // Add subtitle/explanation
+        TextView dialogSubtitle = dialog.findViewById(R.id.dialog_subtitle);
+        if (dialogSubtitle != null) {
+            dialogSubtitle.setText("Select a writing prompt to inspire your dream journal entry");
+            dialogSubtitle.setVisibility(View.VISIBLE);
+        }
+        
+        // Get prompts for this journal type
+        List<String> prompts = ApplicationConstants.DREAM_PROMPTS;
+        
+        // Show a random prompt
+        if (prompts != null && !prompts.isEmpty()) {
+            Random random = new Random();
+            int index = random.nextInt(prompts.size());
+            String randomPrompt = prompts.get(index);
+            promptText.setText(randomPrompt);
+        }
+        
+        // Get a new prompt when clicking "New Prompt" button
+        newPromptButton.setOnClickListener(view -> {
+            if (prompts != null && !prompts.isEmpty()) {
+                Random random = new Random();
+                int index = random.nextInt(prompts.size());
+                String randomPrompt = prompts.get(index);
+                promptText.setText(randomPrompt);
+            }
+        });
+        
+        // Use the prompt
+        usePromptButton.setOnClickListener(view -> {
+            String prompt = promptText.getText().toString();
+            
+            // Set the title
+            journalTitle.setText(prompt);
+            
+            // Set focus to the content editor
+            journalContent.focusEditor();
+            
+            dialog.dismiss();
+            Toast.makeText(this, "Prompt applied as title", Toast.LENGTH_SHORT).show();
+        });
+        
+        dialog.show();
+    }
+
     /**
      * Show the tags management dialog
      */
