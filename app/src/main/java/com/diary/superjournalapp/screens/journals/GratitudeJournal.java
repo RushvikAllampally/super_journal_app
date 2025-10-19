@@ -67,7 +67,7 @@ public class GratitudeJournal extends AppCompatActivity {
     private Button heading1Button, heading2Button;
     private ImageButton bulletButton;
     private Button numbersButton;
-    private Button textColorButton, fontSizeButton;
+    private Button textColorButton;
     private Journal journal;
     private GratitudeJournalEntity gratitudeJournal;
     private ImageButton promptIcon;
@@ -112,7 +112,6 @@ public class GratitudeJournal extends AppCompatActivity {
         bulletButton = findViewById(R.id.action_bullet);
         numbersButton = findViewById(R.id.action_numbers);
         textColorButton = findViewById(R.id.action_text_color);
-        fontSizeButton = findViewById(R.id.action_font_size);
         
         // Set up tag management
         manageTagsButton.setOnClickListener(v -> {
@@ -360,17 +359,41 @@ public class GratitudeJournal extends AppCompatActivity {
             @Override
             public void onTextChange(String text) {
                 updateWordCount(text);
-                
-                // Show/hide placeholder
-                if (android.text.TextUtils.isEmpty(text) || text.equals("<br>")) {
-                    placeholderTextView.setVisibility(View.VISIBLE);
-                } else {
-                    placeholderTextView.setVisibility(View.GONE);
-                }
+                updatePlaceholderVisibility();
             }
         });
         
+        // Add text watcher to title for placeholder visibility
+        journalTitle.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updatePlaceholderVisibility();
+            }
+            
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+        
         journalContent.focusEditor();
+    }
+    
+    private void updatePlaceholderVisibility() {
+        String titleText = journalTitle.getText().toString().trim();
+        String contentHtml = journalContent.getHtml();
+        if (contentHtml == null) {
+            contentHtml = "";
+        }
+        String contentText = Html.fromHtml(contentHtml, Html.FROM_HTML_MODE_LEGACY).toString().trim();
+        
+        // Hide placeholder if either title or content has text
+        if (!titleText.isEmpty() || (!contentText.isEmpty() && !contentHtml.equals("<br>"))) {
+            placeholderTextView.setVisibility(View.GONE);
+        } else {
+            placeholderTextView.setVisibility(View.VISIBLE);
+        }
     }
     
     private void setupFormattingButtons() {
@@ -397,22 +420,30 @@ public class GratitudeJournal extends AppCompatActivity {
             underlineButton.setSelected(willBeActive);
         });
         
-        // Headings
+        // Headings - toggle behavior (click to apply, click again to remove)
         heading1Button.setOnClickListener(v -> {
-            boolean willBeActive = !heading1Button.isSelected();
-            journalContent.setHeading(1);
-            heading1Button.setSelected(willBeActive);
-            if (willBeActive) {
+            if (!heading1Button.isSelected()) {
+                // Apply H1
+                journalContent.setHeading(1);
+                heading1Button.setSelected(true);
                 heading2Button.setSelected(false);
+            } else {
+                // Remove H1 - toggle it off
+                journalContent.setHeading(1);
+                heading1Button.setSelected(false);
             }
         });
         
         heading2Button.setOnClickListener(v -> {
-            boolean willBeActive = !heading2Button.isSelected();
-            journalContent.setHeading(2);
-            heading2Button.setSelected(willBeActive);
-            if (willBeActive) {
+            if (!heading2Button.isSelected()) {
+                // Apply H2
+                journalContent.setHeading(2);
+                heading2Button.setSelected(true);
                 heading1Button.setSelected(false);
+            } else {
+                // Remove H2 - toggle it off
+                journalContent.setHeading(2);
+                heading2Button.setSelected(false);
             }
         });
         
@@ -435,9 +466,8 @@ public class GratitudeJournal extends AppCompatActivity {
             }
         });
         
-        // Color and font size
+        // Color picker
         textColorButton.setOnClickListener(v -> showColorPicker());
-        fontSizeButton.setOnClickListener(v -> showFontSizePicker());
     }
     
     private void updateWordCount(String htmlContent) {
@@ -489,42 +519,5 @@ public class GratitudeJournal extends AppCompatActivity {
         cancelButton.setOnClickListener(v -> dialog.dismiss());
     }
     
-    private void showFontSizePicker() {
-        android.app.Dialog dialog = new android.app.Dialog(this);
-        dialog.setContentView(R.layout.dialog_font_size_picker);
-        dialog.show();
-        
-        LinearLayout sizeContainer = dialog.findViewById(R.id.font_size_container);
-        
-        final int[] fontSizes = {12, 14, 16, 18, 20, 24, 28, 32};
-        final String[] sizeLabels = {"Tiny", "Small", "Normal", "Medium", "Large", "XL", "XXL", "Huge"};
-        
-        for (int i = 0; i < fontSizes.length; i++) {
-            final int size = fontSizes[i];
-            final String label = sizeLabels[i];
-            
-            Button sizeButton = new Button(this);
-            sizeButton.setText(label + " (" + size + "px)");
-            sizeButton.setTextSize(Math.min(size, 20));
-            sizeButton.setAllCaps(false);
-            
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 8, 0, 8);
-            sizeButton.setLayoutParams(params);
-            
-            sizeButton.setOnClickListener(v -> {
-                journalContent.setFontSize(size);
-                dialog.dismiss();
-            });
-            
-            sizeContainer.addView(sizeButton);
-        }
-        
-        Button cancelButton = dialog.findViewById(R.id.btn_cancel_font_size);
-        cancelButton.setOnClickListener(v -> dialog.dismiss());
-    }
 
 }
