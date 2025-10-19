@@ -208,6 +208,14 @@ public class TagDialogFragment extends DialogFragment {
                 com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
                 chip.setText(tagName);
                 chip.setCloseIconVisible(true);
+                chip.setTextSize(12);
+                chip.setChipBackgroundColorResource(android.R.color.holo_blue_bright);
+                chip.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(0xFFE1F5FE));
+                chip.setChipStrokeWidth(1);
+                chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
+                chip.setTextColor(0xFF0277BD);
+                chip.setCloseIconTint(android.content.res.ColorStateList.valueOf(0xFF0277BD));
+                chip.setChipMinHeight(32);
                 chip.setOnCloseIconClickListener(v -> {
                     temporaryTags.remove(tagName);
                     if (tagUpdateListener != null) {
@@ -267,6 +275,13 @@ public class TagDialogFragment extends DialogFragment {
                     chip.setText(tag.getName());
                     chip.setClickable(true);
                     chip.setCheckable(false);
+                    chip.setTextSize(12);
+                    chip.setChipBackgroundColorResource(android.R.color.holo_blue_bright);
+                    chip.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(0xFFE1F5FE));
+                    chip.setChipStrokeWidth(1);
+                    chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
+                    chip.setTextColor(0xFF0277BD);
+                    chip.setChipMinHeight(32);
                     chip.setOnClickListener(v -> {
                         temporaryTags.add(tag.getName());
                         if (tagUpdateListener != null) {
