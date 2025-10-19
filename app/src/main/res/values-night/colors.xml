@@ -35,4 +35,10 @@
     <!-- Tag colors - Dark theme -->
     <color name="tag_unselected">#4A3F5C</color> <!-- Darker purple for unselected tags -->
     <color name="tag_selected">#8B76B3</color> <!-- Medium purple for selected tags -->
+    
+    <!-- Journal editor colors - Dark theme -->
+    <color name="journal_writing_area_bg">#1E1E1E</color> <!-- Dark surface for writing area -->
+    <color name="journal_toolbar_bg">#2A2A2A</color> <!-- Slightly lighter dark for toolbar separation -->
+    <color name="toolbar_button_active">#4A3F5C</color> <!-- Dark purple for active toolbar buttons -->
+    <color name="toolbar_button_pressed">#5B4F6D</color> <!-- Lighter purple for pressed state -->
 </resources>

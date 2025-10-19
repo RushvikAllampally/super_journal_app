@@ -162,6 +162,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
+        android:background="@color/journal_toolbar_bg"
+        android:elevation="2dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -176,7 +178,7 @@
                 android:id="@+id/action_undo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/toolbar_image_button_background"
                 android:src="@drawable/edit_black"
                 android:tint="?attr/colorOnSurface"
                 android:contentDescription="Undo"
@@ -187,7 +189,7 @@
                 android:id="@+id/action_redo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/toolbar_image_button_background"
                 android:src="@drawable/edit_black"
                 android:tint="?attr/colorOnSurface"
                 android:contentDescription="Redo"
@@ -205,50 +207,41 @@
             <!-- Text Styling -->
             <Button
                 android:id="@+id/action_bold"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="B"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <Button
                 android:id="@+id/action_italic"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="I"
                 android:textStyle="italic"
                 android:textSize="16sp"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <Button
                 android:id="@+id/action_underline"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="U"
                 android:textSize="16sp"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <View
                 android:layout_width="1dp"
@@ -260,35 +253,29 @@
             <!-- Headings -->
             <Button
                 android:id="@+id/action_heading1"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="44dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="H1"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <Button
                 android:id="@+id/action_heading2"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="44dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="H2"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <View
                 android:layout_width="1dp"
@@ -302,7 +289,7 @@
                 android:id="@+id/action_bullet"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/toolbar_image_button_background"
                 android:src="@drawable/ic_bullet"
                 android:tint="?attr/colorOnSurface"
                 android:contentDescription="Bullet List"
@@ -311,18 +298,15 @@
 
             <Button
                 android:id="@+id/action_numbers"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="48dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="123"
                 android:textSize="11sp"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <View
                 android:layout_width="1dp"
@@ -334,34 +318,28 @@
             <!-- Color & Font Size -->
             <Button
                 android:id="@+id/action_text_color"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="A"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/icons_color"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
             <Button
                 android:id="@+id/action_font_size"
-                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="44dp"
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 android:text="Aa"
                 android:textSize="14sp"
                 android:textColor="?attr/colorOnSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="@drawable/toolbar_button_background" />
 
         </LinearLayout>
 
@@ -372,7 +350,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="8dp">
+        android:layout_margin="12dp"
+        android:background="@color/journal_writing_area_bg"
+        android:elevation="1dp"
+        android:padding="4dp">
 
         <jp.wasabeef.richeditor.RichEditor
             android:id="@+id/journal_content"

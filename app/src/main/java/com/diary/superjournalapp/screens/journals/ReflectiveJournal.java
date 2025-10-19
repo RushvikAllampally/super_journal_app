@@ -443,13 +443,64 @@ public class ReflectiveJournal extends AppCompatActivity {
     private void setupFormattingButtons() {
         undoButton.setOnClickListener(v -> journalContent.undo());
         redoButton.setOnClickListener(v -> journalContent.redo());
-        boldButton.setOnClickListener(v -> journalContent.setBold());
-        italicButton.setOnClickListener(v -> journalContent.setItalic());
-        underlineButton.setOnClickListener(v -> journalContent.setUnderline());
-        heading1Button.setOnClickListener(v -> journalContent.setHeading(1));
-        heading2Button.setOnClickListener(v -> journalContent.setHeading(2));
-        bulletButton.setOnClickListener(v -> journalContent.setBullets());
-        numbersButton.setOnClickListener(v -> journalContent.setNumbers());
+        
+        // Text styling - explicit state management
+        boldButton.setOnClickListener(v -> {
+            boolean willBeActive = !boldButton.isSelected();
+            journalContent.setBold();
+            boldButton.setSelected(willBeActive);
+        });
+        
+        italicButton.setOnClickListener(v -> {
+            boolean willBeActive = !italicButton.isSelected();
+            journalContent.setItalic();
+            italicButton.setSelected(willBeActive);
+        });
+        
+        underlineButton.setOnClickListener(v -> {
+            boolean willBeActive = !underlineButton.isSelected();
+            journalContent.setUnderline();
+            underlineButton.setSelected(willBeActive);
+        });
+        
+        // Headings
+        heading1Button.setOnClickListener(v -> {
+            boolean willBeActive = !heading1Button.isSelected();
+            journalContent.setHeading(1);
+            heading1Button.setSelected(willBeActive);
+            if (willBeActive) {
+                heading2Button.setSelected(false);
+            }
+        });
+        
+        heading2Button.setOnClickListener(v -> {
+            boolean willBeActive = !heading2Button.isSelected();
+            journalContent.setHeading(2);
+            heading2Button.setSelected(willBeActive);
+            if (willBeActive) {
+                heading1Button.setSelected(false);
+            }
+        });
+        
+        // Lists
+        bulletButton.setOnClickListener(v -> {
+            boolean willBeActive = !bulletButton.isSelected();
+            journalContent.setBullets();
+            bulletButton.setSelected(willBeActive);
+            if (willBeActive) {
+                numbersButton.setSelected(false);
+            }
+        });
+        
+        numbersButton.setOnClickListener(v -> {
+            boolean willBeActive = !numbersButton.isSelected();
+            journalContent.setNumbers();
+            numbersButton.setSelected(willBeActive);
+            if (willBeActive) {
+                bulletButton.setSelected(false);
+            }
+        });
+        
         textColorButton.setOnClickListener(v -> showColorPicker());
         fontSizeButton.setOnClickListener(v -> showFontSizePicker());
     }

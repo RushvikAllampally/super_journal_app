@@ -54,6 +54,12 @@
     <color name="tag_unselected">#E0D7F5</color> <!-- Light purple for unselected tags -->
     <color name="tag_selected">#A797D9</color> <!-- Darker purple for selected tags -->
     
+    <!-- Journal editor colors -->
+    <color name="journal_writing_area_bg">#FFFFFF</color> <!-- White background for writing area -->
+    <color name="journal_toolbar_bg">#FFFFFF</color> <!-- White background for toolbar -->
+    <color name="toolbar_button_active">#E8DFF5</color> <!-- Light purple for active toolbar buttons -->
+    <color name="toolbar_button_pressed">#D4C5ED</color> <!-- Slightly darker purple for pressed state -->
+    
     <!-- Legacy color references (for backward compatibility) -->
     <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->
     <color name="btn_color">@color/secondary</color>
