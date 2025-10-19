@@ -145,7 +145,7 @@ public class TagChipAdapter {
         // Handle small chips (for journal cards)
         if (smallChips) {
             chip.setTextSize(10);
-            chip.setChipIconSize(12);
+            chip.setChipIconSize(20);
             chip.setMinHeight(24);
             chip.setEnsureMinTouchTargetSize(false);
         }
