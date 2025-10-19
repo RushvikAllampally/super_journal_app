@@ -417,6 +417,11 @@ public class DreamJournal extends AppCompatActivity {
         journalContent.setEditorFontSize(16);
         journalContent.setPadding(16, 16, 16, 16);
         journalContent.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Set text color based on theme
+        int textColor = getResources().getColor(R.color.journal_editor_text, getTheme());
+        journalContent.setEditorFontColor(textColor);
+        
         journalContent.setPlaceholder("Describe your dreams...");
         
         journalContent.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
@@ -493,7 +498,7 @@ public class DreamJournal extends AppCompatActivity {
                 heading2Button.setSelected(false);
             } else {
                 // Remove H1 - toggle it off
-                journalContent.setHeading(1);
+                journalContent.setHeading(0);
                 heading1Button.setSelected(false);
             }
         });
@@ -506,7 +511,7 @@ public class DreamJournal extends AppCompatActivity {
                 heading1Button.setSelected(false);
             } else {
                 // Remove H2 - toggle it off
-                journalContent.setHeading(2);
+                journalContent.setHeading(0);
                 heading2Button.setSelected(false);
             }
         });

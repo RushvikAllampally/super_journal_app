@@ -57,7 +57,7 @@ import java.util.Set;
 
 public class ReflectiveJournal extends AppCompatActivity {
 
-    private ImageButton saveJournalButton;
+    private Button saveJournalButton;
     private ImageView closeJournalButton;
     private ImageView journalCalenderIconReflective;
     private ImageButton manageTagsButton;
@@ -421,6 +421,11 @@ public class ReflectiveJournal extends AppCompatActivity {
         journalContent.setEditorFontSize(16);
         journalContent.setPadding(16, 16, 16, 16);
         journalContent.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Set text color based on theme
+        int textColor = getResources().getColor(R.color.journal_editor_text, getTheme());
+        journalContent.setEditorFontColor(textColor);
+        
         journalContent.setPlaceholder("Reflect on your day...");
         
         journalContent.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {

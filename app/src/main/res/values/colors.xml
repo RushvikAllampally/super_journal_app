@@ -28,12 +28,12 @@
     <color name="on_surface">#000000</color> <!-- Text/icons on surface -->
     <color name="on_error">#FFFFFF</color> <!-- Text/icons on error -->
     
-    <!-- Journal specific colors -->
+    <!-- Journal specific colors - Calm aesthetic palette -->
     <color name="journal_list_bg_color">#FFC107</color> <!-- Yellow background -->
-    <color name="journal_bg_gratitude">#B0E57C</color> <!-- Light green for gratitude journal -->
-    <color name="journal_bg_reflective">#87CEEB</color> <!-- Sky blue for reflective journal -->
-    <color name="journal_bg_dream">#DDA0DD</color> <!-- Plum for dream journal -->
-    <color name="journal_bg_bullet">#FFB6C1</color> <!-- Light pink for bullet journal -->
+    <color name="journal_bg_gratitude">#D4EDDA</color> <!-- Soft mint green for gratitude journal -->
+    <color name="journal_bg_reflective">#E3F2FD</color> <!-- Soft sky blue for reflective journal -->
+    <color name="journal_bg_dream">#F3E5F5</color> <!-- Soft lavender for dream journal -->
+    <color name="journal_bg_bullet">#FFE5E5</color> <!-- Soft blush for bullet journal -->
     <color name="prompt_button_bg">#3498db</color> <!-- Blue for prompt button -->
     <color name="thumb_tint">#EDEFECEC</color> <!-- Light gray -->
     <color name="thumb_tint_on">#7F2EA1</color> <!-- Purple -->
@@ -57,6 +57,8 @@
     <!-- Journal editor colors -->
     <color name="journal_writing_area_bg">#FFFFFF</color> <!-- White background for writing area -->
     <color name="journal_toolbar_bg">#FFFFFF</color> <!-- White background for toolbar -->
+    <color name="journal_title_text">#000000</color> <!-- Black text for journal title in light mode -->
+    <color name="journal_editor_text">#000000</color> <!-- Black text for journal content in light mode -->
     <color name="toolbar_button_active">#E8DFF5</color> <!-- Light purple for active toolbar buttons -->
     <color name="toolbar_button_pressed">#D4C5ED</color> <!-- Slightly darker purple for pressed state -->
     

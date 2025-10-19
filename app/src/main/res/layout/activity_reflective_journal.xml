@@ -17,7 +17,8 @@
         android:paddingBottom="8dp"
         android:elevation="2dp"
         android:background="@color/journal_bg_reflective"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/close_journal_reflective"
@@ -28,41 +29,50 @@
             android:contentDescription="Close"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
-        <Space
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reflective Journal"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginStart="8dp" />
 
         <ImageButton
             android:id="@+id/reflective_delete_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/delete_icon_24"
+            android:src="@drawable/ic_delete_outline"
             android:contentDescription="Delete"
-            android:padding="4dp" />
+            android:tint="?attr/colorOnBackground"
+            android:padding="6dp" />
 
         <ImageButton
             android:id="@+id/manage_tags_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:src="@drawable/ic_tag_outline"
             android:contentDescription="Manage Tags"
-            android:padding="4dp" />
+            android:tint="?attr/colorOnBackground"
+            android:padding="6dp" />
 
-        <ImageButton
+        <Button
             android:id="@+id/save_journal_reflective"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginHorizontal="4dp"
-            android:src="@android:drawable/ic_menu_save"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Save"
-            android:padding="4dp"
-            android:tint="@color/secondary" />
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="4dp"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:text="Save"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@color/secondary" />
 
     </LinearLayout>
 
@@ -97,11 +107,12 @@
 
         <ImageView
             android:id="@+id/journal_calender_icon_reflective"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/calender_view_icon"
+            android:src="@drawable/ic_calendar_outline"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="?attr/colorOnBackground"
             android:contentDescription="Select Date" />
 
     </LinearLayout>
@@ -121,12 +132,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/balsamiqsans_regular"
             android:hint="Title"
-            android:inputType="text"
+            android:inputType="text|textMultiLine"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textSize="18sp"
-            android:textColor="?attr/colorOnBackground"
+            android:textColor="@color/journal_title_text"
             android:textColorHint="?attr/colorOnBackground"
             android:alpha="0.8"
             android:textStyle="bold" />
@@ -136,7 +150,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/icons_color">
+            app:cardBackgroundColor="@color/secondary">
 
             <ImageButton
                 android:id="@+id/reflective_prompt_icon"
@@ -146,6 +160,7 @@
                 android:padding="6dp"
                 android:src="@android:drawable/ic_menu_help"
                 android:scaleType="fitCenter"
+                android:tint="#1A1A1A"
                 android:contentDescription="Get Prompt" />
 
         </androidx.cardview.widget.CardView>
@@ -175,34 +190,31 @@
             android:orientation="horizontal"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp">
-
             <ImageButton
                 android:id="@+id/action_undo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/toolbar_image_button_background"
-                android:src="@drawable/edit_black"
+                android:src="@drawable/ic_undo_outline"
                 android:tint="?attr/colorOnSurface"
                 android:contentDescription="Undo"
                 android:scaleType="centerInside"
-                android:padding="10dp" />
+                android:padding="8dp" />
 
             <ImageButton
                 android:id="@+id/action_redo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/toolbar_image_button_background"
-                android:src="@drawable/edit_black"
+                android:src="@drawable/ic_redo_outline"
                 android:tint="?attr/colorOnSurface"
                 android:contentDescription="Redo"
                 android:scaleType="centerInside"
-                android:padding="10dp"
-                android:rotation="180" />
+                android:padding="8dp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="4dp"
                 android:background="?attr/colorOnSurface"
                 android:alpha="0.3" />
 
