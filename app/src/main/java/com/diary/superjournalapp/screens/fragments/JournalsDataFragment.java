@@ -236,14 +236,20 @@ public class JournalsDataFragment extends Fragment {
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         dataSet.setValueTextSize(14f);
         
+        // Get text color based on theme
+        int textColor = getResources().getColor(R.color.journal_editor_text, requireContext().getTheme());
+        dataSet.setValueTextColor(textColor);
+        
         PieData pieData = new PieData(dataSet);
         
         // Configure chart
         journalTypesChart.setData(pieData);
         journalTypesChart.getDescription().setEnabled(false);
         journalTypesChart.setEntryLabelTextSize(14f);
+        journalTypesChart.setEntryLabelColor(textColor);
         journalTypesChart.setHoleRadius(40f);
         journalTypesChart.setTransparentCircleRadius(45f);
+        journalTypesChart.getLegend().setTextColor(textColor);
         journalTypesChart.animateY(1000);
         journalTypesChart.invalidate();
     }
@@ -329,6 +335,10 @@ public class JournalsDataFragment extends Fragment {
         dataSet.setColors(colors);
         dataSet.setValueTextSize(12f);
         
+        // Get text color based on theme
+        int textColor = getResources().getColor(R.color.journal_editor_text, requireContext().getTheme());
+        dataSet.setValueTextColor(textColor);
+        
         BarData barData = new BarData(dataSet);
         
         // Configure chart
@@ -341,12 +351,16 @@ public class JournalsDataFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
+        xAxis.setTextColor(textColor);
+        xAxis.setTextSize(12f);
         
         // Y-axis styling
         YAxis leftAxis = moodTrendsChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
         leftAxis.setGranularity(1f);
         leftAxis.setDrawGridLines(true);
+        leftAxis.setTextColor(textColor);
+        leftAxis.setTextSize(12f);
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
