@@ -202,11 +202,28 @@ public class BulletJournal extends AppCompatActivity {
         pinImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Toggle pin status
                 isPinned = !isPinned;
-                if (isPinned) {
-                    pinImage.setImageResource(R.drawable.unpin_icon);
-                } else {
-                    pinImage.setImageResource(R.drawable.pin_icon);
+                
+                // Update UI immediately
+                updatePinIconDisplay();
+                
+                // Only proceed if we have a valid journal
+                if (bulletJournalEntity != null && journal != null && journal.getJournalId() != 0) {
+                    // If pinning, we should handle potential multiple pinned journals
+                    if (isPinned) {
+                        handlePinning();
+                    } else {
+                        handleUnpinning();
+                    }
+                    
+                    // Force UI update in home fragment
+                    refreshHomeFragment();
+                    
+                    // Provide user feedback
+                    Toast.makeText(BulletJournal.this, 
+                        isPinned ? "Journal Pinned to Home Screen" : "Journal Unpinned from Home Screen", 
+                        Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -269,21 +286,81 @@ public class BulletJournal extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         saveJournalDetails();
-
+    }
+    
+    /**
+     * Update the pin icon display based on the current pin state
+     */
+    private void updatePinIconDisplay() {
+        if (isPinned) {
+            pinImage.setImageResource(R.drawable.unpin_icon);
+        } else {
+            pinImage.setImageResource(R.drawable.pin_icon);
+        }
+    }
+    
+    /**
+     * Handle pinning this journal, accounting for other potentially pinned journals
+     */
+    private void handlePinning() {
+        // Update this journal's pinned status
+        bulletJournalEntity.setListPinned(true);
+        bulletJournalEntity.setDontShow(false); // Make sure it's visible
+        
+        // Save changes to database
+        databaseHelper.bulletJournalContentDao().updateBulletJournalEntity(bulletJournalEntity);
+    }
+    
+    /**
+     * Handle unpinning this journal
+     */
+    private void handleUnpinning() {
+        // Update this journal's pinned status
+        bulletJournalEntity.setListPinned(false);
+        bulletJournalEntity.setDontShow(true); // Hide from home screen
+        
+        // Save changes to database
+        databaseHelper.bulletJournalContentDao().updateBulletJournalEntity(bulletJournalEntity);
+    }
+    
+    /**
+     * Refresh the home fragment to reflect changes in pin status
+     */
+    private void refreshHomeFragment() {
+        // Force UI updates on the home screen
+        HomeFragment.notifyHomeRecyclerViewChanges();
+        HomeFragment.notifyHomeBulletChanges();
     }
 
     private void saveJournalDetails() {
+        // Update journal basic details
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         journal.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
+        
+        boolean isNewJournal = journal.getJournalId() == 0;
+        
+        // Handle existing vs new bullet journal entity
+        if (isNewJournal || this.bulletJournalEntity == null) {
+            // Create new entity for new journals
+            this.bulletJournalEntity = new BulletJournalEntity();
+            this.bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+            this.bulletJournalEntity.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
+            this.bulletJournalEntity.setListPinned(isPinned);
+            
+            // If pinned, make sure it's visible
+            if (isPinned) {
+                this.bulletJournalEntity.setDontShow(false);
+            }
+        } else {
+            // Update existing entity
+            this.bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
+            // Note: we don't update the pin status here as that's handled by the pin button click
+        }
 
-        BulletJournalEntity bulletJournalEntity = new BulletJournalEntity();
+        // Save to database
+        bulletRecyclerAdaptor.saveBulletJournal(databaseHelper, this.bulletJournalEntity, journal, isNewJournal);
 
-        bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
-        bulletJournalEntity.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
-        bulletJournalEntity.setListPinned(isPinned);
-
-        bulletRecyclerAdaptor.saveBulletJournal(databaseHelper, bulletJournalEntity, journal, journal.getJournalId() == 0);
-
+        // Update UI
         JournalUtils.updateStreak(BulletJournal.this);
         HomeFragment.notifyHomeRecyclerViewChanges();
         HomeFragment.notifyHomeBulletChanges();

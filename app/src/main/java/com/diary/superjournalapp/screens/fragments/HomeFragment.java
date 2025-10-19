@@ -137,33 +137,58 @@ public class HomeFragment extends Fragment {
         journalRecyclerAdaptor.notifyDataSetChanged();
     }
 
+    /**
+     * Update the display of bullet journals on the home screen
+     * This method handles displaying either the most recent or pinned bullet journal
+     */
     public static void notifyHomeBulletChanges() {
-        bulletJournalEntity = databaseHelper.bulletJournalContentDao().getMostRecentBulletJournal();
+        if (context == null || linearLayoutContainer == null || tasksCard == null) {
+            // Safety check - can't update UI elements if they're not initialized
+            return;
+        }
+        
+        // Get all pinned bullet journals and the most recent one
         bulletJournalEntities = databaseHelper.bulletJournalContentDao().getPinnedBulletJournals(true);
-
+        bulletJournalEntity = databaseHelper.bulletJournalContentDao().getMostRecentBulletJournal();
 
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<BulletEntryDetails>>() {
-        }.getType();
+        Type listType = new TypeToken<List<BulletEntryDetails>>() {}.getType();
         List<BulletEntryDetails> bulletEntryDetails = new ArrayList<>();
-
-        if (bulletJournalEntity != null && (bulletJournalEntities.size() == 0)) {
-            if (bulletJournalEntity.isDontShow) {
-                tasksCard.setVisibility(View.GONE);
-            } else {
-                bulletEntryDetails = gson.fromJson(bulletJournalEntity.taskListJson, listType);
-                homeDisplayBulletJournalId = bulletJournalEntity.getJournalId();
+        boolean showTasks = false;
+        
+        // Decide which journal to display (if any)
+        if (bulletJournalEntities.size() > 0) {
+            // We have pinned journals - show the most recently created/updated one
+            BulletJournalEntity pinnedJournal = bulletJournalEntities.get(0); // Most recent pinned journal
+            
+            // Verify it's not marked as hidden
+            if (!pinnedJournal.isDontShow) {
+                bulletEntryDetails = gson.fromJson(pinnedJournal.taskListJson, listType);
+                homeDisplayBulletJournalId = pinnedJournal.getJournalId();
+                showTasks = true;
             }
-        } else if (bulletJournalEntities.size() > 0) {
-            bulletEntryDetails = gson.fromJson(bulletJournalEntities.get(bulletJournalEntities.size() - 1).taskListJson, listType);
-            homeDisplayBulletJournalId = bulletJournalEntities.get(bulletJournalEntities.size() - 1).getJournalId();
+        } else if (bulletJournalEntity != null && !bulletJournalEntity.isDontShow) {
+            // No pinned journals, but we have a recent journal that's not hidden
+            bulletEntryDetails = gson.fromJson(bulletJournalEntity.taskListJson, listType);
+            homeDisplayBulletJournalId = bulletJournalEntity.getJournalId();
+            showTasks = true;
+        }
+        
+        // Update UI based on whether we should show tasks
+        if (showTasks && bulletEntryDetails != null && !bulletEntryDetails.isEmpty()) {
+            tasksCard.setVisibility(View.VISIBLE);
+            displayTasksList(bulletEntryDetails);
         } else {
             tasksCard.setVisibility(View.GONE);
+            linearLayoutContainer.removeAllViews();
         }
-
+    }
+    
+    /**
+     * Helper method to display tasks in the LinearLayout
+     */
+    private static void displayTasksList(List<BulletEntryDetails> bulletEntryDetails) {
         linearLayoutContainer.removeAllViews();
-
-        // Add the TextView to the LinearLayout
 
         for (int i = 0; i < bulletEntryDetails.size(); i++) {
             TextView taskTxtView = new TextView(context);
@@ -180,7 +205,6 @@ public class HomeFragment extends Fragment {
             }
             linearLayoutContainer.addView(taskTxtView);
         }
-
     }
 
     public static void updateStreakCount(int count) {
@@ -251,12 +275,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        pinImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showConfirmationDialog();
-            }
-        });
+        // Hide the pin icon on home page - unpinning should only be done from the journal screen
+        pinImage.setVisibility(View.GONE);
 
         editBulletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -463,31 +483,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Unpin Task");
-        builder.setMessage("Unpinning will remove the tasks list from home screen. Are you sure about it ?");
-        builder.setPositiveButton("Unpin", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // User clicked "save," so finish the activity and discard changes
-                bulletJournalEntity.setListPinned(false);
-                bulletJournalEntity.setDontShow(true);
-                databaseHelper.bulletJournalContentDao().updateBulletJournalEntity(bulletJournalEntity);
-                tasksCard.setVisibility(View.GONE);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // User clicked "Cancel," so do nothing and close the dialog
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
+    // Unused pin/unpin methods removed - pin/unpin now handled only in BulletJournal screen
 
 
 }
