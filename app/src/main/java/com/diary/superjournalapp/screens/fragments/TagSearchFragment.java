@@ -115,23 +115,24 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private void loadAllTags() {
         allTagsContainer.removeAllViews();
         
-        // Make sure we're getting ALL tags from the database
-        List<Tag> allTags = tagRepository.getAllTags();
+        // Get all tags from both TagManager and TagRepository for comparison
+        List<Tag> tagsFromManager = tagManager.getAllTags();
+        List<Tag> tagsFromRepository = tagRepository.getAllTags();
         
-        if (allTags == null || allTags.isEmpty()) {
+        // Use the one with more tags (should be the same, but just in case)
+        List<Tag> allTags = (tagsFromManager.size() >= tagsFromRepository.size()) ? 
+                            tagsFromManager : tagsFromRepository;
+        
+        if (allTags.isEmpty()) {
             // No tags available yet
             TextView noTagsText = new TextView(requireContext());
             noTagsText.setText("No tags available yet");
             noTagsText.setTextSize(16);
             allTagsContainer.addView(noTagsText);
         } else {
-            // Log the number of tags found for debugging
-            System.out.println("Found " + allTags.size() + " tags");
-            
-            // Add tag chips - make sure we're displaying all of them
+            // Add tag chips with enhanced logging
             for (Tag tag : allTags) {
                 addTagChip(tag);
-                System.out.println("Adding tag: " + tag.getName() + " (ID: " + tag.getTagId() + ")");
             }
         }
     }
@@ -292,19 +293,29 @@ public class TagSearchFragment extends Fragment implements Searchable {
     
     /**
      * Update the visual state of a tag view based on selection state
-     * 
-     * @param tagView The tag view to update
-     * @param tag The tag text
+     * @param tagView The tag view
+     * @param tag The tag data
      */
     private void updateTagViewState(View tagView, Tag tag) {
+        // Get the MaterialCardView from the parent
+        com.google.android.material.card.MaterialCardView cardView = 
+                (com.google.android.material.card.MaterialCardView) tagView;
+        TextView tagText = tagView.findViewById(R.id.tag_text);
+        
         if (selectedTagIds.contains(tag.getTagId())) {
-            tagView.setBackgroundColor(getResources().getColor(R.color.tag_selected));
-            TextView textView = tagView.findViewById(R.id.tag_text);
-            textView.setTextColor(getResources().getColor(R.color.white));
+            // Selected state - soft orange with darker text
+            cardView.setCardBackgroundColor(0xFFFFF3E0); // Lighter orange
+            cardView.setStrokeColor(0xFFFFB74D);     // Darker orange border
+            cardView.setStrokeWidth(1);
+            tagText.setTextColor(0xFFE65100);        // Dark orange text
+            tagText.setTypeface(tagText.getTypeface(), android.graphics.Typeface.BOLD);
         } else {
-            tagView.setBackgroundColor(getResources().getColor(R.color.tag_unselected));
-            TextView textView = tagView.findViewById(R.id.tag_text);
-            textView.setTextColor(getResources().getColor(R.color.on_surface));
+            // Unselected state - light blue
+            cardView.setCardBackgroundColor(0xFFE1F5FE); // Light blue background
+            cardView.setStrokeColor(0xFF81D4FA);     // Blue border
+            cardView.setStrokeWidth(1);
+            tagText.setTextColor(0xFF0277BD);        // Dark blue text
+            tagText.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
     }
     
