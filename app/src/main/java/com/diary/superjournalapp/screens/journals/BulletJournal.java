@@ -61,7 +61,7 @@ public class BulletJournal extends AppCompatActivity {
     private BulletRecyclerAdaptor bulletRecyclerAdaptor;
     private BulletJournalEntity bulletJournalEntity;
     private ImageView pinImage;
-    private boolean isPinned;
+    private boolean isPinned = false; // Default to not pinned
     private Journal journal;
     private ImageButton deleteIcon;
     private Date selectedDate = null;
@@ -202,29 +202,8 @@ public class BulletJournal extends AppCompatActivity {
         pinImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toggle pin status
-                isPinned = !isPinned;
-                
-                // Update UI immediately
-                updatePinIconDisplay();
-                
-                // Only proceed if we have a valid journal
-                if (bulletJournalEntity != null && journal != null && journal.getJournalId() != 0) {
-                    // If pinning, we should handle potential multiple pinned journals
-                    if (isPinned) {
-                        handlePinning();
-                    } else {
-                        handleUnpinning();
-                    }
-                    
-                    // Force UI update in home fragment
-                    refreshHomeFragment();
-                    
-                    // Provide user feedback
-                    Toast.makeText(BulletJournal.this, 
-                        isPinned ? "Journal Pinned to Home Screen" : "Journal Unpinned from Home Screen", 
-                        Toast.LENGTH_SHORT).show();
-                }
+                // Show confirmation dialog before changing pin status
+                showPinConfirmationDialog();
             }
         });
 
@@ -345,12 +324,10 @@ public class BulletJournal extends AppCompatActivity {
             this.bulletJournalEntity = new BulletJournalEntity();
             this.bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
             this.bulletJournalEntity.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
-            this.bulletJournalEntity.setListPinned(isPinned);
             
-            // If pinned, make sure it's visible
-            if (isPinned) {
-                this.bulletJournalEntity.setDontShow(false);
-            }
+            // Always set isPinned to false for new journals (fix for auto-pinning issue)
+            this.bulletJournalEntity.setListPinned(false);
+            this.bulletJournalEntity.setDontShow(true); // By default, don't show on home screen
         } else {
             // Update existing entity
             this.bulletJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
@@ -420,6 +397,64 @@ public class BulletJournal extends AppCompatActivity {
         }
     }
     
+    /**
+     * Show confirmation dialog for pinning/unpinning a bullet journal
+     */
+    private void showPinConfirmationDialog() {
+        // Prepare the next pin state
+        boolean willBePinned = !isPinned;
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(willBePinned ? "Pin to Home Screen" : "Unpin from Home Screen");
+        
+        // Explain what will happen based on the action
+        if (willBePinned) {
+            builder.setMessage("This will pin your bullet journal to your home screen, making it easily accessible.");
+        } else {
+            builder.setMessage("This will remove this bullet journal from your home screen. You can still access it from the Library.");
+        }
+        
+        builder.setPositiveButton(willBePinned ? "Pin Journal" : "Unpin Journal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Toggle pin status
+                isPinned = willBePinned;
+                
+                // Update UI immediately
+                updatePinIconDisplay();
+                
+                // Only proceed if we have a valid journal
+                if (bulletJournalEntity != null && journal != null && journal.getJournalId() != 0) {
+                    // Apply changes based on pin state
+                    if (isPinned) {
+                        handlePinning();
+                    } else {
+                        handleUnpinning();
+                    }
+                    
+                    // Force UI update in home fragment
+                    refreshHomeFragment();
+                    
+                    // Provide user feedback
+                    Toast.makeText(BulletJournal.this, 
+                        isPinned ? "Journal Pinned to Home Screen" : "Journal Unpinned from Home Screen", 
+                        Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // User clicked "Cancel", so do nothing and close the dialog
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     private void showDeleteConfirmationDialog(DatabaseHelper databaseHelper, BulletJournalEntity bulletJournalEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete Journal");
