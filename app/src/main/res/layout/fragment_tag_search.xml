@@ -10,27 +10,114 @@
     android:background="?attr/android:colorBackground"
     tools:context=".screens.fragments.TagSearchFragment">
 
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search by Tags"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Instructions (only shown when tags exist) -->
+    <TextView
+        android:id="@+id/instructions_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap tags to select, then search below"
+        android:textSize="14sp"
+        android:textColor="#757575"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone" />
+
+    <!-- Tags Container (no fixed height wrapper) -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/tags_scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200dp"
+        android:paddingHorizontal="16dp"
+        android:overScrollMode="never"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"
+        android:visibility="gone">
+        
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/all_tags_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp"
+            app:flexWrap="wrap"
+            app:alignItems="flex_start"
+            app:flexDirection="row"
+            app:justifyContent="flex_start" />
+            
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- No Tags State -->
     <LinearLayout
+        android:id="@+id/no_tags_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="48dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_tag_outline"
+            android:alpha="0.3"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No tags available yet"
+            android:textSize="18sp"
+            android:textColor="#757575"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create journal entries with tags to search by them"
+            android:textSize="14sp"
+            android:textColor="#9E9E9E"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:gravity="center"
+            android:lineSpacingExtra="2dp" />
+
+    </LinearLayout>
+
+    <!-- Selected Count and Action Buttons -->
+    <LinearLayout
+        android:id="@+id/action_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"
-        android:layout_marginBottom="6dp">
+        android:paddingVertical="12dp"
+        android:visibility="gone">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/selected_count_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Search by Tags"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="0 tags selected"
+            android:textSize="14sp"
+            android:textColor="#757575"
             android:fontFamily="@font/balsamiqsans_regular" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-            
         <Button
             android:id="@+id/clear_tags_button"
             android:layout_width="wrap_content"
@@ -38,59 +125,37 @@
             android:text="Clear"
             android:textAllCaps="false"
             android:layout_marginEnd="8dp"
+            style="?android:attr/borderlessButtonStyle"
             android:visibility="gone" />
 
-        <ImageButton
+        <Button
             android:id="@+id/search_by_tag_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_search"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Search by tag" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:textAllCaps="false"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
-    <TextView
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select one or more tags to search for journals"
-        android:textSize="14sp"
-        android:fontFamily="@font/balsamiqsans_regular"
-        android:paddingHorizontal="16dp"
-        android:layout_marginBottom="8dp" />
-        
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="1dp">
-        
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:overScrollMode="never"
-            android:fadeScrollbars="false"
-            android:scrollbars="vertical">
-            
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/all_tags_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
-                app:flexWrap="wrap"
-                app:alignItems="flex_start"
-                app:flexDirection="row"
-                app:justifyContent="flex_start" />
-                
-        </androidx.core.widget.NestedScrollView>
-    </androidx.cardview.widget.CardView>
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
 
+    <!-- Results Label -->
     <TextView
         android:id="@+id/search_results_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:text="Journal Results"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -98,18 +163,22 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <!-- Results RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tag_search_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
 
+    <!-- No Results Text -->
     <TextView
         android:id="@+id/no_results_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No journals found with selected tags"
         android:textSize="16sp"
+        android:textColor="#757575"
         android:fontFamily="@font/balsamiqsans_regular"
         android:gravity="center"
         android:layout_marginHorizontal="16dp"

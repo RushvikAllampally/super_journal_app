@@ -47,7 +47,7 @@
         android:layout_margin="10dp"
         android:text="Your Journal Entries here"
         android:fontFamily="@font/balsamiqsans_regular"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/nothing_found_journals_list_view"

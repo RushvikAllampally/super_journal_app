@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +37,16 @@ import java.util.Set;
 public class TagSearchFragment extends Fragment implements Searchable {
 
     private FlexboxLayout allTagsContainer;
-    private ImageButton searchByTagButton;
+    private Button searchByTagButton;
     private RecyclerView recyclerView;
     private TextView searchResultsLabel;
     private TextView noResultsText;
+    private TextView instructionsText;
+    private TextView selectedCountText;
+    private View tagsScrollContainer;
+    private View noTagsContainer;
+    private View actionContainer;
+    private View divider;
     private DatabaseHelper databaseHelper;
     private TagManager tagManager;
     private TagRepository tagRepository;
@@ -76,18 +83,18 @@ public class TagSearchFragment extends Fragment implements Searchable {
         recyclerView = view.findViewById(R.id.tag_search_recycler_view);
         searchResultsLabel = view.findViewById(R.id.search_results_label);
         noResultsText = view.findViewById(R.id.no_results_text);
+        instructionsText = view.findViewById(R.id.instructions_text);
+        selectedCountText = view.findViewById(R.id.selected_count_text);
+        tagsScrollContainer = view.findViewById(R.id.tags_scroll_container);
+        noTagsContainer = view.findViewById(R.id.no_tags_container);
+        actionContainer = view.findViewById(R.id.action_container);
+        divider = view.findViewById(R.id.divider);
         
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         // Set up search button
-        searchByTagButton.setOnClickListener(v -> {
-            if (selectedTagIds.isEmpty()) {
-                Toast.makeText(requireContext(), "Please select at least one tag", Toast.LENGTH_SHORT).show();
-            } else {
-                performSearch();
-            }
-        });
+        searchByTagButton.setOnClickListener(v -> performSearch());
         
         // Load all available tags
         loadAllTags();
@@ -124,16 +131,27 @@ public class TagSearchFragment extends Fragment implements Searchable {
                             tagsFromManager : tagsFromRepository;
         
         if (allTags.isEmpty()) {
-            // No tags available yet
-            TextView noTagsText = new TextView(requireContext());
-            noTagsText.setText("No tags available yet");
-            noTagsText.setTextSize(16);
-            allTagsContainer.addView(noTagsText);
+            // Show empty state
+            tagsScrollContainer.setVisibility(View.GONE);
+            noTagsContainer.setVisibility(View.VISIBLE);
+            instructionsText.setVisibility(View.GONE);
+            actionContainer.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         } else {
-            // Add tag chips with enhanced logging
+            // Show tags
+            tagsScrollContainer.setVisibility(View.VISIBLE);
+            noTagsContainer.setVisibility(View.GONE);
+            instructionsText.setVisibility(View.VISIBLE);
+            actionContainer.setVisibility(View.VISIBLE);
+            divider.setVisibility(View.GONE);
+            
+            // Add tag chips
             for (Tag tag : allTags) {
                 addTagChip(tag);
             }
+            
+            // Update the UI state
+            updateSelectionUI();
         }
     }
     
@@ -166,15 +184,8 @@ public class TagSearchFragment extends Fragment implements Searchable {
             // Update the visual state
             updateTagViewState(tagView, tag);
             
-            // Update clear button visibility
-            updateClearButtonVisibility();
-            
-            // Show toast with current selection
-            if (selectedTagIds.isEmpty()) {
-                Toast.makeText(requireContext(), "No tags selected", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), selectedTagIds.size() + " tag(s) selected", Toast.LENGTH_SHORT).show();
-            }
+            // Update selection UI
+            updateSelectionUI();
         });
         
         allTagsContainer.addView(tagView);
@@ -187,7 +198,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
         searchResults.clear();
         
         if (selectedTagIds.isEmpty()) {
-            updateUIForResults();
+            Toast.makeText(requireContext(), "Please select at least one tag", Toast.LENGTH_SHORT).show();
             return;
         }
         
@@ -242,10 +253,12 @@ public class TagSearchFragment extends Fragment implements Searchable {
             searchResultsLabel.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
             noResultsText.setVisibility(View.VISIBLE);
+            divider.setVisibility(View.GONE);
         } else {
             searchResultsLabel.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
             noResultsText.setVisibility(View.GONE);
+            divider.setVisibility(View.VISIBLE);
             
             // Update results count
             searchResultsLabel.setText("Journal Results (" + searchResults.size() + ")");
@@ -269,9 +282,6 @@ public class TagSearchFragment extends Fragment implements Searchable {
                     loadAllTags();
                     searchResults.clear();
                     updateUIForResults();
-                    
-                    // Update clear button visibility
-                    updateClearButtonVisibility();
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -333,6 +343,23 @@ public class TagSearchFragment extends Fragment implements Searchable {
                     clearButton.setVisibility(View.GONE);
                 }
             }
+        }
+    }
+    
+    /**
+     * Update the selection UI (count text and button visibility)
+     */
+    private void updateSelectionUI() {
+        int count = selectedTagIds.size();
+        
+        if (count == 0) {
+            selectedCountText.setText("Tap tags to select them");
+            searchByTagButton.setVisibility(View.GONE);
+            updateClearButtonVisibility();
+        } else {
+            selectedCountText.setText(count + (count == 1 ? " tag selected" : " tags selected"));
+            searchByTagButton.setVisibility(View.VISIBLE);
+            updateClearButtonVisibility();
         }
     }
 }
