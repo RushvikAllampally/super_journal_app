@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private TextView instructionsText;
     private TextView selectedCountText;
     private View tagsScrollContainer;
+    private View tagsCardContainer;
     private View noTagsContainer;
     private View actionContainer;
     private View divider;
@@ -53,6 +56,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
     private Set<Long> selectedTagIds = new HashSet<>();
     private List<Journal> searchResults = new ArrayList<>();
     private String currentSearchQuery = "";
+    private List<Tag> allTagsList = new ArrayList<>();
     
     public TagSearchFragment() {
         // Required empty public constructor
@@ -86,6 +90,7 @@ public class TagSearchFragment extends Fragment implements Searchable {
         instructionsText = view.findViewById(R.id.instructions_text);
         selectedCountText = view.findViewById(R.id.selected_count_text);
         tagsScrollContainer = view.findViewById(R.id.tags_scroll_container);
+        tagsCardContainer = view.findViewById(R.id.tags_card_container);
         noTagsContainer = view.findViewById(R.id.no_tags_container);
         actionContainer = view.findViewById(R.id.action_container);
         divider = view.findViewById(R.id.divider);
@@ -117,22 +122,31 @@ public class TagSearchFragment extends Fragment implements Searchable {
     }
     
     /**
-     * Load and display all available tags
+     * Load all available tags
      */
     private void loadAllTags() {
-        allTagsContainer.removeAllViews();
-        
         // Get all tags from both TagManager and TagRepository for comparison
         List<Tag> tagsFromManager = tagManager.getAllTags();
         List<Tag> tagsFromRepository = tagRepository.getAllTags();
         
         // Use the one with more tags (should be the same, but just in case)
-        List<Tag> allTags = (tagsFromManager.size() >= tagsFromRepository.size()) ? 
-                            tagsFromManager : tagsFromRepository;
+        allTagsList = (tagsFromManager.size() >= tagsFromRepository.size()) ? 
+                      tagsFromManager : tagsFromRepository;
         
-        if (allTags.isEmpty()) {
+        // Display all tags
+        displayTags();
+    }
+    
+    /**
+     * Display all tags
+     */
+    private void displayTags() {
+        allTagsContainer.removeAllViews();
+        
+        if (allTagsList.isEmpty()) {
             // Show empty state
             tagsScrollContainer.setVisibility(View.GONE);
+            tagsCardContainer.setVisibility(View.GONE);
             noTagsContainer.setVisibility(View.VISIBLE);
             instructionsText.setVisibility(View.GONE);
             actionContainer.setVisibility(View.GONE);
@@ -140,13 +154,14 @@ public class TagSearchFragment extends Fragment implements Searchable {
         } else {
             // Show tags
             tagsScrollContainer.setVisibility(View.VISIBLE);
+            tagsCardContainer.setVisibility(View.VISIBLE);
             noTagsContainer.setVisibility(View.GONE);
             instructionsText.setVisibility(View.VISIBLE);
             actionContainer.setVisibility(View.VISIBLE);
             divider.setVisibility(View.GONE);
             
-            // Add tag chips
-            for (Tag tag : allTags) {
+            // Add all tag chips
+            for (Tag tag : allTagsList) {
                 addTagChip(tag);
             }
             
@@ -267,6 +282,21 @@ public class TagSearchFragment extends Fragment implements Searchable {
             JournalRecyclerAdaptor adapter = new JournalRecyclerAdaptor(
                     requireContext(), new ArrayList<>(searchResults));
             recyclerView.setAdapter(adapter);
+            
+            // Make sure tag section is compact to give more space to results
+            if (tagsCardContainer != null && tagsCardContainer.getLayoutParams() != null) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tagsCardContainer.getLayoutParams();
+                params.bottomMargin = 4;
+                tagsCardContainer.setLayoutParams(params);
+            }
+            
+            // Ensure RecyclerView has the correct layout parameters for visibility
+            if (recyclerView.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
+                layoutParams.height = 0;
+                layoutParams.weight = 1;
+                recyclerView.setLayoutParams(layoutParams);
+            }
         }
     }
     
@@ -313,18 +343,20 @@ public class TagSearchFragment extends Fragment implements Searchable {
         TextView tagText = tagView.findViewById(R.id.tag_text);
         
         if (selectedTagIds.contains(tag.getTagId())) {
-            // Selected state - soft orange with darker text
-            cardView.setCardBackgroundColor(0xFFFFF3E0); // Lighter orange
-            cardView.setStrokeColor(0xFFFFB74D);     // Darker orange border
+            // Selected state - minimalistic style
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.tag_selected));
+            cardView.setStrokeColor(getResources().getColor(R.color.secondary));
             cardView.setStrokeWidth(1);
-            tagText.setTextColor(0xFFE65100);        // Dark orange text
+            cardView.setCardElevation(1f); // Subtle elevation for selected state
+            tagText.setTextColor(getResources().getColor(R.color.primary_variant));
             tagText.setTypeface(tagText.getTypeface(), android.graphics.Typeface.BOLD);
         } else {
-            // Unselected state - light blue
-            cardView.setCardBackgroundColor(0xFFE1F5FE); // Light blue background
-            cardView.setStrokeColor(0xFF81D4FA);     // Blue border
+            // Unselected state
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.tag_unselected));
+            cardView.setStrokeColor(getResources().getColor(R.color.secondary_variant));
             cardView.setStrokeWidth(1);
-            tagText.setTextColor(0xFF0277BD);        // Dark blue text
+            cardView.setCardElevation(0.5f);
+            tagText.setTextColor(getResources().getColor(R.color.text_primary));
             tagText.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
     }
