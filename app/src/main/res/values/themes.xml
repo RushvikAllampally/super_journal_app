@@ -21,6 +21,9 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
         
+        <!-- Opt out of Android 15 edge-to-edge enforcement -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+        
         <!-- Widget styling -->
         <item name="switchStyle">@style/Widget.App.Switch</item>
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
@@ -33,7 +36,6 @@
         <item name="thumbTint">@color/switch_thumb_tint</item>
         <item name="trackTint">@color/switch_track_tint</item>
     </style>
-    
     <style name="Widget.App.Button" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/secondary</item>
         <item name="android:textColor">@color/on_secondary</item>
