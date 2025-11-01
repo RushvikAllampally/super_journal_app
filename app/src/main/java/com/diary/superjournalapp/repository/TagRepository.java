@@ -179,6 +179,29 @@ public class TagRepository {
     }
     
     /**
+     * Update a tag's name
+     * @param tag Tag to update
+     * @return true if successful, false otherwise
+     */
+    public boolean updateTag(Tag tag) {
+        if (tag == null || tag.getName() == null || tag.getName().trim().isEmpty()) {
+            return false;
+        }
+        
+        try {
+            // Normalize the name
+            tag.setName(tag.getName().trim());
+            
+            // Update the tag
+            database.tagDao().updateTag(tag);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
      * Search tags by name
      * @param query Search query
      * @return List of matching tags

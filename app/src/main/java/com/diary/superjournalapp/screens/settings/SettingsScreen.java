@@ -37,6 +37,7 @@ public class SettingsScreen extends ThemedActivity {
     private LinearLayout darkModeBlock;
     private LinearLayout dailyPromptsBlock;
     private LinearLayout fontSizeBlock;
+    private LinearLayout manageTagsBlock;
     private Button editProfileBtn;
     private EditText editNameInput;
     private TextView displayProfileName;
@@ -57,6 +58,7 @@ public class SettingsScreen extends ThemedActivity {
         rateOurAppBlock = findViewById(R.id.rate_app_block);
         darkModeBlock = findViewById(R.id.dark_mode_block);
         dailyPromptsBlock = findViewById(R.id.daily_prompts_block);
+        manageTagsBlock = findViewById(R.id.manage_tags_block);
 //        fontSizeBlock = findViewById(R.id.font_size_block);
 
         displayProfileName = findViewById(R.id.display_profile_name);
@@ -94,6 +96,15 @@ public class SettingsScreen extends ThemedActivity {
                 startActivity(intent);
             }
         };
+        
+        // Set up click listener for Manage Tags option
+        manageTagsBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsScreen.this, com.diary.superjournalapp.screens.tags.TagManagementActivity.class);
+                startActivity(intent);
+            }
+        });
 
         passocodeBlock.setOnClickListener(new View.OnClickListener() {
             @Override

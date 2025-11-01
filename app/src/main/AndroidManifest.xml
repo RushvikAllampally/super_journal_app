@@ -32,6 +32,9 @@
             android:name=".screens.settings.SettingsScreen"
             android:exported="false" />
         <activity
+            android:name=".screens.tags.TagManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.introScreens.IntroScreenTwo"
             android:exported="false" />
         <activity
