@@ -135,13 +135,13 @@
             android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:hint="Title"
+            android:hint="Give your dream a title..."
+            android:textColorHint="@color/journal_hint_text"
             android:inputType="text|textMultiLine"
             android:maxLines="2"
             android:ellipsize="end"
             android:textSize="18sp"
             android:textColor="@color/journal_title_text"
-            android:textColorHint="?attr/colorOnBackground"
             android:alpha="0.8"
             android:textStyle="bold" />
 

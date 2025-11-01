@@ -41,6 +41,7 @@
     <color name="journal_toolbar_bg">#2A2A2A</color> <!-- Slightly lighter dark for toolbar separation -->
     <color name="journal_title_text">#FFFFFF</color> <!-- White text for journal title in dark mode -->
     <color name="journal_editor_text">#FFFFFF</color> <!-- White text for journal content in dark mode -->
+    <color name="journal_hint_text">#BBBBBB</color> <!-- Light gray text for journal hints in dark mode -->
     <color name="toolbar_button_active">#4A3F5C</color> <!-- Dark purple for active toolbar buttons -->
     <color name="toolbar_button_pressed">#5B4F6D</color> <!-- Lighter purple for pressed state -->
 </resources>

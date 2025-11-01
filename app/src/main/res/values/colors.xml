@@ -59,6 +59,7 @@
     <color name="journal_toolbar_bg">#FFFFFF</color> <!-- White background for toolbar -->
     <color name="journal_title_text">#000000</color> <!-- Black text for journal title in light mode -->
     <color name="journal_editor_text">#000000</color> <!-- Black text for journal content in light mode -->
+    <color name="journal_hint_text">#757575</color> <!-- Medium gray text for journal hints in light mode -->
     <color name="toolbar_button_active">#E8DFF5</color> <!-- Light purple for active toolbar buttons -->
     <color name="toolbar_button_pressed">#D4C5ED</color> <!-- Slightly darker purple for pressed state -->
     
