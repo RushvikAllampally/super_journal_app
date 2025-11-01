@@ -334,7 +334,12 @@ public class ReminderScreen extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.SECOND, 0);
+        
+        // If the time has already passed today, schedule for tomorrow
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.putExtra(ApplicationConstants.NOTIFICATION_TYPE, notificationType);
@@ -362,12 +367,25 @@ public class ReminderScreen extends AppCompatActivity {
 
         //end channel creation
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+            getApplicationContext(), 
+            ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), 
+            intent, 
+            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        
         System.out.println("setting the receiver");
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        // Use exact alarms for precise timing
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            System.out.println("Scheduled exact alarm for " + notificationType + " at " + hour + ":" + minute);
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.diary.superjournalapp.utils;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,6 +18,9 @@ import com.diary.superjournalapp.R;
 import com.diary.superjournalapp.constants.ApplicationConstants;
 import com.diary.superjournalapp.dto.NotificationData;
 import com.diary.superjournalapp.screens.settings.ReminderScreen;
+import com.google.gson.Gson;
+
+import java.util.Calendar;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -68,11 +72,20 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        
+        // Handle device reboot - reschedule all alarms
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
+            System.out.println("Boot completed - rescheduling all notifications");
+            rescheduleAllNotifications(context);
+            return;
+        }
 
+        // Handle regular notification
         System.out.println("received the notification ");
         String notificationType = intent.getStringExtra(ApplicationConstants.NOTIFICATION_TYPE);
 
-//         Check if the notification is enabled
+        // Check if the notification is enabled
         SharedPreferences sharedPreferences = context.getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
         NotificationData notificationData = ReminderScreen.getNotificationData(sharedPreferences, notificationType);
 
@@ -82,6 +95,9 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (notificationData != null && notificationData.isEnabled()) {
             // Show the notification
             showNotification(context, notificationType);
+            
+            // Reschedule for next day
+            scheduleNextNotification(context, notificationType, notificationData.getHour(), notificationData.getMinute());
         }
     }
 
@@ -116,6 +132,93 @@ public class NotificationReceiver extends BroadcastReceiver {
             }
         }
         notificationManager.notify(ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), builder.build());
+    }
+
+    // Schedule notification for next day at same time
+    private void scheduleNextNotification(Context context, String notificationType, int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        
+        // Add one day to schedule for tomorrow
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra(ApplicationConstants.NOTIFICATION_TYPE, notificationType);
+        
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+            context,
+            ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            System.out.println("Rescheduled " + notificationType + " for next day at " + hour + ":" + minute);
+        }
+    }
+
+    // Reschedule all enabled notifications (called on boot)
+    private void rescheduleAllNotifications(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
+        
+        String[] notificationTypes = {
+            ApplicationConstants.Gratitude_NOTIFICATION_TYPE,
+            ApplicationConstants.REFLECTIVE_NOTIFICATION_TYPE,
+            ApplicationConstants.BULLET_NOTIFICATION_TYPE,
+            ApplicationConstants.DREAM_NOTIFICATION_TYPE,
+            ApplicationConstants.QUOTE_NOTIFICATION_TYPE,
+            ApplicationConstants.AFFIRMATION_NOTIFICATION_TYPE,
+            ApplicationConstants.MOOD_NOTIFICATION_TYPE
+        };
+        
+        for (String notificationType : notificationTypes) {
+            NotificationData notificationData = ReminderScreen.getNotificationData(sharedPreferences, notificationType);
+            
+            if (notificationData != null && notificationData.isEnabled()) {
+                scheduleNotificationFromReceiver(context, notificationType, notificationData.getHour(), notificationData.getMinute());
+            }
+        }
+    }
+
+    // Schedule a notification (used during boot and initial setup)
+    private void scheduleNotificationFromReceiver(Context context, String notificationType, int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        
+        // If the time has already passed today, schedule for tomorrow
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra(ApplicationConstants.NOTIFICATION_TYPE, notificationType);
+        
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+            context,
+            ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            System.out.println("Scheduled " + notificationType + " at " + hour + ":" + minute);
+        }
     }
 
 }
