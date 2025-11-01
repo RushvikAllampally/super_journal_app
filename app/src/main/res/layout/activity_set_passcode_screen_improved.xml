@@ -103,51 +103,9 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <!-- Change Passcode Button -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/change_passcode_card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="@android:color/transparent">
-                        
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp"
-                            android:gravity="center_vertical"
-                            android:background="?attr/selectableItemBackground">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/lock_open_24"
-                                android:tint="?attr/colorPrimary"
-                                android:layout_marginEnd="16dp"
-                                android:contentDescription="Change passcode" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Change Passcode"
-                                android:textColor="?attr/colorOnSurface"
-                                android:fontFamily="@font/balsamiqsans_regular"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="?attr/colorOnSurface"
-                        android:alpha="0.1"
-                        android:layout_marginStart="64dp" />
-
                     <!-- Reset Passcode Button -->
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/reset_passcode_card"
+                        android:id="@+id/change_passcode_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardElevation="0dp"
@@ -209,7 +167,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• Use a passcode that's easy for you to remember but hard for others to guess\n\n• Don't share your passcode with anyone\n\n• If you forget your passcode, you can reset it but you'll need to create a new one"
+                    android:text="• Use a passcode that's easy for you to remember but hard for others to guess\n\n• Don't share your passcode with anyone\n\n• If you forget your passcode, use the master passcode (always the CURRENT YEAR when you need it)\n\n• For additional help, use the 'Need Help?' option when prompted"
                     android:textColor="?attr/colorOnSurface"
                     android:alpha="0.8"
                     android:fontFamily="@font/balsamiqsans_regular"

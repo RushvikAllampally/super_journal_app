@@ -3,6 +3,7 @@ package com.diary.superjournalapp.applock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +29,10 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
     private View view_01, view_02, view_03, view_04;
     private Button btn_01, btn_02, btn_03, btn_04, btn_05, btn_06, btn_07, btn_08, btn_09, btn_00, btn_forgot;
     private ImageButton btn_clear;
-    private TextView passcodeTitle, passcodeInstruction, changePassword;
+    private TextView passcodeTitle, passcodeInstruction, changePassword, needHelpButton;
+    
+    // Master passcode is the current year
+    private String masterPasscode;
 
     private ArrayList<String> numbers_list = new ArrayList<>();
 
@@ -47,6 +52,10 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
 
         Intent intent = getIntent();
         isNewPasscode = intent.getBooleanExtra(ApplicationConstants.IS_NEW_PASSCODE, false);
+
+        // Set master passcode as the current year
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        masterPasscode = String.valueOf(calendar.get(java.util.Calendar.YEAR));
 
         initializeComponents();
         updateUIForMode();
@@ -80,6 +89,7 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
         btn_00 = findViewById(R.id.btn_0);
         btn_clear = findViewById(R.id.btn_clear);
         btn_forgot = findViewById(R.id.btn_forgot);
+        needHelpButton = findViewById(R.id.need_help_button);
 
         // Set click listeners
         btn_00.setOnClickListener(this);
@@ -94,6 +104,11 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
         btn_09.setOnClickListener(this);
         btn_clear.setOnClickListener(this);
         btn_forgot.setOnClickListener(this);
+        
+        // Set up Need Help button
+        if (needHelpButton != null) {
+            needHelpButton.setOnClickListener(v -> showEmailSupportDialog());
+        }
 
         // Show change password button only if passcode exists
         if (!isNewPasscode && getPassCode().length() > 0) {
@@ -201,14 +216,61 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
      * Show dialog for forgotten passcode
      */
     private void showForgotPasscodeDialog() {
-        new AlertDialog.Builder(this)
+        // Create custom view for dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.forgot_passcode_dialog, null);
+        EditText masterPasscodeInput = dialogView.findViewById(R.id.master_passcode_input);
+        Button needHelpBtn = dialogView.findViewById(R.id.need_help_btn);
+        
+        AlertDialog dialog = new AlertDialog.Builder(this)
             .setTitle("Forgot Passcode")
-            .setMessage("If you've forgotten your passcode, you'll need to reset the app. This will clear all app settings but won't delete your journal entries.")
-            .setPositiveButton("Reset", (dialog, which) -> {
+            .setView(dialogView)
+            .setPositiveButton("Reset", null) // We'll set this later to avoid automatic dismissal
+            .setNegativeButton("Cancel", null)
+            .create();
+        
+        // Show the dialog
+        dialog.show();
+        
+        // Need Help button in dialog
+        needHelpBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            showEmailSupportDialog();
+        });
+        
+        // Set up positive button to validate the master passcode
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String enteredCode = masterPasscodeInput.getText().toString().trim();
+            
+            // Check if master passcode is correct
+            if (enteredCode.equals(masterPasscode)) {
                 // Reset passcode but keep journal data
                 clearPasscode();
-                Toast.makeText(this, "Passcode reset successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(AppLock.this, "Passcode reset successfully", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
                 finish();
+            } else {
+                // Show error for incorrect master passcode
+                masterPasscodeInput.setError("Incorrect master passcode");
+                Toast.makeText(AppLock.this, "Incorrect master passcode", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    
+    /**
+     * Show dialog to contact email support
+     */
+    private void showEmailSupportDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle("Need Help?")
+            .setMessage("Contact our support team for assistance with your passcode.")
+            .setPositiveButton("Email Support", (dialog, which) -> {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                String uriText = "mailto:" + Uri.encode(ApplicationConstants.CONTACT_EMAIL) + "?subject=" +
+                        Uri.encode("Passcode Recovery Help") + "&body=" + 
+                        Uri.encode("I need help recovering my passcode. Please assist.");
+                Uri uri = Uri.parse(uriText);
+                intent.setData(uri);
+                startActivity(Intent.createChooser(intent, "Send Email"));
             })
             .setNegativeButton("Cancel", null)
             .show();
@@ -271,8 +333,18 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
             // Changing existing passcode
             handlePasscodeChange();
         } else {
-            // Normal passcode verification
-            matchPassCode();
+            // Check for master passcode or normal passcode verification
+            if (passCode.equals(masterPasscode)) {
+                // Master passcode entered - allow access and show message
+                Toast.makeText(AppLock.this, "Access granted using master passcode", Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("isPasscodeOpened", true);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            } else {
+                // Normal passcode verification
+                matchPassCode();
+            }
         }
     }
     
@@ -294,7 +366,9 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
                 savePassCode(passCode);
                 Toast.makeText(AppLock.this, "Passcode set successfully", Toast.LENGTH_SHORT).show();
                 isNewPasscode = false;
-                finish();
+                
+                // Show information about the master passcode
+                showMasterPasscodeInfo();
             } else {
                 // Passcodes don't match
                 showErrorAnimation();
@@ -377,6 +451,18 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
         Animation shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
         View dotContainer = findViewById(R.id.passcode_title);
         dotContainer.startAnimation(shakeAnimation);
+    }
+    
+    /**
+     * Show information about the master passcode
+     */
+    private void showMasterPasscodeInfo() {
+        new AlertDialog.Builder(this)
+            .setTitle("Master Passcode Information")
+            .setMessage("For your security, we've created a Master Passcode that you can use if you ever forget your passcode.\n\nImportant: The Master Passcode is always the current year at the time you need it.\n\nExample: If today is January 2026, your Master Passcode will be \"2026\", even if you originally set up your passcode in 2025.\n\nNote: This information will not be shown again.")
+            .setPositiveButton("I understand", (dialog, which) -> finish())
+            .setCancelable(false)
+            .show();
     }
 
     private void matchPassCode() {

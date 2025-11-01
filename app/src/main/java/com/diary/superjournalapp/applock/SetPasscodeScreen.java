@@ -20,7 +20,7 @@ import com.diary.superjournalapp.constants.ApplicationConstants;
 public class SetPasscodeScreen extends AppCompatActivity {
 
     private SwitchCompat enablePasscodeLock;
-    private CardView changePasscodeCard, resetPasscodeCard;
+    private CardView resetPasscodeCard;
     private LinearLayout passcodeOptionsLayout;
     private TextView passcodeStatus;
 
@@ -31,8 +31,7 @@ public class SetPasscodeScreen extends AppCompatActivity {
 
         // Initialize views
         enablePasscodeLock = findViewById(R.id.switch_enable_passcode_lock);
-        changePasscodeCard = findViewById(R.id.change_passcode_card);
-        resetPasscodeCard = findViewById(R.id.reset_passcode_card);
+        resetPasscodeCard = findViewById(R.id.change_passcode_card); // We'll reuse the change_passcode_card ID
         passcodeOptionsLayout = findViewById(R.id.passcode_options);
         passcodeStatus = findViewById(R.id.passcode_status);
 
@@ -55,21 +54,11 @@ public class SetPasscodeScreen extends AppCompatActivity {
             }
         });
 
-        // Change passcode button
-        changePasscodeCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SetPasscodeScreen.this, AppLock.class);
-                intent.putExtra("isChangingPasscode", true);
-                startActivity(intent);
-            }
-        });
-
         // Reset passcode button
         resetPasscodeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showResetPasscodeDialog();
+                showResetPasscodeConfirmation();
             }
         });
     }
@@ -137,10 +126,11 @@ public class SetPasscodeScreen extends AppCompatActivity {
                 .show();
     }
 
+    
     /**
      * Show confirmation dialog before resetting passcode
      */
-    private void showResetPasscodeDialog() {
+    private void showResetPasscodeConfirmation() {
         new AlertDialog.Builder(this)
                 .setTitle("Reset Passcode")
                 .setMessage("Are you sure you want to reset your passcode? You'll need to create a new one.")
