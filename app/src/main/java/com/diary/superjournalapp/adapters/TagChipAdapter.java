@@ -137,10 +137,11 @@ public class TagChipAdapter {
         
         // Set chip appearance
         chip.setChipBackgroundColorResource(android.R.color.transparent);
-        chip.setChipStrokeColorResource(R.color.app_blue);
+        chip.setChipStrokeColorResource(R.color.text_primary);
         chip.setChipStrokeWidth(1);
         chip.setChipIconResource(R.drawable.tag_24);
-        chip.setChipIconTintResource(R.color.app_blue);
+        chip.setChipIconTintResource(R.color.text_primary);
+        chip.setTextColor(context.getResources().getColor(R.color.text_primary));
         
         // Handle small chips (for journal cards)
         if (smallChips) {
@@ -154,9 +155,9 @@ public class TagChipAdapter {
             chip.setEnsureMinTouchTargetSize(false);
         } else {
             // Standard sized chips - ensure consistent height and padding
-            chip.setChipMinHeight(32); // Reduced from 40 to 32
-            chip.setChipStartPadding(10); // Reduced from 12 to 10
-            chip.setChipEndPadding(10); // Reduced from 12 to 10
+            chip.setChipMinHeight(36); // Increased from 32 to 36dp
+            chip.setChipStartPadding(10);
+            chip.setChipEndPadding(10);
             chip.setTextEndPadding(4);
             chip.setTextStartPadding(4);
             chip.setEnsureMinTouchTargetSize(false);
@@ -165,7 +166,7 @@ public class TagChipAdapter {
         // Handle close icon
         if (showCloseIcon && onTagCloseListener != null) {
             chip.setCloseIconVisible(true);
-            chip.setCloseIconTintResource(R.color.app_blue);
+            chip.setCloseIconTintResource(R.color.text_primary);
             if (smallChips) {
                 chip.setCloseIconSize(12);
             }
@@ -214,11 +215,12 @@ public class TagChipAdapter {
             chip.setEnsureMinTouchTargetSize(false);
         } else {
             // Standard sized chips - ensure consistent height and padding
-            chip.setChipMinHeight(32); // Reduced from 40 to 32
-            chip.setChipStartPadding(10); // Reduced from 12 to 10
-            chip.setChipEndPadding(10); // Reduced from 12 to 10
+            chip.setChipMinHeight(36); // Increased from 32 to 36dp
+            chip.setChipStartPadding(10);
+            chip.setChipEndPadding(10);
             chip.setTextEndPadding(4);
             chip.setTextStartPadding(4);
+            chip.setEnsureMinTouchTargetSize(false); // Ensure consistent height with other chips
         }
         
         // Add to chip group

@@ -341,23 +341,35 @@ public class TagSearchFragment extends Fragment implements Searchable {
         com.google.android.material.card.MaterialCardView cardView = 
                 (com.google.android.material.card.MaterialCardView) tagView;
         TextView tagText = tagView.findViewById(R.id.tag_text);
+        ImageView tagIcon = tagView.findViewById(R.id.tag_icon);
+        
+        // Remove animations
+        cardView.setClickable(true);
+        cardView.setCheckable(false);
+        cardView.setStateListAnimator(null);
         
         if (selectedTagIds.contains(tag.getTagId())) {
-            // Selected state - minimalistic style
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.tag_selected));
-            cardView.setStrokeColor(getResources().getColor(R.color.secondary));
+            // Selected state - using primary text color styling
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.text_primary));
+            cardView.setStrokeColor(getResources().getColor(R.color.text_primary));
             cardView.setStrokeWidth(1);
-            cardView.setCardElevation(1f); // Subtle elevation for selected state
-            tagText.setTextColor(getResources().getColor(R.color.primary_variant));
-            tagText.setTypeface(tagText.getTypeface(), android.graphics.Typeface.BOLD);
+            cardView.setCardElevation(0f); // No elevation to match journal modal
+            tagText.setTextColor(getResources().getColor(android.R.color.white));
+            tagText.setTypeface(tagText.getTypeface(), android.graphics.Typeface.NORMAL);
+            if (tagIcon != null) {
+                tagIcon.setColorFilter(getResources().getColor(android.R.color.white));
+            }
         } else {
-            // Unselected state
-            cardView.setCardBackgroundColor(getResources().getColor(R.color.tag_unselected));
-            cardView.setStrokeColor(getResources().getColor(R.color.secondary_variant));
+            // Unselected state - using transparent with text_primary stroke
+            cardView.setCardBackgroundColor(getResources().getColor(android.R.color.transparent));
+            cardView.setStrokeColor(getResources().getColor(R.color.text_primary));
             cardView.setStrokeWidth(1);
-            cardView.setCardElevation(0.5f);
+            cardView.setCardElevation(0f);
             tagText.setTextColor(getResources().getColor(R.color.text_primary));
             tagText.setTypeface(null, android.graphics.Typeface.NORMAL);
+            if (tagIcon != null) {
+                tagIcon.setColorFilter(getResources().getColor(R.color.text_primary));
+            }
         }
     }
     

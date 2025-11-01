@@ -18,4 +18,5 @@
     app:checkedIconVisible="true"
     app:checkedIcon="@drawable/check_circle_24"
     app:closeIconVisible="false"
+    app:ensureMinTouchTargetSize="false"
     style="@style/Widget.MaterialComponents.Chip.Choice" />

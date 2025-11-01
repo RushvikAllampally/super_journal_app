@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ import com.diary.superjournalapp.adapters.TagChipAdapter;
 import com.diary.superjournalapp.entity.Tag;
 import com.diary.superjournalapp.repository.TagRepository;
 import com.diary.superjournalapp.utils.TagManager;
-import com.google.android.material.chip.ChipGroup;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -50,8 +51,8 @@ public class TagDialogFragment extends DialogFragment {
     private EditText tagInputField;
     private Button addTagButton;
     private Button doneButton;
-    private ChipGroup currentTagsGroup;
-    private ChipGroup suggestedTagsGroup;
+    private FlexboxLayout currentTagsGroup;
+    private FlexboxLayout suggestedTagsGroup;
     private TextView emptyTagsMessage;
     
     /**
@@ -199,43 +200,101 @@ public class TagDialogFragment extends DialogFragment {
     /**
      * Load and display the current tags for the journal
      */
+    /**
+     * Creates a tag chip using the unified tag_chip_item layout
+     * 
+     * @param tagName The name of the tag to display
+     * @param showCloseButton Whether to show the close button
+     * @param onCloseListener Listener for close button clicks (optional)
+     * @param onClickListener Listener for chip clicks (optional)
+     * @return The inflated and configured tag view
+     */
+    /**
+     * Updates the visual state of a tag view for consistent styling
+     * @param tagView The tag view to style
+     * @param isSelected Whether the tag is in a selected state
+     */
+    private void updateTagViewState(View tagView, boolean isSelected) {
+        com.google.android.material.card.MaterialCardView cardView = 
+                (com.google.android.material.card.MaterialCardView) tagView;
+        TextView tagText = tagView.findViewById(R.id.tag_text);
+        ImageView tagIcon = tagView.findViewById(R.id.tag_icon);
+        
+        // Remove animations for consistent appearance
+        cardView.setClickable(true);
+        cardView.setCheckable(false);
+        cardView.setStateListAnimator(null);
+        
+        if (isSelected) {
+            // Selected state
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.text_primary));
+            cardView.setStrokeColor(getResources().getColor(R.color.text_primary));
+            cardView.setStrokeWidth(1);
+            cardView.setCardElevation(0f);
+            tagText.setTextColor(getResources().getColor(android.R.color.white));
+            if (tagIcon != null) {
+                tagIcon.setColorFilter(getResources().getColor(android.R.color.white));
+            }
+        } else {
+            // Unselected state
+            cardView.setCardBackgroundColor(getResources().getColor(android.R.color.transparent));
+            cardView.setStrokeColor(getResources().getColor(R.color.text_primary));
+            cardView.setStrokeWidth(1);
+            cardView.setCardElevation(0f);
+            tagText.setTextColor(getResources().getColor(R.color.text_primary));
+            if (tagIcon != null) {
+                tagIcon.setColorFilter(getResources().getColor(R.color.text_primary));
+            }
+        }
+    }
+    
+    private View createTagChip(String tagName, boolean showCloseButton, View.OnClickListener onCloseListener, View.OnClickListener onClickListener) {
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        // Use the proper parent for consistent layout parameters
+        View tagView = inflater.inflate(R.layout.tag_chip_item, showCloseButton ? currentTagsGroup : suggestedTagsGroup, false);
+        
+        // Set the tag text
+        TextView tagText = tagView.findViewById(R.id.tag_text);
+        tagText.setText(tagName);
+        
+        // Configure close button
+        ImageView closeButton = tagView.findViewById(R.id.tag_remove_button);
+        if (showCloseButton) {
+            closeButton.setVisibility(View.VISIBLE);
+            if (onCloseListener != null) {
+                closeButton.setOnClickListener(onCloseListener);
+            }
+        } else {
+            closeButton.setVisibility(View.GONE);
+        }
+        
+        // Set click listener if provided
+        if (onClickListener != null) {
+            tagView.setOnClickListener(onClickListener);
+        }
+        
+        // Apply consistent styling (showCloseButton indicates it's a selected/current tag)
+        updateTagViewState(tagView, false);
+        
+        return tagView;
+    }
+    
     private void loadCurrentTags() {
         if (isTemporaryMode) {
             // Show temporary tags
             currentTagsGroup.removeAllViews();
             
             for (String tagName : temporaryTags) {
-                com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
-                chip.setText(tagName);
-                chip.setCloseIconVisible(true);
-                // Normal text size (not specifying means it will use default Material size)
-                // which matches what TagChipAdapter uses
-                
-                // Use consistent styling with TagChipAdapter
-                chip.setChipBackgroundColorResource(android.R.color.transparent);
-                chip.setChipStrokeColorResource(R.color.app_blue);
-                chip.setChipStrokeWidth(1);
-                chip.setChipIconResource(R.drawable.tag_24);
-                chip.setChipIconTintResource(R.color.app_blue);
-                chip.setCloseIconTintResource(R.color.app_blue);
-                // Set appropriate chip height for mobile
-                chip.setChipMinHeight(32); // Reduced from 40 to 32
-                // Add proper padding for the chip content
-                chip.setChipStartPadding(10); // Reduced from 12 to 10
-                chip.setChipEndPadding(10); // Reduced from 12 to 10
-                chip.setTextEndPadding(4);
-                chip.setTextStartPadding(4);
-                // Important: disable min touch target size to match TagChipAdapter
-                chip.setEnsureMinTouchTargetSize(false);
-                chip.setOnCloseIconClickListener(v -> {
+                View tagChip = createTagChip(tagName, true, v -> {
                     temporaryTags.remove(tagName);
                     if (tagUpdateListener != null) {
                         tagUpdateListener.onTagsUpdated(temporaryTags);
                     }
                     loadCurrentTags();
                     loadSuggestedTags();
-                });
-                currentTagsGroup.addView(chip);
+                }, null);
+                
+                currentTagsGroup.addView(tagChip);
             }
             
             // Show empty message if needed
@@ -247,19 +306,18 @@ public class TagDialogFragment extends DialogFragment {
         } else {
             // Load from database
             List<Tag> currentTags = tagManager.getTagsForJournal(journalId);
+            currentTagsGroup.removeAllViews();
             
-            // Setup the chip adapter
-            TagChipAdapter adapter = new TagChipAdapter(requireContext(), currentTagsGroup)
-                    .setShowCloseIcon(true)
-                    .setOnTagCloseListener(tag -> {
-                        // Remove the tag when the close icon is clicked
-                        tagRepository.removeTagFromJournal(journalId, tag.getTagId());
-                        loadCurrentTags();
-                        loadSuggestedTags();
-                    });
-            
-            // Set the tags
-            adapter.setTags(currentTags);
+            for (Tag tag : currentTags) {
+                View tagChip = createTagChip(tag.getName(), true, v -> {
+                    // Remove the tag when the close icon is clicked
+                    tagRepository.removeTagFromJournal(journalId, tag.getTagId());
+                    loadCurrentTags();
+                    loadSuggestedTags();
+                }, null);
+                
+                currentTagsGroup.addView(tagChip);
+            }
             
             // Show empty message if needed
             if (currentTags.isEmpty()) {
@@ -282,27 +340,7 @@ public class TagDialogFragment extends DialogFragment {
             
             for (Tag tag : allTags) {
                 if (!temporaryTags.contains(tag.getName())) {
-                    com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
-                    chip.setText(tag.getName());
-                    chip.setClickable(true);
-                    chip.setCheckable(false);
-                    
-                    // Use consistent styling with TagChipAdapter
-                    chip.setChipBackgroundColorResource(android.R.color.transparent);
-                    chip.setChipStrokeColorResource(R.color.app_blue);
-                    chip.setChipStrokeWidth(1);
-                    chip.setChipIconResource(R.drawable.tag_24);
-                    chip.setChipIconTintResource(R.color.app_blue);
-                    // Set appropriate chip height for mobile
-                    chip.setChipMinHeight(32); // Reduced from 40 to 32
-                    // Add proper padding for the chip content
-                    chip.setChipStartPadding(10); // Reduced from 12 to 10
-                    chip.setChipEndPadding(10); // Reduced from 12 to 10
-                    chip.setTextEndPadding(4);
-                    chip.setTextStartPadding(4);
-                    // Important: disable min touch target size to match TagChipAdapter
-                    chip.setEnsureMinTouchTargetSize(false);
-                    chip.setOnClickListener(v -> {
+                    View tagChip = createTagChip(tag.getName(), false, null, v -> {
                         temporaryTags.add(tag.getName());
                         if (tagUpdateListener != null) {
                             tagUpdateListener.onTagsUpdated(temporaryTags);
@@ -310,7 +348,8 @@ public class TagDialogFragment extends DialogFragment {
                         loadCurrentTags();
                         loadSuggestedTags();
                     });
-                    suggestedTagsGroup.addView(chip);
+                    
+                    suggestedTagsGroup.addView(tagChip);
                 }
             }
         } else {
@@ -332,17 +371,18 @@ public class TagDialogFragment extends DialogFragment {
                 }
             }
             
-            // Setup the chip adapter
-            TagChipAdapter adapter = new TagChipAdapter(requireContext(), suggestedTagsGroup)
-                    .setOnTagClickListener(tag -> {
-                        // Add the tag when clicked
-                        tagManager.addTagToJournal(journalId, tag.getName());
-                        loadCurrentTags();
-                        loadSuggestedTags();
-                    });
-            
-            // Set the tags
-            adapter.setTags(suggestedTags);
+            // Display suggested tags
+            suggestedTagsGroup.removeAllViews();
+            for (Tag tag : suggestedTags) {
+                View tagChip = createTagChip(tag.getName(), false, null, v -> {
+                    // Add the tag when clicked
+                    tagManager.addTagToJournal(journalId, tag.getName());
+                    loadCurrentTags();
+                    loadSuggestedTags();
+                });
+                
+                suggestedTagsGroup.addView(tagChip);
+            }
         }
     }
 }
