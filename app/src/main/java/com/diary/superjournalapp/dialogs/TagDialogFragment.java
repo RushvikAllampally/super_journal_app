@@ -208,20 +208,25 @@ public class TagDialogFragment extends DialogFragment {
                 com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(requireContext());
                 chip.setText(tagName);
                 chip.setCloseIconVisible(true);
-                chip.setTextSize(12);
-                chip.setChipBackgroundColorResource(android.R.color.holo_blue_bright);
-                chip.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(0xFFE1F5FE));
+                // Normal text size (not specifying means it will use default Material size)
+                // which matches what TagChipAdapter uses
+                
+                // Use consistent styling with TagChipAdapter
+                chip.setChipBackgroundColorResource(android.R.color.transparent);
+                chip.setChipStrokeColorResource(R.color.app_blue);
                 chip.setChipStrokeWidth(1);
-                chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
-                chip.setTextColor(0xFF0277BD);
-                chip.setCloseIconTint(android.content.res.ColorStateList.valueOf(0xFF0277BD));
-                // Increase minimum chip height for better touch targets on mobile
-                chip.setChipMinHeight(40);
+                chip.setChipIconResource(R.drawable.tag_24);
+                chip.setChipIconTintResource(R.color.app_blue);
+                chip.setCloseIconTintResource(R.color.app_blue);
+                // Set appropriate chip height for mobile
+                chip.setChipMinHeight(32); // Reduced from 40 to 32
                 // Add proper padding for the chip content
-                chip.setChipStartPadding(12);
-                chip.setChipEndPadding(12);
+                chip.setChipStartPadding(10); // Reduced from 12 to 10
+                chip.setChipEndPadding(10); // Reduced from 12 to 10
                 chip.setTextEndPadding(4);
                 chip.setTextStartPadding(4);
+                // Important: disable min touch target size to match TagChipAdapter
+                chip.setEnsureMinTouchTargetSize(false);
                 chip.setOnCloseIconClickListener(v -> {
                     temporaryTags.remove(tagName);
                     if (tagUpdateListener != null) {
@@ -281,19 +286,22 @@ public class TagDialogFragment extends DialogFragment {
                     chip.setText(tag.getName());
                     chip.setClickable(true);
                     chip.setCheckable(false);
-                    chip.setTextSize(12);
-                    chip.setChipBackgroundColorResource(android.R.color.holo_blue_bright);
-                    chip.setChipBackgroundColor(android.content.res.ColorStateList.valueOf(0xFFE1F5FE));
+                    
+                    // Use consistent styling with TagChipAdapter
+                    chip.setChipBackgroundColorResource(android.R.color.transparent);
+                    chip.setChipStrokeColorResource(R.color.app_blue);
                     chip.setChipStrokeWidth(1);
-                    chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
-                    chip.setTextColor(0xFF0277BD);
-                    // Increase minimum chip height for better touch targets on mobile
-                    chip.setChipMinHeight(40);
+                    chip.setChipIconResource(R.drawable.tag_24);
+                    chip.setChipIconTintResource(R.color.app_blue);
+                    // Set appropriate chip height for mobile
+                    chip.setChipMinHeight(32); // Reduced from 40 to 32
                     // Add proper padding for the chip content
-                    chip.setChipStartPadding(12);
-                    chip.setChipEndPadding(12);
+                    chip.setChipStartPadding(10); // Reduced from 12 to 10
+                    chip.setChipEndPadding(10); // Reduced from 12 to 10
                     chip.setTextEndPadding(4);
                     chip.setTextStartPadding(4);
+                    // Important: disable min touch target size to match TagChipAdapter
+                    chip.setEnsureMinTouchTargetSize(false);
                     chip.setOnClickListener(v -> {
                         temporaryTags.add(tag.getName());
                         if (tagUpdateListener != null) {

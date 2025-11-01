@@ -154,11 +154,12 @@ public class TagChipAdapter {
             chip.setEnsureMinTouchTargetSize(false);
         } else {
             // Standard sized chips - ensure consistent height and padding
-            chip.setChipMinHeight(40);
-            chip.setChipStartPadding(12);
-            chip.setChipEndPadding(12);
+            chip.setChipMinHeight(32); // Reduced from 40 to 32
+            chip.setChipStartPadding(10); // Reduced from 12 to 10
+            chip.setChipEndPadding(10); // Reduced from 12 to 10
             chip.setTextEndPadding(4);
             chip.setTextStartPadding(4);
+            chip.setEnsureMinTouchTargetSize(false);
         }
         
         // Handle close icon
@@ -213,9 +214,9 @@ public class TagChipAdapter {
             chip.setEnsureMinTouchTargetSize(false);
         } else {
             // Standard sized chips - ensure consistent height and padding
-            chip.setChipMinHeight(40);
-            chip.setChipStartPadding(12);
-            chip.setChipEndPadding(12);
+            chip.setChipMinHeight(32); // Reduced from 40 to 32
+            chip.setChipStartPadding(10); // Reduced from 12 to 10
+            chip.setChipEndPadding(10); // Reduced from 12 to 10
             chip.setTextEndPadding(4);
             chip.setTextStartPadding(4);
         }
