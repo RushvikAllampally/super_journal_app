@@ -97,25 +97,26 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/library_tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             app:tabMode="fixed"
             app:tabGravity="fill"
-            app:tabTextAppearance="@style/TabTextAppearance"
+            app:tabInlineLabel="true"
+            app:tabTextAppearance="@style/TabTextAppearance.Compact"
             app:tabSelectedTextColor="@color/text_primary"
             app:tabIndicatorColor="@color/text_primary"
-            app:tabIndicatorHeight="3dp"
+            app:tabIndicatorHeight="2dp"
             app:tabTextColor="?attr/colorOnSurface"
             app:tabIconTint="@color/tab_icon_selector"
             app:tabRippleColor="@color/text_primary"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorAnimationMode="elastic"
-            app:tabPaddingStart="16dp"
-            app:tabPaddingEnd="16dp">
+            app:tabPaddingStart="8dp"
+            app:tabPaddingEnd="8dp">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Journals"
+                android:text="Journals"
                 android:icon="@drawable/ic_diary" />
 
             <com.google.android.material.tabs.TabItem

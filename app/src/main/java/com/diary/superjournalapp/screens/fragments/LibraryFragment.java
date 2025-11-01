@@ -87,7 +87,7 @@ public class LibraryFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("All Journals");
+                    tab.setText("Journals");
                     tab.setIcon(R.drawable.ic_diary);
                     break;
                 case 1:

@@ -92,6 +92,12 @@ public class ReminderScreen extends AppCompatActivity {
         affirmationTimeIcon = findViewById(R.id.affirmation_time_icon);
         moodTimeIcon = findViewById(R.id.mood_rem_icon);
 
+        // Set up back button
+        View backButton = findViewById(R.id.back_button);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> finish());
+        }
+
         gratitudeNotificationTime = findViewById(R.id.gratitude_notification_time);
         ReflectiveNotificationTime = findViewById(R.id.reflective_notification_time);
         BulletNotificationTime = findViewById(R.id.bullet_notification_time);

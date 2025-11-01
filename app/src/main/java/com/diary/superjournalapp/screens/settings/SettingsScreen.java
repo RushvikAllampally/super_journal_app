@@ -66,6 +66,12 @@ public class SettingsScreen extends ThemedActivity {
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
         promptsSwitch = findViewById(R.id.prompts_switch);
 //        currentFontSizeText = findViewById(R.id.current_font_size_text);
+
+        // Set up back button
+        View backButton = findViewById(R.id.back_button);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> finish());
+        }
         
         // Initialize dark mode switch based on current theme
         setupDarkModeToggle();
