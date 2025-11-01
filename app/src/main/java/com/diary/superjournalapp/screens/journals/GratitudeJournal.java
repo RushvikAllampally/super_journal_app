@@ -248,7 +248,11 @@ public class GratitudeJournal extends AppCompatActivity {
 
     private boolean saveJournalDetails(boolean shouldFinish) {
         String title = journalTitle.getText().toString();
-        String content = Html.fromHtml(journalContent.getHtml(), Html.FROM_HTML_MODE_LEGACY).toString();
+        String content = "";
+        String html = journalContent.getHtml();
+        if (html != null) {
+            content = Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        }
 
         // Check if title is empty
         if (title.isEmpty()) {
@@ -280,8 +284,13 @@ public class GratitudeJournal extends AppCompatActivity {
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         journal.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
 
-        int contentLength = (content.length() > 100) ? 100 : content.length();
-        journal.setJournalStartText(content.substring(0, contentLength));
+        // Safely handle content length and substring
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            journal.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            journal.setJournalStartText("");
+        }
         journal.setTitle(title);
 
         long journalId;
@@ -296,9 +305,20 @@ public class GratitudeJournal extends AppCompatActivity {
 
         gratitudeJournalEntity.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         gratitudeJournalEntity.setJournalCategory(ApplicationConstants.GRATITUDE_JOURNAL);
-        gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
+        
+        // Safely handle content for journal start text
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            gratitudeJournalEntity.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            gratitudeJournalEntity.setJournalStartText("");
+        }
+        
         gratitudeJournalEntity.setTitle(title);
-        gratitudeJournalEntity.setJournalContent(journalContent.getHtml());
+        
+        // Safely set HTML content
+        String htmlContent = journalContent.getHtml();
+        gratitudeJournalEntity.setJournalContent(htmlContent != null ? htmlContent : "");
         gratitudeJournalEntity.setJournalId(journalId);
 
         if (journal.getJournalId() == 0) {
@@ -522,6 +542,11 @@ public class GratitudeJournal extends AppCompatActivity {
     }
     
     private void updateWordCount(String htmlContent) {
+        if (htmlContent == null) {
+            wordCountTextView.setText("0 words");
+            return;
+        }
+        
         String plainText = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY).toString();
         String[] words = plainText.trim().split("\\s+");
         int wordCount = plainText.trim().isEmpty() ? 0 : words.length;

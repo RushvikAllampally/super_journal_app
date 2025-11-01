@@ -333,7 +333,11 @@ public class DreamJournal extends AppCompatActivity {
     
     private boolean saveDreamJournal(boolean shouldFinish) {
         String title = journalTitle.getText().toString();
-        String content = Html.fromHtml(journalContent.getHtml(), Html.FROM_HTML_MODE_LEGACY).toString();
+        String content = "";
+        String html = journalContent.getHtml();
+        if (html != null) {
+            content = Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        }
 
         // Check if title is empty
         if (title.isEmpty()) {
@@ -365,8 +369,13 @@ public class DreamJournal extends AppCompatActivity {
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         journal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
 
-        int contentLength = (content.length() > 100) ? 100 : content.length();
-        journal.setJournalStartText(content.substring(0, contentLength));
+        // Safely handle content length and substring
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            journal.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            journal.setJournalStartText("");
+        }
         journal.setTitle(title);
 
         long journalId;
@@ -380,9 +389,20 @@ public class DreamJournal extends AppCompatActivity {
         DreamJournalEntity dreamJournal = new DreamJournalEntity();
         dreamJournal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         dreamJournal.setJournalCategory(ApplicationConstants.DREAM_JOURNAL);
-        dreamJournal.setJournalStartText(content.substring(0, contentLength));
+        
+        // Safely handle content for journal start text
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            dreamJournal.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            dreamJournal.setJournalStartText("");
+        }
+        
         dreamJournal.setTitle(title);
-        dreamJournal.setJournalContent(journalContent.getHtml());
+        
+        // Safely set HTML content
+        String htmlContent = journalContent.getHtml();
+        dreamJournal.setJournalContent(htmlContent != null ? htmlContent : "");
         dreamJournal.setJournalId(journalId);
 
         if (journal.getJournalId() == 0) {
@@ -582,6 +602,11 @@ public class DreamJournal extends AppCompatActivity {
     }
     
     private void updateWordCount(String htmlContent) {
+        if (htmlContent == null) {
+            wordCountTextView.setText("0 words");
+            return;
+        }
+        
         String plainText = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY).toString();
         String[] words = plainText.trim().split("\\s+");
         int wordCount = plainText.trim().isEmpty() ? 0 : words.length;
