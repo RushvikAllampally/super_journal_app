@@ -146,8 +146,19 @@ public class TagChipAdapter {
         if (smallChips) {
             chip.setTextSize(10);
             chip.setChipIconSize(20);
-            chip.setMinHeight(24);
+            chip.setMinHeight(28);
+            chip.setChipStartPadding(8);
+            chip.setChipEndPadding(8);
+            chip.setTextEndPadding(2);
+            chip.setTextStartPadding(2);
             chip.setEnsureMinTouchTargetSize(false);
+        } else {
+            // Standard sized chips - ensure consistent height and padding
+            chip.setChipMinHeight(40);
+            chip.setChipStartPadding(12);
+            chip.setChipEndPadding(12);
+            chip.setTextEndPadding(4);
+            chip.setTextStartPadding(4);
         }
         
         // Handle close icon
@@ -194,8 +205,19 @@ public class TagChipAdapter {
         // Handle small chips (for journal cards)
         if (smallChips) {
             chip.setTextSize(10);
-            chip.setMinHeight(24);
+            chip.setMinHeight(28);
+            chip.setChipStartPadding(8);
+            chip.setChipEndPadding(8);
+            chip.setTextEndPadding(2);
+            chip.setTextStartPadding(2);
             chip.setEnsureMinTouchTargetSize(false);
+        } else {
+            // Standard sized chips - ensure consistent height and padding
+            chip.setChipMinHeight(40);
+            chip.setChipStartPadding(12);
+            chip.setChipEndPadding(12);
+            chip.setTextEndPadding(4);
+            chip.setTextStartPadding(4);
         }
         
         // Add to chip group

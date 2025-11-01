@@ -254,22 +254,41 @@ public class BulletJournal extends AppCompatActivity {
         saveJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                saveJournalDetails();
-                finish();
+                if (saveJournalDetails(true)) {
+                    finish();
+                }
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        saveJournalDetails();
+        // Show confirmation dialog asking if the user wants to save or discard
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save Changes");
+        builder.setMessage("Would you like to save your changes before exiting?");
+        
+        // Save and exit
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            if (saveJournalDetails(false)) {
+                super.onBackPressed();
+            }
+        });
+        
+        // Discard and exit
+        builder.setNegativeButton("Discard", (dialog, which) -> {
+            super.onBackPressed();
+        });
+        
+        // Cancel (continue editing)
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
+            // Do nothing, stay in editor
+            dialog.dismiss();
+        });
+        
+        builder.show();
     }
     
-    /**
-     * Update the pin icon display based on the current pin state
-     */
     private void updatePinIconDisplay() {
         if (isPinned) {
             pinImage.setImageResource(R.drawable.unpin_icon);
@@ -312,6 +331,10 @@ public class BulletJournal extends AppCompatActivity {
     }
 
     private void saveJournalDetails() {
+        saveJournalDetails(true);
+    }
+
+    private boolean saveJournalDetails(boolean shouldFinish) {
         // Update journal basic details
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         journal.setJournalCategory(ApplicationConstants.BULLET_JOURNAL);
@@ -352,6 +375,7 @@ public class BulletJournal extends AppCompatActivity {
         }
 
         Toast.makeText(BulletJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
+        return true;
     }
 
     private void showConfirmationDialog() {

@@ -215,7 +215,13 @@ public class TagDialogFragment extends DialogFragment {
                 chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
                 chip.setTextColor(0xFF0277BD);
                 chip.setCloseIconTint(android.content.res.ColorStateList.valueOf(0xFF0277BD));
-                chip.setChipMinHeight(32);
+                // Increase minimum chip height for better touch targets on mobile
+                chip.setChipMinHeight(40);
+                // Add proper padding for the chip content
+                chip.setChipStartPadding(12);
+                chip.setChipEndPadding(12);
+                chip.setTextEndPadding(4);
+                chip.setTextStartPadding(4);
                 chip.setOnCloseIconClickListener(v -> {
                     temporaryTags.remove(tagName);
                     if (tagUpdateListener != null) {
@@ -281,7 +287,13 @@ public class TagDialogFragment extends DialogFragment {
                     chip.setChipStrokeWidth(1);
                     chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF81D4FA));
                     chip.setTextColor(0xFF0277BD);
-                    chip.setChipMinHeight(32);
+                    // Increase minimum chip height for better touch targets on mobile
+                    chip.setChipMinHeight(40);
+                    // Add proper padding for the chip content
+                    chip.setChipStartPadding(12);
+                    chip.setChipEndPadding(12);
+                    chip.setTextEndPadding(4);
+                    chip.setTextStartPadding(4);
                     chip.setOnClickListener(v -> {
                         temporaryTags.add(tag.getName());
                         if (tagUpdateListener != null) {

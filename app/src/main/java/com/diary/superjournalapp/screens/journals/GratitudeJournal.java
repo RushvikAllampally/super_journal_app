@@ -206,8 +206,9 @@ public class GratitudeJournal extends AppCompatActivity {
         saveJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveJournalDetails();
-                finish();
+                if (saveJournalDetails(true)) {
+                    finish();
+                }
             }
         });
 
@@ -215,21 +216,65 @@ public class GratitudeJournal extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        saveJournalDetails();
-
+        // Show confirmation dialog asking if the user wants to save or discard
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save Changes");
+        builder.setMessage("Would you like to save your changes before exiting?");
+        
+        // Save and exit
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            if (saveJournalDetails(false)) {
+                super.onBackPressed();
+            }
+        });
+        
+        // Discard and exit
+        builder.setNegativeButton("Discard", (dialog, which) -> {
+            super.onBackPressed();
+        });
+        
+        // Cancel (continue editing)
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
+            // Do nothing, stay in editor
+            dialog.dismiss();
+        });
+        
+        builder.show();
     }
 
     private void saveJournalDetails() {
+        saveJournalDetails(true);
+    }
+
+    private boolean saveJournalDetails(boolean shouldFinish) {
         String title = journalTitle.getText().toString();
         String content = Html.fromHtml(journalContent.getHtml(), Html.FROM_HTML_MODE_LEGACY).toString();
 
+        // Check if title is empty
         if (title.isEmpty()) {
-            Toast.makeText(GratitudeJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
-            return;
-        } else if (content.isEmpty()) {
-            Toast.makeText(GratitudeJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
-            return;
+            // Show alert dialog instead of toast for better UX
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Missing Title");
+            builder.setMessage("Please enter a title for your journal entry before saving.");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // Focus on the title field
+                journalTitle.requestFocus();
+            });
+            builder.show();
+            return false;
+        }
+
+        // Check if content is empty
+        if (content.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Missing Content");
+            builder.setMessage("Please write something in your journal before saving.");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // Focus on the content field
+                journalContent.focusEditor();
+            });
+            builder.show();
+            return false;
         }
 
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
@@ -275,6 +320,7 @@ public class GratitudeJournal extends AppCompatActivity {
         Toast.makeText(GratitudeJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
 
         HomeFragment.notifyHomeRecyclerViewChanges();
+        return true;
     }
 
     private void showConfirmationDialog() {
