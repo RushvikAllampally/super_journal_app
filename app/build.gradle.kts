@@ -23,8 +23,8 @@ android {
         applicationId = "com.diary.superjournalapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 7
+        versionName = "2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -41,6 +41,11 @@ android {
             )
             isDebuggable = false
             signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            // Use the same signing configuration as release
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = true
         }
     }
     compileOptions {

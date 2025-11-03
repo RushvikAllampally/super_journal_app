@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -329,8 +331,37 @@ public class ReminderScreen extends AppCompatActivity {
     }
 
 
+    // Check if exact alarm permission is granted (Android 12+)
+    private boolean canScheduleExactAlarms() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            return alarmManager != null && alarmManager.canScheduleExactAlarms();
+        }
+        return true;
+    }
+
+    // Request exact alarm permission
+    private void requestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Please enable exact alarm permission in settings", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     // Function to schedule a single notification
     private void scheduleNotification(String notificationType, int hour, int minute) {
+        // Check if we have permission for exact alarms
+        if (!canScheduleExactAlarms()) {
+            Toast.makeText(this, "Exact alarm permission required for precise notifications", Toast.LENGTH_LONG).show();
+            requestExactAlarmPermission();
+            return;
+        }
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);

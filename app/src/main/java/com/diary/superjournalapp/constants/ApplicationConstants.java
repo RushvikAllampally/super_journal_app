@@ -255,10 +255,7 @@ public class ApplicationConstants {
     static {
 
         QUOTES_ARRAY.add(createQuote("You don't have to be great to start, but you have to start to be great.", "Zig Ziglar"));
-        QUOTES_ARRAY.add(createQuote("The only way to do great work is to love what you do.", "Steve Jobs"));
         QUOTES_ARRAY.add(createQuote("Success is not final, failure is not fatal: It is the courage to continue that counts.", "Winston Churchill"));
-        QUOTES_ARRAY.add(createQuote("In three words I can sum up everything I've learned about life: it goes on.", "Robert Frost"));
-        QUOTES_ARRAY.add(createQuote("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela"));
         QUOTES_ARRAY.add(createQuote("Your time is limited, don't waste it living someone else's life.", "Steve Jobs"));
         QUOTES_ARRAY.add(createQuote("Life is really simple, but we insist on making it complicated.", "Confucius"));
         QUOTES_ARRAY.add(createQuote("The only limit to our realization of tomorrow will be our doubts of today.", "Franklin D. Roosevelt"));
@@ -275,38 +272,17 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("Success usually comes to those who are too busy to be looking for it.", "Henry David Thoreau"));
         QUOTES_ARRAY.add(createQuote("The only thing necessary for the triumph of evil is for good men to do nothing.", "Edmund Burke"));
         QUOTES_ARRAY.add(createQuote("You miss 100% of the shots you don't take.", "Wayne Gretzky"));
-        QUOTES_ARRAY.add(createQuote("In the middle of every difficulty lies opportunity.", "Albert Einstein"));
         QUOTES_ARRAY.add(createQuote("To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", "Ralph Waldo Emerson"));
         QUOTES_ARRAY.add(createQuote("The only true wisdom is in knowing you know nothing.", "Socrates"));
         QUOTES_ARRAY.add(createQuote("The best revenge is massive success.", "Frank Sinatra"));
         QUOTES_ARRAY.add(createQuote("Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.", "Thomas A. Edison"));
         QUOTES_ARRAY.add(createQuote("If you want to achieve greatness stop asking for permission.", "Anonymous"));
         QUOTES_ARRAY.add(createQuote("Don't watch the clock; do what it does. Keep going.", "Sam Levenson"));
-        QUOTES_ARRAY.add(createQuote("The only way to do great work is to love what you do.", "Steve Jobs"));
-        QUOTES_ARRAY.add(createQuote("Success is not final, failure is not fatal: It is the courage to continue that counts.", "Winston Churchill"));
         QUOTES_ARRAY.add(createQuote("In three words I can sum up everything I've learned about life: it goes on.", "Robert Frost"));
-        QUOTES_ARRAY.add(createQuote("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela"));
-        QUOTES_ARRAY.add(createQuote("Your time is limited, don't waste it living someone else's life.", "Steve Jobs"));
-        QUOTES_ARRAY.add(createQuote("Life is really simple, but we insist on making it complicated.", "Confucius"));
-        QUOTES_ARRAY.add(createQuote("The only limit to our realization of tomorrow will be our doubts of today.", "Franklin D. Roosevelt"));
-        QUOTES_ARRAY.add(createQuote("In the end, it's not the years in your life that count. It's the life in your years.", "Abraham Lincoln"));
-        QUOTES_ARRAY.add(createQuote("Don't count the days, make the days count.", "Muhammad Ali"));
-        QUOTES_ARRAY.add(createQuote("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"));
-        QUOTES_ARRAY.add(createQuote("The best way to predict the future is to create it.", "Peter Drucker"));
-        QUOTES_ARRAY.add(createQuote("Happiness is not something ready-made. It comes from your own actions.", "Dalai Lama"));
-        QUOTES_ARRAY.add(createQuote("The only person you are destined to become is the person you decide to be.", "Ralph Waldo Emerson"));
-        QUOTES_ARRAY.add(createQuote("The journey of a thousand miles begins with one step.", "Lao Tzu"));
-        QUOTES_ARRAY.add(createQuote("Believe you can and you're halfway there.", "Theodore Roosevelt"));
         QUOTES_ARRAY.add(createQuote("Change your thoughts and you change your world.", "Norman Vincent Peale"));
         QUOTES_ARRAY.add(createQuote("The biggest risk is not taking any risk. In a world that's changing quickly, the only strategy that is guaranteed to fail is not taking risks.", "Mark Zuckerberg"));
         QUOTES_ARRAY.add(createQuote("In the end, we will remember not the words of our enemies, but the silence of our friends.", "Martin Luther King Jr."));
-        QUOTES_ARRAY.add(createQuote("It does not matter how slowly you go as long as you do not stop.", "Confucius"));
         QUOTES_ARRAY.add(createQuote("The way to get started is to quit talking and begin doing.", "Walt Disney"));
-        QUOTES_ARRAY.add(createQuote("Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.", "Thomas A. Edison"));
-        QUOTES_ARRAY.add(createQuote("If you want to achieve greatness stop asking for permission.", "Anonymous"));
-        QUOTES_ARRAY.add(createQuote("Don't watch the clock; do what it does. Keep going.", "Sam Levenson"));
-        QUOTES_ARRAY.add(createQuote("The only limit to our realization of tomorrow will be our doubts of today.", "Franklin D. Roosevelt"));
-        QUOTES_ARRAY.add(createQuote("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"));
         
         // Extended quote collection
         QUOTES_ARRAY.add(createQuote("The only impossible journey is the one you never begin.", "Tony Robbins"));
@@ -326,7 +302,6 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("Your life does not get better by chance, it gets better by change.", "Jim Rohn"));
         QUOTES_ARRAY.add(createQuote("People who are crazy enough to think they can change the world, are the ones who do.", "Rob Siltanen"));
         QUOTES_ARRAY.add(createQuote("We must balance conspicuous consumption with conscious capitalism.", "Kevin Kruse"));
-        QUOTES_ARRAY.add(createQuote("Do what you can, with what you have, where you are.", "Theodore Roosevelt"));
         QUOTES_ARRAY.add(createQuote("Everything has beauty, but not everyone can see.", "Confucius"));
         QUOTES_ARRAY.add(createQuote("How wonderful it is that nobody need wait a single moment before starting to improve the world.", "Anne Frank"));
         QUOTES_ARRAY.add(createQuote("When I let go of what I am, I become what I might be.", "Lao Tzu"));
@@ -357,7 +332,6 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("It is never too late to be what you might have been.", "George Eliot"));
         QUOTES_ARRAY.add(createQuote("You become what you believe.", "Oprah Winfrey"));
         QUOTES_ARRAY.add(createQuote("I would rather die of passion than of boredom.", "Vincent van Gogh"));
-        QUOTES_ARRAY.add(createQuote("A truly rich man is one whose children run into his arms when his hands are empty.", "Anonymous"));
         QUOTES_ARRAY.add(createQuote("It is not what you do for your children, but what you have taught them to do for themselves.", "Ann Landers"));
         QUOTES_ARRAY.add(createQuote("The only way to have a friend is to be one.", "Ralph Waldo Emerson"));
         QUOTES_ARRAY.add(createQuote("Build your own dreams, or someone else will hire you to build theirs.", "Farrah Gray"));
@@ -385,7 +359,6 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("Blessed are those who can give without remembering and take without forgetting.", "Anonymous"));
         QUOTES_ARRAY.add(createQuote("Do not go where the path may lead, go instead where there is no path and leave a trail.", "Ralph Waldo Emerson"));
         QUOTES_ARRAY.add(createQuote("Be yourself; everyone else is already taken.", "Oscar Wilde"));
-        QUOTES_ARRAY.add(createQuote("The best revenge is massive success.", "Frank Sinatra"));
         QUOTES_ARRAY.add(createQuote("People often say that motivation doesn't last. Well, neither does bathing.", "Zig Ziglar"));
         QUOTES_ARRAY.add(createQuote("Life is what we make it, always has been, always will be.", "Grandma Moses"));
         QUOTES_ARRAY.add(createQuote("Dreaming, after all, is a form of planning.", "Gloria Steinem"));
@@ -395,7 +368,6 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("The only way to do great work is to love what you do.", "Steve Jobs"));
         QUOTES_ARRAY.add(createQuote("If you can dream it, you can achieve it.", "Zig Ziglar"));
         QUOTES_ARRAY.add(createQuote("Don't let what you cannot do interfere with what you can do.", "John Wooden"));
-        QUOTES_ARRAY.add(createQuote("You can't use up creativity. The more you use, the more you have.", "Maya Angelou"));
         QUOTES_ARRAY.add(createQuote("Dream as if you'll live forever, live as if you'll die today.", "James Dean"));
         QUOTES_ARRAY.add(createQuote("What you lack in talent can be made up with desire, hustle and giving 110% all the time.", "Don Zimmer"));
         QUOTES_ARRAY.add(createQuote("Do what you can with all you have, wherever you are.", "Theodore Roosevelt"));
@@ -416,9 +388,45 @@ public class ApplicationConstants {
         QUOTES_ARRAY.add(createQuote("Good friends, good books, and a sleepy conscience: this is the ideal life.", "Mark Twain"));
         QUOTES_ARRAY.add(createQuote("To live is the rarest thing in the world. Most people exist, that is all.", "Oscar Wilde"));
         QUOTES_ARRAY.add(createQuote("Live in the sunshine, swim the sea, drink the wild air.", "Ralph Waldo Emerson"));
-        QUOTES_ARRAY.add(createQuote("Go confidently in the direction of your dreams! Live the life you've imagined.", "Henry David Thoreau"));
         QUOTES_ARRAY.add(createQuote("The greatest glory in living lies not in never failing, but in rising every time we fail.", "Ralph Waldo Emerson"));
         QUOTES_ARRAY.add(createQuote("You only live once, but if you do it right, once is enough.", "Mae West"));
+        QUOTES_ARRAY.add(createQuote("You have power over your mind — not outside events. Realize this, and you will find strength.", "Marcus Aurelius"));
+        QUOTES_ARRAY.add(createQuote("The impediment to action advances action. What stands in the way becomes the way.", "Marcus Aurelius"));
+        QUOTES_ARRAY.add(createQuote("Waste no more time arguing what a good man should be. Be one.", "Marcus Aurelius"));
+        QUOTES_ARRAY.add(createQuote("The happiness of your life depends upon the quality of your thoughts.", "Marcus Aurelius"));
+        QUOTES_ARRAY.add(createQuote("We suffer more often in imagination than in reality.", "Seneca"));
+        QUOTES_ARRAY.add(createQuote("Luck is what happens when preparation meets opportunity.", "Seneca"));
+        QUOTES_ARRAY.add(createQuote("It is not the man who has too little, but the man who desires more, that is poor.", "Seneca"));
+        QUOTES_ARRAY.add(createQuote("No man is free who is not master of himself.", "Epictetus"));
+        QUOTES_ARRAY.add(createQuote("First say to yourself what you would be; and then do what you have to do.", "Epictetus"));
+        QUOTES_ARRAY.add(createQuote("It does not matter how slowly you go as long as you do not stop.", "Confucius"));
+        QUOTES_ARRAY.add(createQuote("Life is really simple, but we insist on making it complicated.", "Confucius"));
+        QUOTES_ARRAY.add(createQuote("Go confidently in the direction of your dreams! Live the life you've imagined.", "Henry David Thoreau"));
+        QUOTES_ARRAY.add(createQuote("In the end, it's not the years in your life that count. It's the life in your years.", "Abraham Lincoln"));
+        QUOTES_ARRAY.add(createQuote("Do what you can, with what you have, where you are.", "Theodore Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("The only thing we have to fear is fear itself.", "Franklin D. Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("Remember no one can make you feel inferior without your consent.", "Eleanor Roosevelt"));
+        QUOTES_ARRAY.add(createQuote("People will forget what you said, people will forget what you did, but people will never forget how you made them feel.", "Maya Angelou"));
+        QUOTES_ARRAY.add(createQuote("You can't use up creativity. The more you use, the more you have.", "Maya Angelou"));
+        QUOTES_ARRAY.add(createQuote("In the middle of every difficulty lies opportunity.", "Albert Einstein"));
+        QUOTES_ARRAY.add(createQuote("He who has a why to live can bear almost any how.", "Friedrich Nietzsche"));
+        QUOTES_ARRAY.add(createQuote("Not all of us can do great things. But we can do small things with great love.", "Mother Teresa"));
+        QUOTES_ARRAY.add(createQuote("The soul becomes dyed with the color of its thoughts.", "Marcus Aurelius"));
+        QUOTES_ARRAY.add(createQuote("When we are no longer able to change a situation, we are challenged to change ourselves.", "Viktor E. Frankl"));
+        QUOTES_ARRAY.add(createQuote("Let everything happen to you: beauty and terror. Just keep going. No feeling is final.", "Rainer Maria Rilke"));
+        QUOTES_ARRAY.add(createQuote("Until you make the unconscious conscious, it will direct your life and you will call it fate.", "Carl Jung"));
+        QUOTES_ARRAY.add(createQuote("You do not rise to the level of your goals. You fall to the level of your systems.", "James Clear"));
+        QUOTES_ARRAY.add(createQuote("Desire is a contract you make with yourself to be unhappy until you get what you want.", "Naval Ravikant"));
+        QUOTES_ARRAY.add(createQuote("Tell me, what is it you plan to do with your one wild and precious life?", "Mary Oliver"));
+        QUOTES_ARRAY.add(createQuote("If there's a book that you want to read, but it hasn't been written yet, then you must write it.", "Toni Morrison"));
+        QUOTES_ARRAY.add(createQuote("It is good to have an end to journey toward; but it is the journey that matters, in the end.", "Ursula K. Le Guin"));
+        QUOTES_ARRAY.add(createQuote("Muddy water is best cleared by leaving it alone.", "Alan Watts"));
+        QUOTES_ARRAY.add(createQuote("Life can only be understood backwards; but it must be lived forwards.", "Soren Kierkegaard"));
+        QUOTES_ARRAY.add(createQuote("In the depth of winter, I finally learned that within me there lay an invincible summer.", "Albert Camus"));
+        QUOTES_ARRAY.add(createQuote("Everyone thinks of changing the world, but no one thinks of changing himself.", "Leo Tolstoy"));
+        QUOTES_ARRAY.add(createQuote("Your pain is the breaking of the shell that encloses your understanding.", "Khalil Gibran"));
+        QUOTES_ARRAY.add(createQuote("Nothing ever goes away until it has taught us what we need to know.", "Pema Chodron"));
+        QUOTES_ARRAY.add(createQuote("Life shrinks or expands in proportion to one's courage.", "Anais Nin"));
 
     }
 

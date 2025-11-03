@@ -58,6 +58,13 @@ public class QuoteManager {
         } else {
             // Same day - return saved quote
             int savedIndex = prefs.getInt(KEY_DAILY_QUOTE_INDEX, 0);
+            int totalQuotes = ApplicationConstants.QUOTES_ARRAY.size();
+            if (savedIndex < 0 || savedIndex >= totalQuotes) {
+                // Stored index is out of range (likely after a quotes list update) – pick a new valid one
+                int newQuoteIndex = getNextUnusedQuoteIndex();
+                prefs.edit().putInt(KEY_DAILY_QUOTE_INDEX, newQuoteIndex).apply();
+                return ApplicationConstants.QUOTES_ARRAY.get(newQuoteIndex);
+            }
             return ApplicationConstants.QUOTES_ARRAY.get(savedIndex);
         }
     }
