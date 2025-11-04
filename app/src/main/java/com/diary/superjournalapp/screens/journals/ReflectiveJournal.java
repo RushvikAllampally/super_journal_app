@@ -506,6 +506,14 @@ public class ReflectiveJournal extends AppCompatActivity {
             }
         });
         
+        // Add decoration change listener to sync toolbar button states with actual formatting
+        journalContent.setOnDecorationChangeListener(new RichEditor.OnDecorationStateListener() {
+            @Override
+            public void onStateChangeListener(String text, List<RichEditor.Type> types) {
+                updateToolbarButtonStates(types);
+            }
+        });
+        
         // Add text watcher to title for placeholder visibility
         journalTitle.addTextChangedListener(new android.text.TextWatcher() {
             @Override
@@ -543,69 +551,60 @@ public class ReflectiveJournal extends AppCompatActivity {
         undoButton.setOnClickListener(v -> journalContent.undo());
         redoButton.setOnClickListener(v -> journalContent.redo());
         
-        // Text styling - explicit state management
+        // Toggle buttons with immediate visual feedback
         boldButton.setOnClickListener(v -> {
-            boolean willBeActive = !boldButton.isSelected();
+            boldButton.setSelected(!boldButton.isSelected());
             journalContent.setBold();
-            boldButton.setSelected(willBeActive);
         });
         
         italicButton.setOnClickListener(v -> {
-            boolean willBeActive = !italicButton.isSelected();
+            italicButton.setSelected(!italicButton.isSelected());
             journalContent.setItalic();
-            italicButton.setSelected(willBeActive);
         });
         
         underlineButton.setOnClickListener(v -> {
-            boolean willBeActive = !underlineButton.isSelected();
+            underlineButton.setSelected(!underlineButton.isSelected());
             journalContent.setUnderline();
-            underlineButton.setSelected(willBeActive);
         });
         
-        // Headings - toggle behavior (click to apply, click again to remove)
+        // Headings - toggle with immediate feedback
         heading1Button.setOnClickListener(v -> {
             if (!heading1Button.isSelected()) {
-                // Apply H1
-                journalContent.setHeading(1);
                 heading1Button.setSelected(true);
                 heading2Button.setSelected(false);
+                journalContent.setHeading(1);
             } else {
-                // Remove H1 - toggle it off
-                journalContent.setHeading(0);
                 heading1Button.setSelected(false);
+                journalContent.setHeading(0);
             }
         });
         
         heading2Button.setOnClickListener(v -> {
             if (!heading2Button.isSelected()) {
-                // Apply H2
-                journalContent.setHeading(2);
                 heading2Button.setSelected(true);
                 heading1Button.setSelected(false);
+                journalContent.setHeading(2);
             } else {
-                // Remove H2 - toggle it off
-                journalContent.setHeading(0);
                 heading2Button.setSelected(false);
+                journalContent.setHeading(0);
             }
         });
         
-        // Lists
+        // Lists - toggle with immediate feedback
         bulletButton.setOnClickListener(v -> {
-            boolean willBeActive = !bulletButton.isSelected();
-            journalContent.setBullets();
-            bulletButton.setSelected(willBeActive);
-            if (willBeActive) {
+            bulletButton.setSelected(!bulletButton.isSelected());
+            if (bulletButton.isSelected()) {
                 numbersButton.setSelected(false);
             }
+            journalContent.setBullets();
         });
         
         numbersButton.setOnClickListener(v -> {
-            boolean willBeActive = !numbersButton.isSelected();
-            journalContent.setNumbers();
-            numbersButton.setSelected(willBeActive);
-            if (willBeActive) {
+            numbersButton.setSelected(!numbersButton.isSelected());
+            if (numbersButton.isSelected()) {
                 bulletButton.setSelected(false);
             }
+            journalContent.setNumbers();
         });
         
         textColorButton.setOnClickListener(v -> showColorPicker());
@@ -661,5 +660,46 @@ public class ReflectiveJournal extends AppCompatActivity {
         cancelButton.setOnClickListener(v -> dialog.dismiss());
     }
     
+    /**
+     * Update toolbar button states based on the current formatting at cursor position
+     * This is called by RichEditor's decoration change listener
+     */
+    private void updateToolbarButtonStates(List<RichEditor.Type> types) {
+        // Reset all button states
+        boldButton.setSelected(false);
+        italicButton.setSelected(false);
+        underlineButton.setSelected(false);
+        heading1Button.setSelected(false);
+        heading2Button.setSelected(false);
+        bulletButton.setSelected(false);
+        numbersButton.setSelected(false);
+        
+        // Set button states based on active formatting
+        for (RichEditor.Type type : types) {
+            switch (type) {
+                case BOLD:
+                    boldButton.setSelected(true);
+                    break;
+                case ITALIC:
+                    italicButton.setSelected(true);
+                    break;
+                case UNDERLINE:
+                    underlineButton.setSelected(true);
+                    break;
+                case H1:
+                    heading1Button.setSelected(true);
+                    break;
+                case H2:
+                    heading2Button.setSelected(true);
+                    break;
+                case ORDEREDLIST:
+                    numbersButton.setSelected(true);
+                    break;
+                case UNORDEREDLIST:
+                    bulletButton.setSelected(true);
+                    break;
+            }
+        }
+    }
 
 }
