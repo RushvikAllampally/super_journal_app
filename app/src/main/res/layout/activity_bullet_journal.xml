@@ -30,6 +30,7 @@
                 android:layout_height="32dp"
                 android:layout_margin="4dp"
                 android:src="@drawable/icons8_multiply_24"
+                android:tint="?attr/colorOnBackground"
                 android:contentDescription="Close"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 

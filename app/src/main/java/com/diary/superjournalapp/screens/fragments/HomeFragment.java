@@ -314,6 +314,42 @@ public class HomeFragment extends Fragment {
 //                EditText reasonForMoodTxt = dialog.findViewById(R.id.reason_for_mood);
 
                 moodLevel = 0;
+                
+                // Check if today's mood already exists and pre-select it
+                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+                String formattedDate = dateFormat.format(new Date());
+                MoodTracker existingMood = databaseHelper.moodTrackerDao().findMoodEntryByMoodDate(formattedDate);
+                
+                if (existingMood != null && existingMood.getMoodLevel() > 0) {
+                    moodLevel = existingMood.getMoodLevel();
+                    moodLevelText.setVisibility(View.VISIBLE);
+                    moodLevelMessage.setVisibility(View.VISIBLE);
+                    moodLevelName.setVisibility(View.VISIBLE);
+                    
+                    // Set the appropriate message and name based on existing mood
+                    switch (moodLevel) {
+                        case 1:
+                            moodLevelName.setText("Awful");
+                            moodLevelMessage.setText(ApplicationConstants.VERY_SAD_MOOD_MSGS.get(JournalUtils.getRandomNumber()));
+                            break;
+                        case 2:
+                            moodLevelName.setText("Sad");
+                            moodLevelMessage.setText(ApplicationConstants.SAD_MOOD_MSGS.get(JournalUtils.getRandomNumber()));
+                            break;
+                        case 3:
+                            moodLevelName.setText("Good");
+                            moodLevelMessage.setText(ApplicationConstants.NEUTRAL_MOOD_MSGS.get(JournalUtils.getRandomNumber()));
+                            break;
+                        case 4:
+                            moodLevelName.setText("Happy");
+                            moodLevelMessage.setText(ApplicationConstants.HAPPY_MOOD_MSGS.get(JournalUtils.getRandomNumber()));
+                            break;
+                        case 5:
+                            moodLevelName.setText("Excited");
+                            moodLevelMessage.setText(ApplicationConstants.VERY_HAPPY_MOOD_MSGS.get(JournalUtils.getRandomNumber()));
+                            break;
+                    }
+                }
 
                 moodOne.setOnClickListener(new View.OnClickListener() {
                     @Override
