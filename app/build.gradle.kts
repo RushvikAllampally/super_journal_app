@@ -23,7 +23,7 @@ android {
         applicationId = "com.diary.superjournalapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 7
+        versionCode = 10
         versionName = "2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -42,11 +42,11 @@ android {
             isDebuggable = false
             signingConfig = signingConfigs.getByName("release")
         }
-        debug {
-            // Use the same signing configuration as release
-            signingConfig = signingConfigs.getByName("release")
-            isDebuggable = true
-        }
+        // debug {
+        //     // Use the same signing configuration as release
+        //     signingConfig = signingConfigs.getByName("release")
+        //     isDebuggable = true
+        // }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
