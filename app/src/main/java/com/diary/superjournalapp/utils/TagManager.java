@@ -124,23 +124,4 @@ public class TagManager {
     public List<Tag> searchTags(String query) {
         return tagRepository.searchTags(query);
     }
-    
-    /**
-     * Migrate old tags to new system
-     * This is a one-time operation when upgrading
-     * @param journal Journal with old-style tags
-     */
-    public void migrateOldTags(Journal journal) {
-        if (journal == null || journal.getJournalId() == 0) {
-            return;
-        }
-        
-        String oldTags = journal.getTags();
-        if (oldTags == null || oldTags.trim().isEmpty()) {
-            return;
-        }
-        
-        // Add old tags to new system
-        addTagsToJournal(journal.getJournalId(), oldTags);
-    }
 }

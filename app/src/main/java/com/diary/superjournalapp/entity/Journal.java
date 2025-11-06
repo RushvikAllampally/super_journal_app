@@ -25,12 +25,6 @@ public class Journal {
     
     @ColumnInfo(name="is_bookmarked")
     private boolean isBookmarked = false;
-    
-    // The tags field is no longer used for storage
-    // It's kept temporarily for backward compatibility during migration
-    @Deprecated
-    @ColumnInfo(name="tags")
-    private String tags = "";
 
     public String getTitle() {
         return title;
@@ -87,24 +81,6 @@ public class Journal {
     public void setBookmarked(boolean bookmarked) {
         isBookmarked = bookmarked;
     }
-    
-    /**
-     * @deprecated Use TagManager.getTagsForJournal(journalId) instead
-     * Kept for backward compatibility during migration
-     */
-    @Deprecated
-    public String getTags() {
-        return tags;
-    }
-    
-    /**
-     * @deprecated Use TagManager.addTagsToJournal(journalId, tags) instead
-     * Kept for backward compatibility during migration
-     */
-    @Deprecated
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
 
     @Override
     public String toString() {
@@ -116,7 +92,6 @@ public class Journal {
                 ", journalStartText='" + journalStartText + '\'' +
                 ", journalCategory='" + journalCategory + '\'' +
                 ", isBookmarked=" + isBookmarked +
-                ", tags='" + tags + '\'' +
                 '}';
     }
 }

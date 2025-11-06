@@ -34,7 +34,10 @@ public abstract class DatabaseHelper extends RoomDatabase {
 
     public static synchronized DatabaseHelper getDb(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context, DatabaseHelper.class, DATABASE_NAME).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+            instance = Room.databaseBuilder(context, DatabaseHelper.class, DATABASE_NAME)
+                    .addMigrations(Migrations.MIGRATION_12_14)
+                    .allowMainThreadQueries()
+                    .build();
         }
         return instance;
     }
