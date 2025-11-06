@@ -23,6 +23,27 @@ public class Migrations {
                 "ALTER TABLE journals ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
             );
             
+            // Add is_bookmarked column to all journal content tables
+            // Gratitude Journal
+            database.execSQL(
+                "ALTER TABLE gratitude_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Reflective Journal
+            database.execSQL(
+                "ALTER TABLE reflective_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Bullet Journal
+            database.execSQL(
+                "ALTER TABLE bullet_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Dream Journal
+            database.execSQL(
+                "ALTER TABLE dream_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
             // Create tags table
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `tags` (" +
@@ -38,13 +59,16 @@ public class Migrations {
                 "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_name` ON `tags` (`name`)"
             );
             
-            // Create journal_tags junction table
+            // Drop existing journal_tags table with incorrect foreign key reference
+            database.execSQL("DROP TABLE IF EXISTS `journal_tags`");
+            
+            // Create journal_tags junction table with correct reference to 'journals' table (lowercase)
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `journal_tags` (" +
                 "`journalId` INTEGER NOT NULL, " +
                 "`tagId` INTEGER NOT NULL, " +
                 "PRIMARY KEY(`journalId`, `tagId`), " +
-                "FOREIGN KEY(`journalId`) REFERENCES `Journal`(`journalId`) ON DELETE CASCADE, " +
+                "FOREIGN KEY(`journalId`) REFERENCES `journals`(`journalId`) ON DELETE CASCADE, " +
                 "FOREIGN KEY(`tagId`) REFERENCES `tags`(`tagId`) ON DELETE CASCADE)"
             );
             

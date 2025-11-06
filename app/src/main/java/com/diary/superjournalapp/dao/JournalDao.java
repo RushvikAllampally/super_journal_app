@@ -47,12 +47,27 @@ public interface JournalDao {
     @Query("update journals set is_bookmarked = :isBookmarked where journalId = :journalId")
     void updateBookmarkStatus(long journalId, boolean isBookmarked);
     
-    @Query("update journals set tags = :tags where journalId = :journalId")
-    void updateJournalTags(long journalId, String tags);
+    /**
+     * @deprecated This method is deprecated. Use TagRepository.addTagsToJournal() instead
+     * This is kept for API compatibility but doesn't actually update tags anymore
+     */
+    @Deprecated
+    default void updateJournalTags(long journalId, String tags) {
+        // Tags are now stored in a separate table, this method is kept for API compatibility
+        // but does nothing. Use TagRepository methods instead.
+    }
     
+    /**
+     * @deprecated This method is deprecated. Use TagDao.getJournalsWithTag() instead
+     * This is kept for API compatibility but returns an empty list
+     */
+    @Deprecated
     @Transaction
-    @Query("select * from journals where tags LIKE '%' || :tag || '%' order by journal_created_on desc")
-    public List<Journal> getJournalsByTag(String tag);
+    default List<Journal> getJournalsByTag(String tag) {
+        // Tags are now stored in a separate table, this method is kept for API compatibility
+        // Use TagRepository.getJournalsWithTagName() instead
+        return List.of();
+    }
     
     /**
      * Get journals created in the last specified number of days
