@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -135,6 +136,10 @@ public class TagDialogFragment extends DialogFragment {
         currentTagsGroup = view.findViewById(R.id.current_tags_group);
         suggestedTagsGroup = view.findViewById(R.id.suggested_tags_group);
         emptyTagsMessage = view.findViewById(R.id.empty_tags_message);
+        
+        // Set up close button
+        ImageButton closeButton = view.findViewById(R.id.close_tag_dialog);
+        closeButton.setOnClickListener(v -> dismiss());
         
         // Setup click listeners
         addTagButton.setOnClickListener(v -> {

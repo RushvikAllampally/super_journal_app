@@ -12,15 +12,35 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Manage Tags"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/balsamiqsans_regular"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp">
+            
+            <TextView
+                android:id="@+id/tag_dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Manage Tags"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
+                
+            <ImageButton
+                android:id="@+id/close_tag_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="Close"
+                android:tint="?attr/colorOnSurface" />
+        </RelativeLayout>
 
         <!-- Tag input section -->
         <com.google.android.material.textfield.TextInputLayout
