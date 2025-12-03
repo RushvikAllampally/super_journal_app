@@ -99,12 +99,12 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Semi-transparent background for better text visibility -->
+            <!-- Elegant gradient overlay for better text visibility -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#50000000"
-                android:padding="12dp"
+                android:background="@drawable/quote_text_background"
+                android:padding="16dp"
                 android:orientation="vertical">
 
                 <!-- Greeting text -->
@@ -117,9 +117,9 @@
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
@@ -131,24 +131,25 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2" />
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="6"
+                    android:lineSpacingExtra="2dp" />
 
                 <TextView
                     android:id="@+id/quote_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:text="-- Rushvik"
                     android:textAlignment="textEnd"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="1" />
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -192,7 +193,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_lightbulb"
-                        android:tint="@color/secondary"
+                        android:tint="@color/text_secondary"
                         android:layout_marginEnd="12dp"
                         android:alpha="0.8" />
 
