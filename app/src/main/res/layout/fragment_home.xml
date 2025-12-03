@@ -136,20 +136,40 @@
                     android:shadowRadius="6"
                     android:lineSpacingExtra="2dp" />
 
-                <TextView
-                    android:id="@+id/quote_author"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:fontFamily="@font/balsamiqsans_regular"
-                    android:text="-- Rushvik"
-                    android:textAlignment="textEnd"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:shadowColor="#000000"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="4" />
+                    android:orientation="horizontal"
+                    android:gravity="end|center_vertical">
+
+                    <TextView
+                        android:id="@+id/quote_author"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:text="-- Rushvik"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:shadowColor="#000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <ImageButton
+                        android:id="@+id/shareQuoteBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_share"
+                        android:tint="#FFFFFF"
+                        android:scaleType="centerInside"
+                        android:contentDescription="Share Quote" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

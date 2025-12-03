@@ -83,6 +83,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout quoteContainer;
     private ImageButton rateYourDayBtn;
     private ImageButton settingsBtn;
+    private ImageButton shareQuoteBtn;
     private ImageView editBulletBtn;
     private ImageView pinImage;
     private int moodLevel;
@@ -233,6 +234,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.home_recycler_view);
         rateYourDayBtn = view.findViewById(R.id.rate_mood_icon);
         settingsBtn = view.findViewById(R.id.profile_btn);
+        shareQuoteBtn = view.findViewById(R.id.shareQuoteBtn);
         editBulletBtn = view.findViewById(R.id.edit_bullet_journal);
         pinImage = view.findViewById(R.id.home_pin_icon);
         tasksCard = view.findViewById(R.id.tasks_card);
@@ -305,6 +307,13 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(view.getContext(), BulletJournal.class);
                 intent.putExtra("journalId", String.valueOf(homeDisplayBulletJournalId));
                 view.getContext().startActivity(intent);
+            }
+        });
+
+        shareQuoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareQuote();
             }
         });
 
@@ -537,6 +546,30 @@ public class HomeFragment extends Fragment {
             databaseHelper.moodTrackerDao().updateMood(moodTracker);
         }
 
+    }
+
+    private void shareQuote() {
+        try {
+            String quoteText = quote.getText().toString();
+            String authorText = quoteAuthor.getText().toString();
+            
+            StringBuilder shareText = new StringBuilder();
+            shareText.append("✨ ").append(quoteText).append("\n\n");
+            shareText.append(authorText).append("\n\n");
+            shareText.append("💫 Discover more inspiration with DiaryVerse - Your Personal Journal Companion!\n");
+            shareText.append("📱 Download now: https://play.google.com/store/apps/details?id=com.diary.superjournalapp\n\n");
+            shareText.append("#DiaryVerse #Inspiration #Quotes #Mindfulness #PersonalGrowth");
+            
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText.toString());
+            
+            Intent chooser = Intent.createChooser(shareIntent, "Share Quote");
+            startActivity(chooser);
+            
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Unable to share quote. Please try again.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Unused pin/unpin methods removed - pin/unpin now handled only in BulletJournal screen
