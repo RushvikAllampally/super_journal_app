@@ -87,57 +87,70 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="8dp"
         android:elevation="4dp"
         app:cardCornerRadius="15dp">
 
-
         <LinearLayout
+            android:id="@+id/quote_container"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/quote_background"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/hi_quote_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:text="Hi ,Rushvik"
-                android:textColor="@color/white"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/quote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:text="What gets monitored, get improved !!"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
+            <!-- Semi-transparent background for better text visibility -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:background="#50000000"
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <!-- Greeting text -->
+                <TextView
+                    android:id="@+id/hi_quote_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:text="Hi, User"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/quote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:text="What gets monitored, gets improved!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2" />
 
                 <TextView
                     android:id="@+id/quote_author"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:text="-- Rushvik"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1" />
             </LinearLayout>
-
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 
@@ -161,35 +174,69 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="4dp">
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="230dp"
-                    android:background="@drawable/final_affirmations"
-                    android:orientation="vertical"
-                    android:padding="15dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/affirmation_card_background"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:text="Today's Affirmation"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                    <!-- Icon -->
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lightbulb"
+                        android:tint="@color/secondary"
+                        android:layout_marginEnd="12dp"
+                        android:alpha="0.8" />
 
-                    <TextView
-                        android:id="@+id/affirmation"
-                        android:layout_width="wrap_content"
+                    <!-- Content -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:paddingStart="1dp"
-                        android:text="I am confident and capable"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Header -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:text="Daily Affirmation"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:alpha="0.7"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Affirmation text -->
+                        <TextView
+                            android:id="@+id/affirmation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:text="I am confident and capable"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="16sp"
+                            android:lineSpacingExtra="2dp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+
+                    </LinearLayout>
+
+                    <!-- Subtle accent -->
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="40dp"
+                        android:background="@color/secondary"
+                        android:alpha="0.3"
+                        android:layout_marginStart="12dp" />
 
                 </LinearLayout>
 

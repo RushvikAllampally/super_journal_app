@@ -46,4 +46,8 @@
     <color name="journal_hint_text">#BBBBBB</color> <!-- Light gray text for journal hints in dark mode -->
     <color name="toolbar_button_active">#4A3F5C</color> <!-- Dark purple for active toolbar buttons -->
     <color name="toolbar_button_pressed">#5B4F6D</color> <!-- Lighter purple for pressed state -->
+    
+    <!-- Affirmation card colors - Dark theme -->
+    <color name="affirmation_card_bg">#2A2A2A</color> <!-- Dark gray background -->
+    <color name="affirmation_border">#404040</color> <!-- Medium gray border -->
 </resources>

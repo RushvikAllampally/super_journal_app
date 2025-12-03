@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -79,6 +80,7 @@ public class HomeFragment extends Fragment {
     private TextView quote;
     private TextView quoteAuthor;
     private TextView affirmation;
+    private LinearLayout quoteContainer;
     private ImageButton rateYourDayBtn;
     private ImageButton settingsBtn;
     private ImageView editBulletBtn;
@@ -238,6 +240,7 @@ public class HomeFragment extends Fragment {
         quote = view.findViewById(R.id.quote);
         quoteAuthor = view.findViewById(R.id.quote_author);
         affirmation = view.findViewById(R.id.affirmation);
+        quoteContainer = view.findViewById(R.id.quote_container);
         nothingFoundImage = view.findViewById(R.id.nothing_found_home_view);
         nothingFoundText = view.findViewById(R.id.nothing_found_text);
         streakCount = view.findViewById(R.id.streak_edit_txt);
@@ -251,10 +254,27 @@ public class HomeFragment extends Fragment {
 
         // Use QuoteManager for smart quote/affirmation tracking
         QuoteManager quoteManager = new QuoteManager(view.getContext());
+        
+        // Note: We removed the forceRefreshToday() call to ensure images stay consistent all day
+        
         QuoteDto dailyQuote = quoteManager.getQuoteOfTheDay();
         quote.setText(dailyQuote.getQuote());
         quoteAuthor.setText(dailyQuote.getAuthor());
         affirmation.setText(quoteManager.getAffirmationOfTheDay());
+        
+        // Set dynamic quote background image from quote_images folder
+        String quoteImageName = quoteManager.getQuoteImageOfTheDay();
+        
+        int imageResourceId = getResources().getIdentifier(quoteImageName, "drawable", 
+            view.getContext().getPackageName());
+        
+        
+        if (imageResourceId != 0) {
+            quoteContainer.setBackgroundResource(imageResourceId);
+        } else {
+            // Fallback to default quote background if image not found
+            quoteContainer.setBackgroundResource(R.drawable.quote_background);
+        }
 
         SharedPreferences preferences = getActivity().getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
         String appUserName = preferences.getString(ApplicationConstants.APP_USER_NAME, "Dude");

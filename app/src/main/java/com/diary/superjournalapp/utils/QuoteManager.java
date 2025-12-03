@@ -27,8 +27,18 @@ public class QuoteManager {
     private static final String KEY_CURRENT_DATE = "current_date";
     private static final String KEY_DAILY_QUOTE_INDEX = "daily_quote_index";
     private static final String KEY_DAILY_AFFIRMATION_INDEX = "daily_affirmation_index";
+    private static final String KEY_DAILY_QUOTE_IMAGE_INDEX = "daily_quote_image_index";
     private static final String KEY_USED_QUOTES = "used_quotes";
     private static final String KEY_USED_AFFIRMATIONS = "used_affirmations";
+    
+    // Quote background images from quote_images folder
+    // Note: Android flattens folder structure, so hyphens become underscores in resource names
+    private static final String[] QUOTE_IMAGES = {
+        "quote_image_1_min", "quote_image_2_min", "quote_image_3_min", "quote_image_4_min",
+        "quote_image_5_min", "quote_image_6_min", "quote_image_7_min", "quote_image_8_min",
+        "quote_image_9_min", "quote_image_10_min", "quote_image_11_min", "quote_image_12_min",
+        "quote_image_13_min", "quote_image_14_min"
+    };
     
     private final SharedPreferences prefs;
     private final SimpleDateFormat dateFormat;
@@ -48,11 +58,13 @@ public class QuoteManager {
         
         // Check if it's a new day
         if (!today.equals(savedDate)) {
-            // New day - select a new quote
+            // New day - select a new quote and image
             int newQuoteIndex = getNextUnusedQuoteIndex();
+            int newImageIndex = getRandomQuoteImageIndex();
             prefs.edit()
                     .putString(KEY_CURRENT_DATE, today)
                     .putInt(KEY_DAILY_QUOTE_INDEX, newQuoteIndex)
+                    .putInt(KEY_DAILY_QUOTE_IMAGE_INDEX, newImageIndex)
                     .apply();
             return ApplicationConstants.QUOTES_ARRAY.get(newQuoteIndex);
         } else {
@@ -75,20 +87,27 @@ public class QuoteManager {
      */
     public String getAffirmationOfTheDay() {
         String today = getTodayDate();
-        String savedDate = prefs.getString(KEY_CURRENT_DATE, "");
+        String savedDate = prefs.getString(KEY_CURRENT_DATE + "_affirmation", "");
         
         // Check if it's a new day
         if (!today.equals(savedDate)) {
             // New day - select a new affirmation
             int newAffirmationIndex = getNextUnusedAffirmationIndex();
             prefs.edit()
-                    .putString(KEY_CURRENT_DATE, today)
+                    .putString(KEY_CURRENT_DATE + "_affirmation", today)
                     .putInt(KEY_DAILY_AFFIRMATION_INDEX, newAffirmationIndex)
                     .apply();
             return ApplicationConstants.AFFIRMATIONS[newAffirmationIndex];
         } else {
             // Same day - return saved affirmation
             int savedIndex = prefs.getInt(KEY_DAILY_AFFIRMATION_INDEX, 0);
+            int totalAffirmations = ApplicationConstants.AFFIRMATIONS.length;
+            if (savedIndex < 0 || savedIndex >= totalAffirmations) {
+                // Stored index is out of range (likely after an affirmations list update) – pick a new valid one
+                int newAffirmationIndex = getNextUnusedAffirmationIndex();
+                prefs.edit().putInt(KEY_DAILY_AFFIRMATION_INDEX, newAffirmationIndex).apply();
+                return ApplicationConstants.AFFIRMATIONS[newAffirmationIndex];
+            }
             return ApplicationConstants.AFFIRMATIONS[savedIndex];
         }
     }
@@ -186,12 +205,55 @@ public class QuoteManager {
     }
     
     /**
+     * Get the quote background image resource name for today
+     * @return Resource name for today's quote background image
+     */
+    public String getQuoteImageOfTheDay() {
+        String today = getTodayDate();
+        String savedDate = prefs.getString(KEY_CURRENT_DATE, "");
+        
+        if (!today.equals(savedDate)) {
+            // This shouldn't happen if getQuoteOfTheDay() was called first,
+            // but handle it gracefully
+            int newImageIndex = getRandomQuoteImageIndex();
+            prefs.edit().putInt(KEY_DAILY_QUOTE_IMAGE_INDEX, newImageIndex).apply();
+            return QUOTE_IMAGES[newImageIndex];
+        } else {
+            int savedIndex = prefs.getInt(KEY_DAILY_QUOTE_IMAGE_INDEX, 0);
+            if (savedIndex < 0 || savedIndex >= QUOTE_IMAGES.length) {
+                savedIndex = getRandomQuoteImageIndex();
+                prefs.edit().putInt(KEY_DAILY_QUOTE_IMAGE_INDEX, savedIndex).apply();
+            }
+            return QUOTE_IMAGES[savedIndex];
+        }
+    }
+    
+    /**
+     * Get a random quote image index
+     * @return Random index for quote images
+     */
+    private int getRandomQuoteImageIndex() {
+        return new Random().nextInt(QUOTE_IMAGES.length);
+    }
+    
+    /**
      * Reset all usage tracking (for testing or user preference)
      */
     public void resetAllUsage() {
         prefs.edit()
                 .remove(KEY_USED_QUOTES)
                 .remove(KEY_USED_AFFIRMATIONS)
+                .apply();
+    }
+    
+    /**
+     * Force refresh of today's quote and image (for testing)
+     */
+    public void forceRefreshToday() {
+        prefs.edit()
+                .remove(KEY_CURRENT_DATE)
+                .remove(KEY_DAILY_QUOTE_INDEX)
+                .remove(KEY_DAILY_QUOTE_IMAGE_INDEX)
                 .apply();
     }
 }

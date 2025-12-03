@@ -63,6 +63,10 @@
     <color name="toolbar_button_active">#E8DFF5</color> <!-- Light purple for active toolbar buttons -->
     <color name="toolbar_button_pressed">#D4C5ED</color> <!-- Slightly darker purple for pressed state -->
     
+    <!-- Affirmation card colors -->
+    <color name="affirmation_card_bg">#FAFAFA</color> <!-- Very light gray background -->
+    <color name="affirmation_border">#E0E0E0</color> <!-- Light gray border -->
+    
     <!-- Legacy color references (for backward compatibility) -->
     <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->
     <color name="btn_color">@color/secondary</color>
