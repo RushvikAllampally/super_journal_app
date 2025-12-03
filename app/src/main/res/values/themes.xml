@@ -16,7 +16,7 @@
         <item name="colorOnError">@color/on_error</item>
         
         <!-- Status bar and navigation bar -->
-        <item name="android:statusBarColor">@color/primary_variant</item>
+        <item name="android:statusBarColor">@color/text_secondary</item>
         <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>

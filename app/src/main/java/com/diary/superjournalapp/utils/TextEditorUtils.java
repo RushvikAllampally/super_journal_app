@@ -14,7 +14,6 @@ import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,104 +21,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import com.diary.superjournalapp.utils.LiveTextStyler;
 
 import com.diary.superjournalapp.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class TextEditorUtils {
-
-
-    public static void colorPaletteOnClickListener(BottomSheetDialog bottomSheetDialog, EditText journalContent, Context context) {
-
-        bottomSheetDialog = new BottomSheetDialog(context);
-        bottomSheetDialog.setContentView(R.layout.color_picker);
-
-        CardView blackImage = bottomSheetDialog.findViewById(R.id.black_color_select);
-        CardView greyImage = bottomSheetDialog.findViewById(R.id.grey_color_select);
-        CardView redImage = bottomSheetDialog.findViewById(R.id.red_color_select);
-        CardView greenImage = bottomSheetDialog.findViewById(R.id.green_color_select);
-        CardView brownImage = bottomSheetDialog.findViewById(R.id.brown_color_select);
-        CardView yellowImage = bottomSheetDialog.findViewById(R.id.yellow_color_select);
-        CardView purpleImage = bottomSheetDialog.findViewById(R.id.purple_color_select);
-        CardView blueImage = bottomSheetDialog.findViewById(R.id.blue_color_select);
-        CardView orangeImage = bottomSheetDialog.findViewById(R.id.orange_color_select);
-        CardView pinkImage = bottomSheetDialog.findViewById(R.id.pink_color_select);
-        CardView tealImage = bottomSheetDialog.findViewById(R.id.teal_color_select);
-        
-        // Live styling is now enabled by default
-        LiveTextStyler.setupLiveEditText(journalContent);
-
-        // For selected text styling
-        blackImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.black);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-            Toast.makeText(context, "Black color applied", Toast.LENGTH_SHORT).show();
-        });
-        greyImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.grey);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        redImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.red);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        greenImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.green);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        brownImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.brown);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        yellowImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.yellow);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        purpleImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.purple);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        blueImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.blue);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        orangeImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.orange);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        pinkImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.pink);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-        tealImage.setOnClickListener(v -> {
-            int color = ContextCompat.getColor(context, R.color.teal);
-            LiveTextStyler.setCurrentColor(color);
-            journalContent.setText(applyColor(color, journalContent));
-        });
-
-        // Set BottomSheetBehavior to STATE_EXPANDED
-        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetDialog.findViewById(R.id.design_bottom_sheet));
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        bottomSheetDialog.show();
-
-    }
 
     public static void textStylesOnClickListener(BottomSheetDialog bottomSheetDialog, EditText journalContent, Context context) {
         bottomSheetDialog = new BottomSheetDialog(context);
