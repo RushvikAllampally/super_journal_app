@@ -6,6 +6,10 @@ import com.diary.superjournalapp.constants.ApplicationConstants;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.MoodTracker;
+import com.diary.superjournalapp.entity.JournalCategories.ReflectiveJournalEntity;
+import com.diary.superjournalapp.entity.JournalCategories.GratitudeJournalEntity;
+import com.diary.superjournalapp.entity.JournalCategories.DreamJournalEntity;
+import com.diary.superjournalapp.entity.JournalCategories.BulletJournalEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -259,8 +263,8 @@ public class StatisticsUtils {
                 continue;
             }
             
-            // Get journal content based on type
-            String content = journal.getJournalStartText();
+            // Get full journal content based on type
+            String content = getFullJournalContent(databaseHelper, journal);
             if (content != null && !content.trim().isEmpty()) {
                 // Simple word count (just split by whitespace)
                 totalWords += content.trim().split("\\s+").length;
@@ -321,6 +325,44 @@ public class StatisticsUtils {
         }
         
         return new Date[]{startDate, endDate};
+    }
+    
+    /**
+     * Get the full content of a journal entry based on its type
+     * 
+     * @param databaseHelper The database helper
+     * @param journal The journal entry
+     * @return The full content string, or null if not found
+     */
+    public static String getFullJournalContent(DatabaseHelper databaseHelper, Journal journal) {
+        String category = journal.getJournalCategory();
+        long journalId = journal.getJournalId();
+        
+        try {
+            switch (category) {
+                case ApplicationConstants.REFLECTIVE_JOURNAL:
+                    ReflectiveJournalEntity reflectiveJournal = databaseHelper.reflectiveJournalContentDao().getReflectiveJournalById(journalId);
+                    return reflectiveJournal != null ? reflectiveJournal.getJournalContent() : journal.getJournalStartText();
+                    
+                case ApplicationConstants.GRATITUDE_JOURNAL:
+                    GratitudeJournalEntity gratitudeJournal = databaseHelper.gratitudeJournalContentDao().getGratitudeJournalById(journalId);
+                    return gratitudeJournal != null ? gratitudeJournal.getJournalContent() : journal.getJournalStartText();
+                    
+                case ApplicationConstants.DREAM_JOURNAL:
+                    DreamJournalEntity dreamJournal = databaseHelper.dreamJournalContentDao().getDreamJournalById(journalId);
+                    return dreamJournal != null ? dreamJournal.getJournalContent() : journal.getJournalStartText();
+                    
+                case ApplicationConstants.BULLET_JOURNAL:
+                    BulletJournalEntity bulletJournal = databaseHelper.bulletJournalContentDao().getBulletJournalById(journalId);
+                    return bulletJournal != null ? bulletJournal.getTaskListJson() : journal.getJournalStartText();
+                    
+                default:
+                    return journal.getJournalStartText();
+            }
+        } catch (Exception e) {
+            // Fallback to journalStartText if there's any error
+            return journal.getJournalStartText();
+        }
     }
     
     /**

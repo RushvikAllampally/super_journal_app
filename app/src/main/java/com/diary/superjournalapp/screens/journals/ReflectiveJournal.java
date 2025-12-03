@@ -629,7 +629,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         
         GridLayout colorGrid = dialog.findViewById(R.id.color_grid);
         final int[] colors = {
-            Color.BLACK, Color.DKGRAY, Color.GRAY,
+            Color.BLACK, Color.DKGRAY, Color.GRAY, Color.WHITE,
             Color.RED, Color.rgb(255, 100, 100), Color.rgb(255, 150, 150),
             Color.GREEN, Color.rgb(144, 238, 144), Color.rgb(152, 251, 152),
             Color.BLUE, Color.rgb(135, 206, 250), Color.rgb(173, 216, 230),

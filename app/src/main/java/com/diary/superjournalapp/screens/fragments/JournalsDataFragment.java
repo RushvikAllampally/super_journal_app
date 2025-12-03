@@ -439,7 +439,8 @@ public class JournalsDataFragment extends Fragment {
         
         int totalWords = 0;
         for (Journal journal : journals) {
-            String content = journal.getJournalStartText();
+            // Use StatisticsUtils to get full content instead of just preview
+            String content = StatisticsUtils.getFullJournalContent(databaseHelper, journal);
             if (content != null && !content.trim().isEmpty()) {
                 totalWords += content.trim().split("\\s+").length;
             }
