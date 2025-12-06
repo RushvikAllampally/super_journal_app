@@ -65,6 +65,7 @@ dependencies {
     implementation("com.jjoe64:graphview:4.2.2")
     implementation("com.vanniktech:emoji-google:0.8.0")
     implementation("jp.wasabeef:richeditor-android:2.0.0")
+    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     annotationProcessor("androidx.room:room-compiler:2.6.1")

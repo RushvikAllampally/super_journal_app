@@ -100,4 +100,51 @@ public interface JournalDao {
           + "WHERE jt.journalId = j.journalId AND jt.tagId IN (:tagIds)) = :tagCount "
           + "ORDER BY j.journal_created_on DESC")
     public List<Journal> getJournalsWithAllTags(List<Long> tagIds, int tagCount);
+    
+    /**
+     * Get journal count grouped by date for a specific month
+     * Used for calendar heatmap visualization
+     * 
+     * @param monthStart Start date of the month
+     * @param monthEnd End date of the month
+     * @return Map of date string (YYYY-MM-DD) to journal count
+     */
+    @Query("SELECT DATE(journal_created_on / 1000, 'unixepoch') as date, COUNT(*) as count "
+          + "FROM journals "
+          + "WHERE journal_created_on BETWEEN :monthStart AND :monthEnd "
+          + "GROUP BY DATE(journal_created_on / 1000, 'unixepoch')")
+    public List<JournalCountByDate> getJournalCountsByDate(Date monthStart, Date monthEnd);
+    
+    /**
+     * Get journals grouped by date and category for a specific month
+     * Used for showing category-specific event dots on calendar
+     * 
+     * @param monthStart Start date of the month
+     * @param monthEnd End date of the month
+     * @return List of journals in the month
+     */
+    @Transaction
+    @Query("SELECT * FROM journals "
+          + "WHERE journal_created_on BETWEEN :monthStart AND :monthEnd "
+          + "ORDER BY journal_created_on DESC")
+    public List<Journal> getJournalsForMonth(Date monthStart, Date monthEnd);
+    
+    /**
+     * Get all distinct dates that have journal entries
+     * Used for calculating consistency streaks
+     * 
+     * @return List of dates with journals
+     */
+    @Query("SELECT DISTINCT DATE(journal_created_on / 1000, 'unixepoch') as date "
+          + "FROM journals "
+          + "ORDER BY date DESC")
+    public List<String> getAllJournalDates();
+    
+    /**
+     * Inner class for journal count by date query result
+     */
+    class JournalCountByDate {
+        public String date;
+        public int count;
+    }
 }

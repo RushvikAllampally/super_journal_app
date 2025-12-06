@@ -50,4 +50,10 @@
     <!-- Affirmation card colors - Dark theme -->
     <color name="affirmation_card_bg">#2A2A2A</color> <!-- Dark gray background -->
     <color name="affirmation_border">#404040</color> <!-- Medium gray border -->
+    
+    <!-- Calendar category colors for event dots - Dark theme (brighter for visibility) -->
+    <color name="calendar_gratitude">#A5D6A7</color> <!-- Bright green for gratitude -->
+    <color name="calendar_reflective">#90CAF9</color> <!-- Bright blue for reflective -->
+    <color name="calendar_dream">#CE93D8</color> <!-- Bright purple for dream -->
+    <color name="calendar_bullet">#FFAB91</color> <!-- Bright coral for bullet -->
 </resources>

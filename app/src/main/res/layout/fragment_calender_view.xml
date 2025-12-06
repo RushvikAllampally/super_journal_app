@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/android:colorBackground"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context=".screens.fragments.CalenderViewFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,8 +39,154 @@
             android:textColor="?attr/colorOnBackground"
             android:alpha="0.6"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="12dp" />
 
+        <!-- Month Summary Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="This Month"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/month_total_entries"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Entries"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:alpha="0.7"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/month_gratitude_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/calendar_gratitude"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gratitude"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:alpha="0.7"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/month_reflective_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/calendar_reflective"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Diary"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:alpha="0.7"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/month_dream_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/calendar_dream"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dream"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnBackground"
+                            android:alpha="0.7"
+                            android:fontFamily="@font/balsamiqsans_regular" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Calendar Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,16 +194,125 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp">
 
-        <CalendarView
-            android:id="@+id/calender_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/material_calendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorSurface"
+                app:mcv_showOtherDates="none"
+                app:mcv_selectionColor="@color/secondary"
+                app:mcv_headerTextAppearance="@style/CalendarHeaderText"
+                app:mcv_dateTextAppearance="@style/CalendarDateText"
+                app:mcv_weekDayTextAppearance="@style/CalendarWeekDayText"
+                app:mcv_tileSize="44dp" />
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Legend for event dots -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="12dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/event_dot_shape"
+                    android:backgroundTint="@color/calendar_gratitude"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gratitude"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:alpha="0.7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="12dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/event_dot_shape"
+                    android:backgroundTint="@color/calendar_reflective"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Diary"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:alpha="0.7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="12dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/event_dot_shape"
+                    android:backgroundTint="@color/calendar_dream"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dream"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:alpha="0.7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/event_dot_shape"
+                    android:backgroundTint="@color/calendar_bullet"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bullet"
+                    android:textSize="11sp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:alpha="0.7" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/journal_date_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -93,6 +353,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:paddingBottom="10dp"
+        android:nestedScrollingEnabled="false"
         android:clipToPadding="false" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

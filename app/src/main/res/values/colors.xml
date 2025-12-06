@@ -67,6 +67,14 @@
     <color name="affirmation_card_bg">#FAFAFA</color> <!-- Very light gray background -->
     <color name="affirmation_border">#E0E0E0</color> <!-- Light gray border -->
     
+    <!-- Calendar category colors for event dots -->
+    <color name="calendar_gratitude">#81C784</color> <!-- Green for gratitude -->
+    <color name="calendar_reflective">#64B5F6</color> <!-- Blue for reflective -->
+    <color name="calendar_dream">#BA68C8</color> <!-- Purple for dream -->
+    <color name="calendar_bullet">#FF8A80</color> <!-- Red for bullet -->
+    
+
+    
     <!-- Legacy color references (for backward compatibility) -->
     <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->
     <color name="btn_color">@color/secondary</color>
