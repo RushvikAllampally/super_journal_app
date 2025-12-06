@@ -20,6 +20,7 @@ import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.recyclerviews.JournalRecyclerAdaptor;
 import com.diary.superjournalapp.utils.calendar.EventDotDecorator;
+import com.diary.superjournalapp.utils.calendar.TodayDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -213,6 +214,10 @@ public class CalenderViewFragment extends Fragment {
         Map<CalendarDay, List<Journal>> journalsByDate = groupJournalsByDate(monthJournals);
         
         System.out.println("CalendarDebug: Grouped into " + journalsByDate.size() + " unique dates");
+        
+        // Add today decorator (makes today's date bold with theme-aware color)
+        int textColor = getThemeTextColor();
+        materialCalendarView.addDecorator(new TodayDecorator(textColor));
         
         // Add event dot decorators for each date
         int dotCount = 0;
@@ -420,6 +425,15 @@ public class CalenderViewFragment extends Fragment {
         // Set custom arrow drawables (they use theme-aware colors via ?attr)
         materialCalendarView.setLeftArrow(R.drawable.ic_calendar_arrow_left);
         materialCalendarView.setRightArrow(R.drawable.ic_calendar_arrow_right);
+    }
+    
+    /**
+     * Get theme-aware text color (black in light theme, white in dark theme)
+     */
+    private int getThemeTextColor() {
+        // Use on_surface color which is theme-aware
+        // Black (#000000) in light theme, White (#FFFFFF) in dark theme
+        return ContextCompat.getColor(requireContext(), R.color.on_surface);
     }
 
 }

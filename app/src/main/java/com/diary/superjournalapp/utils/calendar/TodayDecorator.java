@@ -1,6 +1,7 @@
 package com.diary.superjournalapp.utils.calendar;
 
 import android.graphics.Color;
+import android.text.style.ForegroundColorSpan;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
@@ -9,16 +10,16 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 /**
- * Decorator to show a subtle circle around today's date
+ * Decorator to make today's date bold with theme-aware text color
  * This remains visible even when another date is selected
  */
 public class TodayDecorator implements DayViewDecorator {
     private final CalendarDay today;
-    private final int color;
+    private final int textColor;
     
-    public TodayDecorator(int color) {
+    public TodayDecorator(int textColor) {
         this.today = CalendarDay.today();
-        this.color = color;
+        this.textColor = textColor;
     }
     
     @Override
@@ -28,12 +29,8 @@ public class TodayDecorator implements DayViewDecorator {
     
     @Override
     public void decorate(DayViewFacade view) {
-        // Create a subtle stroke circle
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setShape(GradientDrawable.OVAL);
-        drawable.setStroke(2, color); // 2dp stroke
-        drawable.setColor(Color.TRANSPARENT); // Transparent fill
-        
-        view.setBackgroundDrawable(drawable);
+        // Make today's date bold with theme-aware color
+        view.addSpan(new ForegroundColorSpan(textColor));
+        view.addSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD));
     }
 }
