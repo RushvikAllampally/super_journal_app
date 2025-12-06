@@ -22,6 +22,9 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.graphics.Color;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,11 +33,13 @@ import com.diary.superjournalapp.constants.ApplicationConstants;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.JournalCategories.GratitudeJournalEntity;
+import com.diary.superjournalapp.screens.fragments.BookmarkedJournalsFragment;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.utils.JournalUtils;
 import com.diary.superjournalapp.utils.TagManager;
 import com.diary.superjournalapp.utils.TextEditorUtils;
+import com.diary.superjournalapp.utils.JournalLockHelper;
 import com.diary.superjournalapp.dialogs.TagDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
@@ -77,6 +82,11 @@ public class GratitudeJournal extends AppCompatActivity {
     private TagManager tagManager;
     private Date selectedDate = null;
     private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
+    
+    // Lock feature
+    private ImageButton lockJournalButton;
+    private JournalLockHelper lockHelper;
+    private ActivityResultLauncher<Intent> authLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +98,12 @@ public class GratitudeJournal extends AppCompatActivity {
 
         databaseHelper = DatabaseHelper.getDb(this);
         tagManager = new TagManager(this);
+        
+        // Initialize lock helper
+        lockHelper = new JournalLockHelper(this);
+        
+        // Setup authentication launcher BEFORE using it
+        setupAuthenticationLauncher();
 
         closeJournalButton = findViewById(R.id.close_journal);
         saveJournalButton = findViewById(R.id.save_journal);
@@ -101,6 +117,7 @@ public class GratitudeJournal extends AppCompatActivity {
         deleteIcon = findViewById(R.id.gratitude_delete_icon);
         promptIcon = findViewById(R.id.prompt_icon);
         manageTagsButton = findViewById(R.id.manage_tags_button);
+        lockJournalButton = findViewById(R.id.lock_journal_button);
         
         // Initialize formatting buttons
         undoButton = findViewById(R.id.action_undo);
@@ -165,7 +182,8 @@ public class GratitudeJournal extends AppCompatActivity {
                 selectJournalDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + ", " + getMonthName(String.valueOf(calendar.get(Calendar.MONTH) + 1)) + " " + calendar.get(Calendar.YEAR));
             }
         }
-
+        setupLockButton();
+        
         closeJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -634,6 +652,127 @@ public class GratitudeJournal extends AppCompatActivity {
                     break;
             }
         }
+    }
+    
+    // ==================== Lock Feature Methods ====================
+    
+    /**
+     * Setup authentication launcher for lock feature
+     */
+    private void setupAuthenticationLauncher() {
+        authLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    boolean isUnlock = data.getBooleanExtra("journal_unlock", false);
+                    boolean isAccess = data.getBooleanExtra("journal_access", false);
+                    
+                    if (isUnlock) {
+                        // Handle permanent unlock - reload journal from database
+                        journal = databaseHelper.journalDao().getMainJournalById(journal.getJournalId());
+                        updateLockButtonIcon();
+                        Toast.makeText(GratitudeJournal.this, 
+                            "Journal permanently unlocked", Toast.LENGTH_SHORT).show();
+                        
+                        // Notify all fragments to refresh their lists
+                        JournalListFragment.notifyJournalListFragment();
+                        BookmarkedJournalsFragment.notifyBookmarksChanged();
+                        HomeFragment.notifyHomeRecyclerViewChanges();
+                    } else if (isAccess) {
+                        // Handle access authentication - journal opened, no status change
+                        Toast.makeText(GratitudeJournal.this, 
+                            "Journal opened", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Authentication failed
+                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        );
+    }
+    
+    /**
+     * Setup lock button click listener
+     */
+    private void setupLockButton() {
+        // Hide lock button for new journals (not saved yet)
+        if (journal.getJournalId() == 0) {
+            lockJournalButton.setVisibility(View.GONE);
+            return;
+        }
+        
+        lockJournalButton.setVisibility(View.VISIBLE);
+        updateLockButtonIcon();
+        
+        lockJournalButton.setOnClickListener(v -> {
+            lockHelper.toggleJournalLock(journal, this, authLauncher, 
+                new JournalLockHelper.LockToggleCallback() {
+                    @Override
+                    public void onLockToggled(boolean isNowLocked) {
+                        updateLockButtonIcon();
+                        // Reload journal to get updated lock status
+                        journal = databaseHelper.journalDao().getMainJournalById(journal.getJournalId());
+                    }
+                    
+                    @Override
+                    public void onAuthenticationRequired() {
+                        // Authentication dialog will be shown automatically
+                    }
+                    
+                    @Override
+                    public void onSetupRequired() {
+                        // Setup dialog will be shown automatically
+                    }
+                });
+        });
+    }
+    
+    /**
+     * Update lock button icon based on journal lock status
+     */
+    private void updateLockButtonIcon() {
+        if (journal != null && journal.isLocked()) {
+            lockJournalButton.setImageResource(android.R.drawable.ic_lock_lock);
+        } else {
+            lockJournalButton.setImageResource(android.R.drawable.ic_lock_idle_lock);
+        }
+    }
+    
+    /**
+     * Disable editing for locked journals
+     */
+    private void disableEditing() {
+        journalTitle.setEnabled(false);
+        journalContent.setInputEnabled(false);
+        saveJournalButton.setEnabled(false);
+        // Disable formatting buttons
+        boldButton.setEnabled(false);
+        italicButton.setEnabled(false);
+        underlineButton.setEnabled(false);
+        heading1Button.setEnabled(false);
+        heading2Button.setEnabled(false);
+        bulletButton.setEnabled(false);
+        numbersButton.setEnabled(false);
+        textColorButton.setEnabled(false);
+    }
+    
+    /**
+     * Enable editing for unlocked journals
+     */
+    private void enableEditing() {
+        journalTitle.setEnabled(true);
+        journalContent.setInputEnabled(true);
+        saveJournalButton.setEnabled(true);
+        // Enable formatting buttons
+        boldButton.setEnabled(true);
+        italicButton.setEnabled(true);
+        underlineButton.setEnabled(true);
+        heading1Button.setEnabled(true);
+        heading2Button.setEnabled(true);
+        bulletButton.setEnabled(true);
+        numbersButton.setEnabled(true);
+        textColorButton.setEnabled(true);
     }
 
 }

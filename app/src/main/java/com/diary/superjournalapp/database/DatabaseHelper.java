@@ -24,7 +24,7 @@ import com.diary.superjournalapp.entity.MoodTracker;
 import com.diary.superjournalapp.entity.Tag;
 
 
-@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class, Tag.class, JournalTag.class}, exportSchema = false, version = 14)
+@Database(entities = {Journal.class, GratitudeJournalEntity.class, BulletJournalEntity.class, ReflectiveJournalEntity.class, DreamJournalEntity.class, MoodTracker.class, Tag.class, JournalTag.class}, exportSchema = false, version = 15)
 @TypeConverters({Converters.class})
 public abstract class DatabaseHelper extends RoomDatabase {
 
@@ -35,7 +35,7 @@ public abstract class DatabaseHelper extends RoomDatabase {
     public static synchronized DatabaseHelper getDb(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context, DatabaseHelper.class, DATABASE_NAME)
-                    .addMigrations(Migrations.MIGRATION_12_14)
+                    .addMigrations(Migrations.MIGRATION_12_14, Migrations.MIGRATION_14_15)
                     .allowMainThreadQueries()
                     .build();
         }

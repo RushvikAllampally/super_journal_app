@@ -47,6 +47,13 @@ public interface JournalDao {
     @Query("update journals set is_bookmarked = :isBookmarked where journalId = :journalId")
     void updateBookmarkStatus(long journalId, boolean isBookmarked);
     
+    @Query("update journals set is_locked = :isLocked where journalId = :journalId")
+    void updateLockStatus(long journalId, boolean isLocked);
+    
+    @Transaction
+    @Query("select * from journals where is_locked = 1 order by journal_created_on desc")
+    public List<Journal> getLockedJournals();
+    
     /**
      * @deprecated This method is deprecated. Use TagRepository.addTagsToJournal() instead
      * This is kept for API compatibility but doesn't actually update tags anymore

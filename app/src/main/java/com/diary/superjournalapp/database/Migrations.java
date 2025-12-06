@@ -82,4 +82,40 @@ public class Migrations {
             );
         }
     };
+    
+    /**
+     * Migration from version 14 to 15
+     * - Adds is_locked column to journals table and all journal content tables
+     * - Enables per-journal locking premium feature
+     */
+    public static final Migration MIGRATION_14_15 = new Migration(14, 15) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Add is_locked column to main journals table
+            database.execSQL(
+                "ALTER TABLE journals ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Add is_locked column to all journal content tables for consistency
+            // Gratitude Journal
+            database.execSQL(
+                "ALTER TABLE gratitude_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Reflective Journal
+            database.execSQL(
+                "ALTER TABLE reflective_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Bullet Journal
+            database.execSQL(
+                "ALTER TABLE bullet_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Dream Journal
+            database.execSQL(
+                "ALTER TABLE dream_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+        }
+    };
 }

@@ -25,6 +25,9 @@ public class Journal {
     
     @ColumnInfo(name="is_bookmarked")
     private boolean isBookmarked = false;
+    
+    @ColumnInfo(name="is_locked")
+    private boolean isLocked = false;
 
     public String getTitle() {
         return title;
@@ -81,6 +84,14 @@ public class Journal {
     public void setBookmarked(boolean bookmarked) {
         isBookmarked = bookmarked;
     }
+    
+    public boolean isLocked() {
+        return isLocked;
+    }
+    
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
 
     @Override
     public String toString() {
@@ -92,6 +103,7 @@ public class Journal {
                 ", journalStartText='" + journalStartText + '\'' +
                 ", journalCategory='" + journalCategory + '\'' +
                 ", isBookmarked=" + isBookmarked +
+                ", isLocked=" + isLocked +
                 '}';
     }
 }

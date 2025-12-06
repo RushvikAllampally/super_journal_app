@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.core.content.res.ResourcesCompat;
 
 import com.diary.superjournalapp.R;

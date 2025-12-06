@@ -468,6 +468,49 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
     private void matchPassCode() {
         if (getPassCode().equals(passCode)) {
             // Successful passcode entry
+            
+            // Check if this is for journal access or unlock
+            Intent intent = getIntent();
+            boolean isJournalAccess = intent.getBooleanExtra("journal_access", false);
+            boolean isJournalUnlock = intent.getBooleanExtra("journal_unlock", false);
+            
+            if (isJournalAccess) {
+                // Opening a locked journal - just open it, don't change lock status
+                long journalId = intent.getLongExtra("journal_id", -1);
+                String journalCategory = intent.getStringExtra("journal_category");
+                
+                if (journalId != -1 && journalCategory != null) {
+                    // Open the appropriate journal activity
+                    Intent journalIntent = getJournalIntent(journalCategory);
+                    if (journalIntent != null) {
+                        journalIntent.putExtra("journalId", String.valueOf(journalId));
+                        startActivity(journalIntent);
+                        Toast.makeText(this, "Authentication successful", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else if (isJournalUnlock) {
+                // Permanently unlocking journal - change database status
+                long journalId = intent.getLongExtra("journal_id", -1);
+                
+                if (journalId != -1) {
+                    // Update database to unlock journal
+                    com.diary.superjournalapp.database.DatabaseHelper db = 
+                        com.diary.superjournalapp.database.DatabaseHelper.getDb(this);
+                    db.journalDao().updateLockStatus(journalId, false);
+                    
+                    Toast.makeText(this, "Journal permanently unlocked", Toast.LENGTH_SHORT).show();
+                    
+                    // Return with journal_unlock flag so the journal activity can update UI
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("isPasscodeOpened", true);
+                    returnIntent.putExtra("journal_unlock", true);
+                    returnIntent.putExtra("journal_id", journalId);
+                    setResult(RESULT_OK, returnIntent);
+                    finish();
+                    return;
+                }
+            }
+            
             Intent returnIntent = new Intent();
             returnIntent.putExtra("isPasscodeOpened", true);
             setResult(RESULT_OK, returnIntent);
@@ -479,6 +522,28 @@ public class AppLock extends AppCompatActivity implements View.OnClickListener {
             // Clear the entered passcode and reset UI
             new Handler(Looper.getMainLooper()).postDelayed(() -> resetPasscodeInput(), 300);
         }
+    }
+    
+    /**
+     * Get the appropriate journal intent based on category
+     */
+    private Intent getJournalIntent(String category) {
+        Intent intent = null;
+        switch (category) {
+            case "Gratitude Journal":
+                intent = new Intent(this, com.diary.superjournalapp.screens.journals.GratitudeJournal.class);
+                break;
+            case "Bullet Journal":
+                intent = new Intent(this, com.diary.superjournalapp.screens.journals.BulletJournal.class);
+                break;
+            case "Dream Journal":
+                intent = new Intent(this, com.diary.superjournalapp.screens.journals.DreamJournal.class);
+                break;
+            case "My Diary":
+                intent = new Intent(this, com.diary.superjournalapp.screens.journals.ReflectiveJournal.class);
+                break;
+        }
+        return intent;
     }
 
     /**

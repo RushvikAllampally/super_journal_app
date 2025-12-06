@@ -24,6 +24,8 @@ import com.diary.superjournalapp.utils.JournalUtils;
 import com.diary.superjournalapp.adapters.TagChipAdapter;
 import com.diary.superjournalapp.entity.Tag;
 import com.diary.superjournalapp.utils.TagManager;
+import com.diary.superjournalapp.utils.PremiumFeatureManager;
+import com.diary.superjournalapp.utils.JournalLockManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +35,16 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     Context context;
     ArrayList<Journal> journalArrayList;
     private TagManager tagManager;
+    private PremiumFeatureManager premiumFeatureManager;
+    private JournalLockManager lockManager;
 
     public JournalRecyclerAdaptor(Context context,ArrayList<Journal> journalsList){
         this.context=context;
         System.out.println(journalsList);
         this.journalArrayList =journalsList;
         this.tagManager = new TagManager(context);
+        this.premiumFeatureManager = PremiumFeatureManager.getInstance(context);
+        this.lockManager = JournalLockManager.getInstance(context);
     }
 
     @NonNull
@@ -54,7 +60,24 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
         
         // Set journal text content
         holder.journalTitle.setText(journal.getTitle());
-        holder.journalContent.setText(journal.getJournalStartText());
+        
+        // Handle locked journal display
+        if (journal.isLocked()) {
+            holder.journalContent.setText("🔒 This journal is locked");
+            holder.journalContent.setAlpha(0.8f);
+            holder.journalContent.setTypeface(holder.journalContent.getTypeface(), android.graphics.Typeface.ITALIC);
+            holder.lockIcon.setVisibility(View.VISIBLE);
+            // Hide tags for privacy when locked
+            holder.journalTagsGroup.setVisibility(View.GONE);
+        } else {
+            holder.journalContent.setText(journal.getJournalStartText());
+            holder.journalContent.setAlpha(1.0f);
+            holder.journalContent.setTypeface(holder.journalContent.getTypeface(), android.graphics.Typeface.NORMAL);
+            holder.lockIcon.setVisibility(View.GONE);
+            holder.journalTagsGroup.setVisibility(View.VISIBLE);
+            // Setup tag chips for unlocked journal - don't allow editing on click
+            setupTagChips(holder.journalTagsGroup, journal, false);
+        }
         
         // Use the improved date format
         holder.journalDate.setText(JournalUtils.getCompactDateFormat(journal.getJournalCreatedOn()));
@@ -63,37 +86,39 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
         
         // Set bookmark icon based on bookmark status
         updateBookmarkIconImproved(holder.bookmarkIcon, journal.isBookmarked());
-        
+
         // Setup tag chips for a journal - don't allow editing on click
         setupTagChips(holder.journalTagsGroup, journal, false);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String journalCategory = journalArrayList.get(holder.getAdapterPosition()).getJournalCategory();
-                Intent intent;
-                switch (journalCategory){
-                    case "Gratitude Journal":
-                        intent = new Intent(view.getContext(), GratitudeJournal.class);
-                        intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
-                        view.getContext().startActivity(intent);
-                        break;
-                    case "Bullet Journal":
-                        intent = new Intent(view.getContext(), BulletJournal.class);
-                        intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
-                        view.getContext().startActivity(intent);
-                        break;
-                    case "Dream Journal":
-                        intent = new Intent(view.getContext(), DreamJournal.class);
-                        intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
-                        view.getContext().startActivity(intent);
-                        break;
-                    case "My Diary":
-                        intent = new Intent(view.getContext(), ReflectiveJournal.class);
-                        intent.putExtra("journalId",String.valueOf(journalArrayList.get(holder.getAdapterPosition()).getJournalId()));
-                        view.getContext().startActivity(intent);
-                        break;
+                int position = holder.getAdapterPosition();
+                if (position == RecyclerView.NO_POSITION) return;
+                
+                Journal journal = journalArrayList.get(position);
+                
+                // Check if journal is locked and needs authentication
+                if (journal.isLocked() && !lockManager.isTemporarilyUnlocked(journal.getJournalId())) {
+                    // Check if app lock is set up
+                    if (!lockManager.isAppPasscodeEnabled()) {
+                        showSetupAppLockDialog();
+                        return;
+                    }
+                    
+                    // Launch AppLock for authentication, then open journal
+                    Intent lockIntent = new Intent(view.getContext(), com.diary.superjournalapp.applock.AppLock.class);
+                    lockIntent.putExtra("journal_access", true);
+                    lockIntent.putExtra("journal_id", journal.getJournalId());
+                    lockIntent.putExtra("journal_category", journal.getJournalCategory());
+                    
+                    // Start AppLock activity - it will handle opening the journal after authentication
+                    view.getContext().startActivity(lockIntent);
+                    return;
                 }
+                
+                // Journal is accessible, open normally
+                openJournal(journal, view.getContext());
             }
         });
 
@@ -111,6 +136,7 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
         TextView journalDate;
         ImageView journalTypeIcon;
         ImageView bookmarkIcon;
+        ImageView lockIcon;
         com.google.android.material.chip.ChipGroup journalTagsGroup;
         com.google.android.material.chip.Chip journalTag; // This is the sample tag in XML
         
@@ -121,6 +147,7 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
             journalDate = itemView.findViewById(R.id.journal_date);
             journalTypeIcon = itemView.findViewById(R.id.journal_type_icon);
             bookmarkIcon = itemView.findViewById(R.id.journal_bookmark);
+            lockIcon = itemView.findViewById(R.id.journal_lock);
             journalTagsGroup = itemView.findViewById(R.id.journal_tags_group);
             journalTag = itemView.findViewById(R.id.journal_tag);
             
@@ -136,6 +163,16 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
                 }
             });
             
+            // Setup lock icon click listener - just show info, actual lock/unlock in journal detail
+            lockIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    android.widget.Toast.makeText(context, 
+                        "Open the journal to lock/unlock it", 
+                        android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+            
             // We don't need a click listener for the example tag in XML 
             // since we're dynamically creating all tags
         }
@@ -144,6 +181,41 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     public void updateData() {
         // Notify the adapter of the data change
         notifyDataSetChanged();
+    }
+    
+    /**
+     * Open a journal based on its category
+     * 
+     * @param journal The journal to open
+     * @param context The context to start the activity from
+     */
+    private void openJournal(Journal journal, Context context) {
+        String journalCategory = journal.getJournalCategory();
+        Intent intent;
+        
+        switch (journalCategory) {
+            case "Gratitude Journal":
+                intent = new Intent(context, GratitudeJournal.class);
+                break;
+            case "Bullet Journal":
+                intent = new Intent(context, BulletJournal.class);
+                break;
+            case "Dream Journal":
+                intent = new Intent(context, DreamJournal.class);
+                break;
+            case "My Diary":
+            default:
+                intent = new Intent(context, ReflectiveJournal.class);
+                break;
+        }
+        
+        intent.putExtra("journalId", String.valueOf(journal.getJournalId()));
+        context.startActivity(intent);
+        
+        // Reset auto-lock timer if journal was temporarily unlocked
+        if (journal.isLocked() && lockManager.isTemporarilyUnlocked(journal.getJournalId())) {
+            lockManager.resetAutoLockTimer(journal.getJournalId());
+        }
     }
     
     /**
@@ -166,6 +238,74 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
     }
     
     /**
+     * Toggle lock status for a journal entry
+     * 
+     * @param journal The journal to toggle lock for
+     * @param position Position in adapter for UI update
+     */
+    private void toggleLock(Journal journal, int position) {
+        boolean newStatus = !journal.isLocked();
+        
+        // If trying to lock, check premium limits
+        if (newStatus && !premiumFeatureManager.canLockMoreJournals()) {
+            showUpgradeDialog();
+            return;
+        }
+        
+        // Toggle lock status
+        journal.setLocked(newStatus);
+        
+        // Update database
+        DatabaseHelper databaseHelper = DatabaseHelper.getDb(context);
+        databaseHelper.journalDao().updateLockStatus(journal.getJournalId(), newStatus);
+        
+        // Update UI
+        notifyItemChanged(position);
+        
+        // Show feedback to user with premium status
+        String message;
+        if (newStatus) {
+            String remaining = premiumFeatureManager.isPremiumUser() ? 
+                "unlimited" : String.valueOf(premiumFeatureManager.getRemainingLockSlots());
+            message = "Journal locked (" + remaining + " locks remaining)";
+        } else {
+            message = "Journal unlocked";
+        }
+        android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show();
+    }
+    
+    /**
+     * Show dialog to setup app lock first
+     */
+    private void showSetupAppLockDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+            .setTitle("App Lock Required")
+            .setMessage("To use journal locking, please set up App Lock first. The same password will be used for locked journals.")
+            .setPositiveButton("Go to Settings", (dialog, which) -> {
+                // Open settings screen
+                Intent intent = new Intent(context, com.diary.superjournalapp.screens.settings.SettingsScreen.class);
+                context.startActivity(intent);
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
+    }
+    
+    /**
+     * Show upgrade dialog when free limit is reached
+     */
+    private void showUpgradeDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+            .setTitle("Premium Feature")
+            .setMessage(premiumFeatureManager.getUpgradeMessage())
+            .setPositiveButton("Upgrade to Premium", (dialog, which) -> {
+                // TODO: Launch premium upgrade activity
+                android.widget.Toast.makeText(context, "Premium upgrade coming soon!", android.widget.Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("Not Now", null)
+            .show();
+    }
+    
+    /**
      * Updates the bookmark icon appearance based on bookmark status
      * 
      * @param bookmarkIcon The ImageView to update
@@ -176,6 +316,21 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
             bookmarkIcon.setImageResource(R.drawable.ic_bookmark_filled);
         } else {
             bookmarkIcon.setImageResource(R.drawable.ic_bookmark);
+        }
+    }
+    
+    /**
+     * Updates the lock icon appearance based on lock status
+     * 
+     * @param lockIcon The ImageView to update
+     * @param isLocked Current lock status
+     */
+    private void updateLockIcon(ImageView lockIcon, boolean isLocked) {
+        if (isLocked) {
+            lockIcon.setImageResource(R.drawable.ic_lock);
+            lockIcon.setVisibility(View.VISIBLE);
+        } else {
+            lockIcon.setVisibility(View.GONE);
         }
     }
     
