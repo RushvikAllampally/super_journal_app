@@ -3,6 +3,7 @@ package com.diary.superjournalapp.utils.calendar;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
+import android.text.style.ForegroundColorSpan;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -15,14 +16,17 @@ import java.util.List;
 /**
  * Decorator to show colored dots below dates with journal entries
  * Each dot represents a different journal category
+ * Preserves theme-aware text color for date numbers
  */
 public class EventDotDecorator implements DayViewDecorator {
     private final HashSet<CalendarDay> dates;
     private final List<Integer> colors;
+    private final int textColor;
     
-    public EventDotDecorator(Collection<CalendarDay> dates, List<Integer> colors) {
+    public EventDotDecorator(Collection<CalendarDay> dates, List<Integer> colors, int textColor) {
         this.dates = new HashSet<>(dates);
         this.colors = colors;
+        this.textColor = textColor;
     }
     
     @Override
@@ -32,6 +36,9 @@ public class EventDotDecorator implements DayViewDecorator {
     
     @Override
     public void decorate(DayViewFacade view) {
+        // Preserve theme-aware text color (black in light, white in dark)
+        view.addSpan(new ForegroundColorSpan(textColor));
+        // Add dots below the date
         view.addSpan(new MultiDotSpan(colors));
     }
     

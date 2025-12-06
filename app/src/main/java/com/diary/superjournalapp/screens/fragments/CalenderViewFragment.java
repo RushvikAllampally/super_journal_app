@@ -226,7 +226,8 @@ public class CalenderViewFragment extends Fragment {
             if (!colors.isEmpty()) {
                 HashSet<CalendarDay> singleDay = new HashSet<>();
                 singleDay.add(entry.getKey());
-                materialCalendarView.addDecorator(new EventDotDecorator(singleDay, colors));
+                // Pass text color to preserve theme-aware date colors
+                materialCalendarView.addDecorator(new EventDotDecorator(singleDay, colors, textColor));
                 dotCount++;
                 System.out.println("CalendarDebug: Added event dots for " + entry.getKey() + " with " + colors.size() + " colors");
             }
