@@ -30,7 +30,7 @@ public class SettingsScreen extends ThemedActivity {
 
     private LinearLayout reminderBlock;
     private LinearLayout passocodeBlock;
-    private LinearLayout exportDatalock;
+    private LinearLayout exportJournalsBlock;
     private LinearLayout inviteAFriendBlock;
     private LinearLayout shareFeedBackBlock;
     private LinearLayout rateOurAppBlock;
@@ -52,7 +52,7 @@ public class SettingsScreen extends ThemedActivity {
 
         reminderBlock = findViewById(R.id.reminder_block);
         passocodeBlock = findViewById(R.id.passcode_block);
-//        exportDatalock = findViewById(R.id.export_data_block);
+        exportJournalsBlock = findViewById(R.id.export_journals_block);
         inviteAFriendBlock = findViewById(R.id.invite_a_block);
         shareFeedBackBlock = findViewById(R.id.feed_back_block);
         rateOurAppBlock = findViewById(R.id.rate_app_block);
@@ -119,7 +119,16 @@ public class SettingsScreen extends ThemedActivity {
                 startActivity(intent);
             }
         });
-//        exportDatalock.setOnClickListener(comingSoononClickListener);
+        
+        // Export Journals
+        exportJournalsBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsScreen.this, com.diary.superjournalapp.screens.ExportJournalsActivity.class);
+                startActivity(intent);
+            }
+        });
+        
         // Implement Invite a Friend feature
         inviteAFriendBlock.setOnClickListener(new View.OnClickListener() {
             @Override

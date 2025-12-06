@@ -842,5 +842,4 @@ public class ReflectiveJournal extends AppCompatActivity {
         numbersButton.setEnabled(true);
         textColorButton.setEnabled(true);
     }
-
 }

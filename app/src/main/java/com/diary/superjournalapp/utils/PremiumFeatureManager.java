@@ -20,6 +20,10 @@ public class PremiumFeatureManager {
     // IMPORTANT: Set to false before production release!
     private static final boolean ENABLE_LOCK_FOR_TESTING = true;
     
+    // NEW: Export feature testing flag
+    // IMPORTANT: Set to false before production release!
+    private static final boolean ENABLE_EXPORT_FOR_TESTING = true;
+    
     private static PremiumFeatureManager instance;
     private Context context;
     private SharedPreferences prefs;
@@ -146,6 +150,11 @@ public class PremiumFeatureManager {
                 return isPremiumUser();
             case EXPORT_LOCKED_JOURNALS:
                 return isPremiumUser();
+            // NEW: Export features
+            case EXPORT_PDF:
+            case EXPORT_TXT:
+            case BATCH_EXPORT:
+                return canExportJournals();
             default:
                 return isPremiumUser();
         }
@@ -158,6 +167,11 @@ public class PremiumFeatureManager {
         PER_JOURNAL_LOCKING,
         UNLIMITED_LOCKS,
         EXPORT_LOCKED_JOURNALS,
+        // NEW: Export features
+        EXPORT_PDF,
+        EXPORT_TXT,
+        BATCH_EXPORT,
+        // Future features
         CLOUD_SYNC,
         ADVANCED_THEMES,
         PREMIUM_TEMPLATES
@@ -171,5 +185,53 @@ public class PremiumFeatureManager {
     public String getUpgradeMessage() {
         return "Journal locking is a Premium feature. " +
                "Upgrade to Premium to lock your private journals and access more exclusive features!";
+    }
+    
+    /**
+     * NEW: Check if user can export journals
+     * Export is a PREMIUM feature
+     * 
+     * @return true if user can export journals
+     */
+    public boolean canExportJournals() {
+        // FOR TESTING: Bypass premium check
+        if (ENABLE_EXPORT_FOR_TESTING) {
+            return true;
+        }
+        
+        // PRODUCTION: Only premium users can export
+        return isPremiumUser();
+    }
+    
+    /**
+     * NEW: Get export feature description for current user
+     * 
+     * @return description of export feature limits
+     */
+    public String getExportFeatureDescription() {
+        if (ENABLE_EXPORT_FOR_TESTING) {
+            return "Testing Mode: Export feature enabled";
+        }
+        
+        if (isPremiumUser()) {
+            return "Premium: Unlimited journal exports";
+        }
+        
+        return "Premium Feature: Upgrade to export journals";
+    }
+    
+    /**
+     * NEW: Get upgrade message specifically for export feature
+     * 
+     * @return user-friendly upgrade message for export
+     */
+    public String getExportUpgradeMessage() {
+        return "Journal export is a Premium feature.\n\n" +
+               "Upgrade to DiaryVerse Premium to:\n" +
+               "✨ Export journals to beautiful PDFs\n" +
+               "📝 Create plain text backups\n" +
+               "📚 Batch export multiple journals\n" +
+               "🎨 Customize export formatting\n" +
+               "💾 Share your memories easily";
     }
 }
