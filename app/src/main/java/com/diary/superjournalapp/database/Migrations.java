@@ -118,4 +118,33 @@ public class Migrations {
             );
         }
     };
+    
+    /**
+     * Migration from version 15 to 16
+     * - Adds backup_history table for tracking backup operations
+     * - Adds lock_pin column to all journal content tables
+     * - Enables backup & restore premium feature
+     */
+    public static final Migration MIGRATION_15_16 = new Migration(15, 16) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Create backup_history table without indices to match entity exactly
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `backup_history` (" +
+                "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "`backup_date` INTEGER NOT NULL, " +
+                "`backup_type` TEXT, " +
+                "`drive_file_id` TEXT, " +
+                "`file_name` TEXT, " +
+                "`file_size` INTEGER NOT NULL, " +
+                "`journal_count` INTEGER NOT NULL, " +
+                "`backup_status` TEXT, " +
+                "`error_message` TEXT, " +
+                "`is_encrypted` INTEGER NOT NULL, " +
+                "`app_version` TEXT, " +
+                "`database_version` INTEGER NOT NULL, " +
+                "`device_info` TEXT)"
+            );
+        }
+    };
 }

@@ -12,6 +12,10 @@
         tools:ignore="ScopedStorage"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"/>
+    
+    <!-- Internet permission for Google Drive backup -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".EmojiApplication"
@@ -41,6 +45,15 @@
             android:exported="false" />
         <activity
             android:name=".screens.ExportJournalsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.BackupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.BackupHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.RestoreActivity"
             android:exported="false" />
         <activity
             android:name=".screens.tags.TagManagementActivity"

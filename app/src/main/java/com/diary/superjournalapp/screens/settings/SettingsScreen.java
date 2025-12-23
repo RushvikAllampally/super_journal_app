@@ -31,6 +31,7 @@ public class SettingsScreen extends ThemedActivity {
     private LinearLayout reminderBlock;
     private LinearLayout passocodeBlock;
     private LinearLayout exportJournalsBlock;
+    private LinearLayout backupRestoreBlock;
     private LinearLayout inviteAFriendBlock;
     private LinearLayout shareFeedBackBlock;
     private LinearLayout rateOurAppBlock;
@@ -42,6 +43,7 @@ public class SettingsScreen extends ThemedActivity {
     private EditText editNameInput;
     private TextView displayProfileName;
     private TextView currentFontSizeText;
+    private TextView backupStatusText;
     private SwitchCompat darkModeSwitch;
     private SwitchCompat promptsSwitch;
 
@@ -53,6 +55,7 @@ public class SettingsScreen extends ThemedActivity {
         reminderBlock = findViewById(R.id.reminder_block);
         passocodeBlock = findViewById(R.id.passcode_block);
         exportJournalsBlock = findViewById(R.id.export_journals_block);
+        backupRestoreBlock = findViewById(R.id.backup_restore_block);
         inviteAFriendBlock = findViewById(R.id.invite_a_block);
         shareFeedBackBlock = findViewById(R.id.feed_back_block);
         rateOurAppBlock = findViewById(R.id.rate_app_block);
@@ -63,6 +66,7 @@ public class SettingsScreen extends ThemedActivity {
 
         displayProfileName = findViewById(R.id.display_profile_name);
         editProfileBtn = findViewById(R.id.edit_profile_btn);
+        backupStatusText = findViewById(R.id.backup_status_text);
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
         promptsSwitch = findViewById(R.id.prompts_switch);
 //        currentFontSizeText = findViewById(R.id.current_font_size_text);
@@ -125,6 +129,15 @@ public class SettingsScreen extends ThemedActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsScreen.this, com.diary.superjournalapp.screens.ExportJournalsActivity.class);
+                startActivity(intent);
+            }
+        });
+        
+        // Backup & Restore
+        backupRestoreBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsScreen.this, com.diary.superjournalapp.screens.BackupActivity.class);
                 startActivity(intent);
             }
         });

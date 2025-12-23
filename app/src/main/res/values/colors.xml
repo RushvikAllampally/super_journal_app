@@ -73,7 +73,11 @@
     <color name="calendar_dream">#BA68C8</color> <!-- Purple for dream -->
     <color name="calendar_bullet">#FF8A80</color> <!-- Red for bullet -->
     
-
+    <!-- Status colors for backup feature -->
+    <color name="success_green">#4CAF50</color> <!-- Green for success status -->
+    <color name="error_red">#F44336</color> <!-- Red for error status -->
+    <color name="warning_orange">#FF9800</color> <!-- Orange for warning/in-progress status -->
+    <color name="premium_gold">#FFD700</color> <!-- Gold color for premium features -->
     
     <!-- Legacy color references (for backward compatibility) -->
     <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->

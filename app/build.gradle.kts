@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -52,6 +53,20 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/license.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/notice.txt",
+                "META-INF/ASL2.0"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -69,6 +84,14 @@ dependencies {
     
     // PDF Export Library
     implementation("com.itextpdf:itext7-core:7.2.5")
+    
+    // Google Drive Backup Dependencies
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.apis:google-api-services-drive:v3-rev20230822-2.0.0")
+    implementation("com.google.api-client:google-api-client-android:2.2.0")
+    implementation("com.google.http-client:google-http-client-gson:1.44.1")
+    implementation("com.google.http-client:google-http-client:1.44.1")
+    implementation("androidx.work:work-runtime:2.9.0")
     
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

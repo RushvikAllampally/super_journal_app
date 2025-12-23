@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "858362172550",
+    "project_id": "diaryverse",
+    "storage_bucket": "diaryverse.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858362172550:android:ae5fb2c353a0335afcad07",
+        "android_client_info": {
+          "package_name": "com.diary.superjournalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858362172550-erpscnrdqdcdsj5qqgl2dhoa1hokkrgn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diary.superjournalapp",
+            "certificate_hash": "b341e059be53e514feb8db9d34d9b9fa7ad8ce7a"
+          }
+        },
+        {
+          "client_id": "858362172550-k7kittof5vnmvv4pr3267f3nnn3bd87j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB62u77z3hy5BGRVCOc04jiHJUGsCkk3K0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858362172550-k7kittof5vnmvv4pr3267f3nnn3bd87j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -24,6 +24,10 @@ public class PremiumFeatureManager {
     // IMPORTANT: Set to false before production release!
     private static final boolean ENABLE_EXPORT_FOR_TESTING = true;
     
+    // NEW: Backup feature testing flag
+    // IMPORTANT: Set to false before production release!
+    private static final boolean ENABLE_BACKUP_FOR_TESTING = true;
+    
     private static PremiumFeatureManager instance;
     private Context context;
     private SharedPreferences prefs;
@@ -155,6 +159,11 @@ public class PremiumFeatureManager {
             case EXPORT_TXT:
             case BATCH_EXPORT:
                 return canExportJournals();
+            // NEW: Backup features
+            case BACKUP_TO_CLOUD:
+            case RESTORE_FROM_BACKUP:
+            case AUTO_BACKUP:
+                return canUseBackupFeature();
             default:
                 return isPremiumUser();
         }
@@ -171,6 +180,10 @@ public class PremiumFeatureManager {
         EXPORT_PDF,
         EXPORT_TXT,
         BATCH_EXPORT,
+        // NEW: Backup features
+        BACKUP_TO_CLOUD,
+        RESTORE_FROM_BACKUP,
+        AUTO_BACKUP,
         // Future features
         CLOUD_SYNC,
         ADVANCED_THEMES,
@@ -233,5 +246,64 @@ public class PremiumFeatureManager {
                "📚 Batch export multiple journals\n" +
                "🎨 Customize export formatting\n" +
                "💾 Share your memories easily";
+    }
+    
+    /**
+     * NEW: Check if user can use backup features
+     * Backup is a PREMIUM feature
+     * 
+     * @return true if user can use backup features
+     */
+    public boolean canUseBackupFeature() {
+        // FOR TESTING: Bypass premium check
+        if (ENABLE_BACKUP_FOR_TESTING) {
+            return true;
+        }
+        
+        // PRODUCTION: Only premium users can use backup
+        return isPremiumUser();
+    }
+    
+    /**
+     * NEW: Get backup feature description for current user
+     * 
+     * @return description of backup feature limits
+     */
+    public String getBackupFeatureDescription() {
+        if (ENABLE_BACKUP_FOR_TESTING) {
+            return "Testing Mode: Backup feature enabled";
+        }
+        
+        if (isPremiumUser()) {
+            return "Premium: Unlimited backups & restores";
+        }
+        
+        return "Premium Feature: Upgrade to backup journals";
+    }
+    
+    /**
+     * NEW: Get upgrade message specifically for backup feature
+     * 
+     * @return user-friendly upgrade message for backup
+     */
+    public String getBackupUpgradeMessage() {
+        return "Backup & Restore is a Premium feature.\n\n" +
+               "Upgrade to DiaryVerse Premium to:\n" +
+               "☁️ Secure cloud backups to Google Drive\n" +
+               "🔒 Military-grade encryption (AES-256)\n" +
+               "🔄 Automatic daily backups\n" +
+               "📱 Restore on any device\n" +
+               "🛡️ Never lose your memories again!";
+    }
+    
+    /**
+     * Show premium upgrade dialog for the backup feature
+     * 
+     * @param context The context to show dialog from
+     */
+    public void showPremiumUpgradeDialog(Context context) {
+        // TODO: Implement actual premium upgrade dialog
+        // For now, this is a placeholder method that can be expanded
+        // to integrate with Google Play Billing or other subscription system
     }
 }

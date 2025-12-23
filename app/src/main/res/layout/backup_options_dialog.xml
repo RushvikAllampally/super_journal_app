@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_backup"
+            app:tint="@color/app_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Create Backup"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your journals will be encrypted and uploaded to your Google Drive. Please set a password to protect your backup."
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnSurface"
+        android:alpha="0.8"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_marginBottom="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:boxStrokeColor="@color/app_blue"
+        app:hintTextColor="@color/app_blue"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/backup_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Backup Password"
+            android:inputType="textPassword"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurface" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/cancel_backup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+        <Button
+            android:id="@+id/start_backup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Create Backup"
+            android:textAllCaps="false"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button" />
+
+    </LinearLayout>
+
+</LinearLayout>
