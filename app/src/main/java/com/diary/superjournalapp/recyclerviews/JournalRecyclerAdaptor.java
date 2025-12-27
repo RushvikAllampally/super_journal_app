@@ -298,8 +298,8 @@ public class JournalRecyclerAdaptor extends RecyclerView.Adapter<JournalRecycler
             .setTitle("Premium Feature")
             .setMessage(premiumFeatureManager.getUpgradeMessage())
             .setPositiveButton("Upgrade to Premium", (dialog, which) -> {
-                // TODO: Launch premium upgrade activity
-                android.widget.Toast.makeText(context, "Premium upgrade coming soon!", android.widget.Toast.LENGTH_SHORT).show();
+                // Launch premium upgrade activity
+                premiumFeatureManager.showPremiumUpgradeDialog(context);
             })
             .setNegativeButton("Not Now", null)
             .show();

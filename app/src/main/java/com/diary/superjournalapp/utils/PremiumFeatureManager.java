@@ -18,15 +18,15 @@ public class PremiumFeatureManager {
     
     // FOR TESTING ONLY - Set to true to bypass premium checks
     // IMPORTANT: Set to false before production release!
-    private static final boolean ENABLE_LOCK_FOR_TESTING = true;
+    private static final boolean ENABLE_LOCK_FOR_TESTING = false;
     
     // NEW: Export feature testing flag
     // IMPORTANT: Set to false before production release!
-    private static final boolean ENABLE_EXPORT_FOR_TESTING = true;
+    private static final boolean ENABLE_EXPORT_FOR_TESTING = false;
     
     // NEW: Backup feature testing flag
     // IMPORTANT: Set to false before production release!
-    private static final boolean ENABLE_BACKUP_FOR_TESTING = true;
+    private static final boolean ENABLE_BACKUP_FOR_TESTING = false;
     
     private static PremiumFeatureManager instance;
     private Context context;
@@ -49,12 +49,167 @@ public class PremiumFeatureManager {
     
     /**
      * Check if user has premium subscription
+     * Verifies with Google Play Billing for active subscriptions
      * 
      * @return true if user is premium subscriber
      */
     public boolean isPremiumUser() {
-        // TODO: Integrate with actual subscription system (Google Play Billing, etc.)
+        // For testing mode - bypass real verification
+        if (ENABLE_LOCK_FOR_TESTING || ENABLE_EXPORT_FOR_TESTING || ENABLE_BACKUP_FOR_TESTING) {
+            return prefs.getBoolean(IS_PREMIUM_KEY, false);
+        }
+        
+        // PRODUCTION: Check with Google Play Billing for active subscriptions
+        return hasActiveSubscription();
+    }
+    
+    /**
+     * Check for active subscriptions with Google Play Billing
+     * This is the REAL verification that prevents subscription bypass
+     * 
+     * @return true if user has active subscription
+     */
+    private boolean hasActiveSubscription() {
+        try {
+            // For frequent checks, use cached status if recent
+            long lastCheck = prefs.getLong("premium_last_check", 0);
+            long currentTime = System.currentTimeMillis();
+            long fiveMinutes = 5 * 60 * 1000; // 5 minutes cache for frequent checks
+            
+            if (currentTime - lastCheck < fiveMinutes) {
+                return getCachedPremiumStatus();
+            }
+            
+            // Initialize billing client for verification
+            com.android.billingclient.api.BillingClient billingClient = 
+                com.android.billingclient.api.BillingClient.newBuilder(context)
+                    .setListener((billingResult, purchases) -> {})
+                    .enablePendingPurchases()
+                    .build();
+            
+            // For real-time verification, we need async connection
+            billingClient.startConnection(new com.android.billingclient.api.BillingClientStateListener() {
+                @Override
+                public void onBillingSetupFinished(com.android.billingclient.api.BillingResult billingResult) {
+                    if (billingResult.getResponseCode() == com.android.billingclient.api.BillingClient.BillingResponseCode.OK) {
+                        checkActivePurchases(billingClient);
+                        // Update last check time
+                        prefs.edit().putLong("premium_last_check", System.currentTimeMillis()).apply();
+                    }
+                    billingClient.endConnection();
+                }
+                
+                @Override
+                public void onBillingServiceDisconnected() {
+                    android.util.Log.w("PremiumFeatureManager", "Billing service disconnected during verification");
+                }
+            });
+            
+            // Return cached status while async verification happens
+            return getCachedPremiumStatus();
+            
+        } catch (Exception e) {
+            android.util.Log.e("PremiumFeatureManager", "Error checking subscription: " + e.getMessage());
+            // Fallback to cached status on error
+            return getCachedPremiumStatus();
+        }
+    }
+    
+    /**
+     * Check active purchases from Google Play
+     */
+    private boolean checkActivePurchases(com.android.billingclient.api.BillingClient billingClient) {
+        // Query active subscriptions using current API
+        billingClient.queryPurchasesAsync(
+            com.android.billingclient.api.QueryPurchasesParams.newBuilder()
+                .setProductType(com.android.billingclient.api.BillingClient.ProductType.SUBS)
+                .build(),
+            (billingResult, purchases) -> {
+                if (billingResult.getResponseCode() == com.android.billingclient.api.BillingClient.BillingResponseCode.OK) {
+                    updatePremiumStatusFromPurchases(purchases);
+                }
+            }
+        );
+        
+        // For now, check cached status while async verification runs
+        return getCachedPremiumStatus();
+    }
+    
+    /**
+     * Update premium status based on active purchases from Google Play
+     */
+    private void updatePremiumStatusFromPurchases(java.util.List<com.android.billingclient.api.Purchase> purchases) {
+        boolean hasActivePremium = false;
+        String activeProductId = null;
+        
+        if (purchases != null && !purchases.isEmpty()) {
+            for (com.android.billingclient.api.Purchase purchase : purchases) {
+                try {
+                    // Check if purchase is for our premium products
+                    java.util.List<String> products = purchase.getProducts();
+                    for (String productId : products) {
+                        if ("diaryverse_premium_monthly".equals(productId) || 
+                            "diaryverse_premium_yearly".equals(productId) ||
+                            "diaryverse_premium_lifetime".equals(productId)) {
+                            
+                            // Verify purchase is acknowledged and active
+                            if (purchase.getPurchaseState() == com.android.billingclient.api.Purchase.PurchaseState.PURCHASED &&
+                                purchase.isAcknowledged()) {
+                                hasActivePremium = true;
+                                activeProductId = productId;
+                                break;
+                            }
+                        }
+                    }
+                    if (hasActivePremium) break;
+                } catch (Exception e) {
+                    android.util.Log.e("PremiumFeatureManager", "Error processing purchase: " + e.getMessage());
+                }
+            }
+        }
+        
+        // Update cached status with detailed logging
+        boolean previousStatus = getCachedPremiumStatus();
+        setCachedPremiumStatus(hasActivePremium);
+        
+        // Log status change
+        if (previousStatus != hasActivePremium) {
+            android.util.Log.i("PremiumFeatureManager", 
+                String.format("Premium status changed: %s -> %s (Product: %s)", 
+                    previousStatus, hasActivePremium, activeProductId));
+        }
+        
+        android.util.Log.d("PremiumFeatureManager", 
+            String.format("Updated premium status from Google Play: %s (Active products: %d)", 
+                hasActivePremium, purchases != null ? purchases.size() : 0));
+    }
+    
+    /**
+     * Get cached premium status with expiry check
+     */
+    private boolean getCachedPremiumStatus() {
+        // Check if cached status has expired (24 hours)
+        long lastVerified = prefs.getLong("premium_last_verified", 0);
+        long currentTime = System.currentTimeMillis();
+        long twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        
+        if (currentTime - lastVerified > twentyFourHours) {
+            // Status expired, assume non-premium for security
+            android.util.Log.w("PremiumFeatureManager", "Premium status cache expired, defaulting to free");
+            return false;
+        }
+        
         return prefs.getBoolean(IS_PREMIUM_KEY, false);
+    }
+    
+    /**
+     * Set cached premium status with timestamp
+     */
+    private void setCachedPremiumStatus(boolean isPremium) {
+        prefs.edit()
+            .putBoolean(IS_PREMIUM_KEY, isPremium)
+            .putLong("premium_last_verified", System.currentTimeMillis())
+            .apply();
     }
     
     /**
@@ -63,7 +218,65 @@ public class PremiumFeatureManager {
      * @param isPremium true if user should have premium access
      */
     public void setPremiumStatus(boolean isPremium) {
-        prefs.edit().putBoolean(IS_PREMIUM_KEY, isPremium).apply();
+        setCachedPremiumStatus(isPremium);
+    }
+    
+    /**
+     * Set premium status with specific product type tracking
+     * This allows the app to know which subscription type is active
+     */
+    public void setPremiumStatusWithProduct(boolean isPremium, String productId) {
+        setCachedPremiumStatus(isPremium);
+        
+        // Store the active product type
+        if (isPremium && productId != null) {
+            prefs.edit().putString("active_premium_product", productId).apply();
+            android.util.Log.i("PremiumFeatureManager", "Premium activated with product: " + productId);
+        } else {
+            prefs.edit().remove("active_premium_product").apply();
+            android.util.Log.i("PremiumFeatureManager", "Premium deactivated");
+        }
+    }
+    
+    /**
+     * Get the currently active premium product type
+     */
+    public String getActivePremiumProduct() {
+        return prefs.getString("active_premium_product", null);
+    }
+    
+    /**
+     * Check if user has specific subscription type
+     */
+    public boolean hasMonthlySubscription() {
+        return "diaryverse_premium_monthly".equals(getActivePremiumProduct());
+    }
+    
+    public boolean hasYearlySubscription() {
+        return "diaryverse_premium_yearly".equals(getActivePremiumProduct());
+    }
+    
+    public boolean hasLifetimeSubscription() {
+        return "diaryverse_premium_lifetime".equals(getActivePremiumProduct());
+    }
+    
+    /**
+     * Get user-friendly subscription type name
+     */
+    public String getSubscriptionTypeName() {
+        String product = getActivePremiumProduct();
+        if (product == null) return "Free";
+        
+        switch (product) {
+            case "diaryverse_premium_monthly":
+                return "Monthly Premium";
+            case "diaryverse_premium_yearly":
+                return "Yearly Premium";
+            case "diaryverse_premium_lifetime":
+                return "Lifetime Premium";
+            default:
+                return "Premium";
+        }
     }
     
     /**
@@ -302,8 +515,144 @@ public class PremiumFeatureManager {
      * @param context The context to show dialog from
      */
     public void showPremiumUpgradeDialog(Context context) {
-        // TODO: Implement actual premium upgrade dialog
-        // For now, this is a placeholder method that can be expanded
-        // to integrate with Google Play Billing or other subscription system
+        // Launch the premium upgrade activity
+        android.content.Intent intent = new android.content.Intent(context, 
+            com.diary.superjournalapp.screens.PremiumUpgradeActivity.class);
+        context.startActivity(intent);
+    }
+    
+    /**
+     * NEW: Get subscription product IDs
+     * 
+     * @return array of subscription product IDs for Google Play
+     */
+    public static String[] getSubscriptionProductIds() {
+        return new String[]{
+            "diaryverse_premium_monthly",
+            "diaryverse_premium_yearly"
+        };
+    }
+    
+    /**
+     * NEW: Get premium subscription prices (will be loaded from Google Play)
+     * 
+     * @return description of available subscription plans
+     */
+    public String getSubscriptionPlansDescription() {
+        return "Choose your DiaryVerse Premium plan:\n\n" +
+               "📅 Monthly Premium - Full access to all features ($1.99/month)\n" +
+               "💰 Yearly Premium - Save 37% with annual billing ($14.99/year)\n" +
+               "👑 Lifetime Premium - Pay once, own forever ($39.99 one-time)\n\n" +
+               "All plans include:\n" +
+               "🔒 Unlimited journal locking\n" +
+               "☁️ Cloud backup & restore\n" +
+               "📄 PDF & text export\n" +
+               "🎨 Premium themes\n" +
+               "⭐ Priority support\n" +
+               "🚫 Ad-free experience";
+    }
+    
+    /**
+     * NEW: Check if testing flags should be disabled for production
+     * 
+     * @return true if app is ready for production
+     */
+    public boolean isProductionReady() {
+        return !ENABLE_LOCK_FOR_TESTING && 
+               !ENABLE_EXPORT_FOR_TESTING && 
+               !ENABLE_BACKUP_FOR_TESTING;
+    }
+    
+    /**
+     * NEW: Get list of features that are currently in testing mode
+     * 
+     * @return list of features with testing enabled
+     */
+    public java.util.List<String> getTestingEnabledFeatures() {
+        java.util.List<String> testingFeatures = new java.util.ArrayList<>();
+        
+        if (ENABLE_LOCK_FOR_TESTING) {
+            testingFeatures.add("Journal Locking");
+        }
+        if (ENABLE_EXPORT_FOR_TESTING) {
+            testingFeatures.add("Export Features");
+        }
+        if (ENABLE_BACKUP_FOR_TESTING) {
+            testingFeatures.add("Backup & Restore");
+        }
+        
+        return testingFeatures;
+    }
+    
+    /**
+     * Force refresh premium status from Google Play
+     * Call this after successful purchases or when user requests refresh
+     */
+    public void refreshPremiumStatus() {
+        try {
+            // Clear cache to force fresh check
+            prefs.edit()
+                .remove("premium_last_check")
+                .remove("premium_last_verified")
+                .apply();
+            
+            // Force new verification
+            hasActiveSubscription();
+            android.util.Log.d("PremiumFeatureManager", "Premium status refresh initiated");
+        } catch (Exception e) {
+            android.util.Log.e("PremiumFeatureManager", "Error refreshing premium status: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Check if premium verification is recent (within 5 minutes)
+     */
+    public boolean isVerificationRecent() {
+        long lastCheck = prefs.getLong("premium_last_check", 0);
+        long currentTime = System.currentTimeMillis();
+        long fiveMinutes = 5 * 60 * 1000;
+        return (currentTime - lastCheck) < fiveMinutes;
+    }
+    
+    /**
+     * Get premium status info for debugging
+     */
+    public String getPremiumStatusInfo() {
+        boolean isPremium = isPremiumUser();
+        long lastVerified = prefs.getLong("premium_last_verified", 0);
+        long lastCheck = prefs.getLong("premium_last_check", 0);
+        boolean isRecentVerification = isVerificationRecent();
+        
+        return String.format(
+            "Premium: %s | Last Verified: %s | Last Check: %s | Recent: %s",
+            isPremium,
+            lastVerified > 0 ? new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date(lastVerified)) : "Never",
+            lastCheck > 0 ? new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date(lastCheck)) : "Never",
+            isRecentVerification
+        );
+    }
+    
+    /**
+     * TESTING HELPER: Simulate premium purchase for testing
+     * Call this to test the upgrade flow
+     */
+    public void simulatePremiumPurchase(Context context) {
+        setPremiumStatus(true);
+        android.widget.Toast.makeText(context, 
+            "🎉 Premium activated! All features unlocked.", 
+            android.widget.Toast.LENGTH_LONG).show();
+        android.util.Log.d("PremiumFeatureManager", "TESTING: Premium status activated");
+    }
+    
+    /**
+     * TESTING HELPER: Simulate free user for testing
+     * Call this to test premium restrictions
+     */
+    public void simulateFreeUser(Context context) {
+        setPremiumStatus(false);
+        android.widget.Toast.makeText(context, 
+            "📱 Free user mode. Premium features restricted.", 
+            android.widget.Toast.LENGTH_LONG).show();
+        android.util.Log.d("PremiumFeatureManager", "TESTING: Free user mode activated");
     }
 }

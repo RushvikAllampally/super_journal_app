@@ -216,8 +216,8 @@ public class JournalLockHelper {
             .setTitle("Premium Feature")
             .setMessage(premiumManager.getUpgradeMessage())
             .setPositiveButton("Upgrade", (dialog, which) -> {
-                // TODO: Launch premium upgrade flow
-                Toast.makeText(context, "Premium upgrade coming soon!", Toast.LENGTH_SHORT).show();
+                // Launch premium upgrade flow
+                premiumManager.showPremiumUpgradeDialog(context);
             })
             .setNegativeButton("Cancel", null)
             .show();

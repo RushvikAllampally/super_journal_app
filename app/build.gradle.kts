@@ -24,8 +24,8 @@ android {
         applicationId = "com.diary.superjournalapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 10
-        versionName = "2.1"
+        versionCode = 13
+        versionName = "2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -92,6 +92,12 @@ dependencies {
     implementation("com.google.http-client:google-http-client-gson:1.44.1")
     implementation("com.google.http-client:google-http-client:1.44.1")
     implementation("androidx.work:work-runtime:2.9.0")
+    
+    // Security - Certificate Pinning
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    
+    // Google Play Billing for Premium Subscriptions
+    implementation("com.android.billingclient:billing:6.2.1")
     
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

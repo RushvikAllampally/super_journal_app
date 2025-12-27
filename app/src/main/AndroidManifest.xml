@@ -56,6 +56,9 @@
             android:name=".screens.RestoreActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.PremiumUpgradeActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.tags.TagManagementActivity"
             android:exported="false" />
         <activity

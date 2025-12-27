@@ -422,8 +422,8 @@ public class ExportJournalsActivity extends AppCompatActivity {
             .setTitle("Premium Feature")
             .setMessage(premiumFeatureManager.getExportUpgradeMessage())
             .setPositiveButton("Upgrade to Premium", (dialog, which) -> {
-                // TODO: Launch premium upgrade activity
-                Toast.makeText(this, "Premium upgrade coming soon!", Toast.LENGTH_SHORT).show();
+                // Launch premium upgrade activity
+                premiumFeatureManager.showPremiumUpgradeDialog(this);
                 finish();
             })
             .setNegativeButton("Go Back", (dialog, which) -> finish())
