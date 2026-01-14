@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp">
+            
+            <TextView
+                android:id="@+id/tag_dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Manage Tags"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
+                
+            <ImageButton
+                android:id="@+id/close_tag_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="Close"
+                android:tint="?attr/colorOnSurface" />
+        </RelativeLayout>
+
+        <!-- Tag input section -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/tag_24"
+            app:startIconTint="?attr/colorPrimary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tag_input_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Add tags (comma-separated)"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_tag_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Tags"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Current tags section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Tags"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/empty_tags_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No tags added yet"
+            android:textStyle="italic"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp">
+            
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:overScrollMode="ifContentScrolls"
+                android:fadeScrollbars="false"
+                android:scrollbarThumbVertical="@color/text_primary"
+                android:scrollbarSize="4dp"
+                android:scrollbarTrackVertical="?attr/colorSurface"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                android:padding="4dp">
+                
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/current_tags_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    app:flexWrap="wrap"
+                    app:alignItems="center"
+                    app:alignContent="flex_start"
+                    app:flexDirection="row"
+                    app:justifyContent="flex_start" />
+                    
+            </androidx.core.widget.NestedScrollView>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Suggested tags section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suggested Tags"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp">
+            
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:overScrollMode="ifContentScrolls"
+                android:fadeScrollbars="false"
+                android:scrollbarThumbVertical="@color/text_primary"
+                android:scrollbarSize="4dp"
+                android:scrollbarTrackVertical="?attr/colorSurface"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                android:padding="4dp">
+                
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/suggested_tags_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    app:flexWrap="wrap"
+                    app:alignItems="center"
+                    app:alignContent="flex_start"
+                    app:flexDirection="row"
+                    app:justifyContent="flex_start" />
+                    
+            </androidx.core.widget.NestedScrollView>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Done button -->
+        <Button
+            android:id="@+id/done_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Done" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

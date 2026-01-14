@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -91,6 +93,12 @@ public class ReminderScreen extends AppCompatActivity {
         quoteTimeIcon = findViewById(R.id.quote_time_icon);
         affirmationTimeIcon = findViewById(R.id.affirmation_time_icon);
         moodTimeIcon = findViewById(R.id.mood_rem_icon);
+
+        // Set up back button
+        View backButton = findViewById(R.id.back_button);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> finish());
+        }
 
         gratitudeNotificationTime = findViewById(R.id.gratitude_notification_time);
         ReflectiveNotificationTime = findViewById(R.id.reflective_notification_time);
@@ -323,12 +331,46 @@ public class ReminderScreen extends AppCompatActivity {
     }
 
 
+    // Check if exact alarm permission is granted (Android 12+)
+    private boolean canScheduleExactAlarms() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            return alarmManager != null && alarmManager.canScheduleExactAlarms();
+        }
+        return true;
+    }
+
+    // Request exact alarm permission
+    private void requestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Please enable exact alarm permission in settings", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     // Function to schedule a single notification
     private void scheduleNotification(String notificationType, int hour, int minute) {
+        // Check if we have permission for exact alarms
+        if (!canScheduleExactAlarms()) {
+            Toast.makeText(this, "Exact alarm permission required for precise notifications", Toast.LENGTH_LONG).show();
+            requestExactAlarmPermission();
+            return;
+        }
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.SECOND, 0);
+        
+        // If the time has already passed today, schedule for tomorrow
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
 
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.putExtra(ApplicationConstants.NOTIFICATION_TYPE, notificationType);
@@ -356,12 +398,25 @@ public class ReminderScreen extends AppCompatActivity {
 
         //end channel creation
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+            getApplicationContext(), 
+            ApplicationConstants.NOTIFICATION_TYPE_REQUEST_CODE.get(notificationType), 
+            intent, 
+            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        
         System.out.println("setting the receiver");
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        // Use exact alarms for precise timing
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            System.out.println("Scheduled exact alarm for " + notificationType + " at " + hour + ":" + minute);
+        }
 
     }
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.fragments.BookmarkedJournalsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bookmarked Journals"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:gravity="center"
+        android:padding="16dp" />
+        
+    <ImageView
+        android:id="@+id/no_bookmarks_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star_big_on"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+        
+    <TextView
+        android:id="@+id/no_bookmarks_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No bookmarked journals yet"
+        android:textSize="18sp"
+        android:fontFamily="@font/balsamiqsans_regular"
+        android:gravity="center"
+        android:padding="16dp"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookmarked_journals_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp" />
+
+</LinearLayout>

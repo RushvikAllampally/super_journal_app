@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8dff5"
+    android:background="?attr/android:colorBackground"
     android:orientation="vertical"
     tools:context=".screens.settings.SettingsScreen">
 
@@ -12,42 +13,64 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:elevation="4dp"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            app:tint="?attr/colorOnSurface" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginStart="8dp"
             android:text="Settings"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textSize="30sp" />
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="12dp">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_btn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/profile_icon" />
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/transparent_profile_icon" />
 
                 <TextView
                     android:id="@+id/display_profile_name"
@@ -58,57 +81,65 @@
                     android:text="Rushvik"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textSize="23sp"
-
+                    android:textColor="?attr/colorOnSurface"
                     />
 
                 <Button
                     android:id="@+id/edit_profile_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
-                    android:backgroundTint="@color/btn_color"
+                    android:layout_marginHorizontal="16dp"
+                    android:backgroundTint="@color/text_secondary"
                     android:text="Edit"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textColor="@color/black" />
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="?attr/colorOnPrimary" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:background="?attr/colorSurface"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="Preferences"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" 
+                    android:textColor="@color/text_primary" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
                 <LinearLayout
                     android:id="@+id/reminder_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/access_alarm_24_black" />
+                        android:src="@drawable/ic_notifications"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -117,13 +148,15 @@
                         android:layout_weight="1"
                         android:text="Reminders"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -131,16 +164,18 @@
                     android:id="@+id/passcode_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/lock_open_24" />
+                        android:src="@drawable/ic_security"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -149,72 +184,277 @@
                         android:layout_weight="1"
                         android:text="Passcode Lock"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
-
+                
                 <LinearLayout
-                    android:id="@+id/export_data_block"
+                    android:id="@+id/export_journals_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/mport_export_24" />
+                        android:src="@drawable/ic_export"
+                        app:tint="@color/icons_color" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Export Journals"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textSize="18sp"
+                            android:textColor="?attr/colorOnSurface" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Premium Feature"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:alpha="0.6" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
+
+                </LinearLayout>
+                
+                <!-- Backup & Restore Section -->
+                <LinearLayout
+                    android:id="@+id/backup_restore_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_backup"
+                        app:tint="@color/icons_color" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Backup &amp; Restore"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textSize="18sp"
+                            android:textColor="?attr/colorOnSurface" />
+
+                        <TextView
+                            android:id="@+id/backup_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Premium Feature"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:textSize="12sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:alpha="0.6" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
+
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/dark_mode_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_dark_mode"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:layout_weight="1"
-                        android:text="Import &amp; Export Data"
+                        android:text="Dark Mode"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/dark_mode_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="?attr/colorOnSurface"
+        android:alpha="0.3"/>
+        
+    <LinearLayout
+                    android:id="@+id/daily_prompts_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:src="@drawable/ic_lightbulb"
+                        app:tint="@color/icons_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:text="Writing Prompts"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/prompts_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="?attr/colorOnSurface"
+        android:alpha="0.3"/>
+        
+    <LinearLayout
+                    android:id="@+id/manage_tags_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/tag_24"
+                        app:tint="@color/icons_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:text="Manage Tags"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
+
+                </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="?attr/colorOnSurface"
+        android:alpha="0.3"/>
+        
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
+                    android:background="?attr/colorSurface"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="16dp"
                     android:text="More options"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black" />
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5" />
 
 
 
@@ -222,16 +462,18 @@
                     android:id="@+id/feed_back_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/message_24" />
+                        android:src="@drawable/ic_feedback"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -240,13 +482,15 @@
                         android:layout_weight="1"
                         android:text="Share Feedback / Contact Us"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -254,16 +498,18 @@
                     android:id="@+id/invite_a_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/card_giftcard_24" />
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -272,13 +518,15 @@
                         android:layout_weight="1"
                         android:text="Invite a friend"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 
@@ -286,16 +534,18 @@
                     android:id="@+id/rate_app_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:backgroundTint="@color/black"
-                        android:src="@drawable/baseline_star_24" />
+                        android:src="@drawable/ic_rate"
+                        app:tint="@color/icons_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -304,13 +554,15 @@
                         android:layout_weight="1"
                         android:text="Rate Our App"
                         android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnSurface" />
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/white"
-                        android:src="@drawable/navigate_next_24_black" />
+                        android:background="?attr/colorSurface"
+                        android:src="@drawable/navigate_next_24_black"
+                        app:tint="?attr/colorOnSurface" />
 
                 </LinearLayout>
 

@@ -5,53 +5,61 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/journal_list_popup_content"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:cardCornerRadius="10dp">
+        android:maxWidth="500dp"
+        android:background="@drawable/popup_card_border"
+        android:elevation="8dp">
 
         <LinearLayout
             android:id="@+id/listview_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingBottom="10dp">
+            android:padding="20dp">
 
+            <!-- Header Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Select the Journal you want to write"
+                    android:text="Create New Journal"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:textAlignment="center"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
+                    
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Choose a journal type to start writing"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
-
+            <!-- Journal List -->
             <ListView
                 android:id="@+id/journal_listView"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:divider="@color/white"
-                android:dividerHeight="4dp"
-                android:paddingHorizontal="15dp"/>
+                android:divider="@android:color/transparent"
+                android:dividerHeight="6dp"
+                android:scrollbars="none" />
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </LinearLayout>

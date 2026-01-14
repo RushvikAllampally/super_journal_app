@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    tools:context=".applock.AppLock">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Title and Instruction -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="40dp">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/lock_open_24"
+                android:tint="?attr/colorPrimary"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/passcode_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Passcode"
+                android:textColor="?attr/colorOnSurface"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/passcode_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please enter your 4-digit passcode"
+                android:textColor="?attr/colorOnSurface"
+                android:alpha="0.7"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+        <!-- Passcode Dots -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp">
+
+            <View
+                android:id="@+id/view_01"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/passcode_dot_empty"
+                android:layout_marginEnd="16dp" />
+
+            <View
+                android:id="@+id/view_02"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/passcode_dot_empty"
+                android:layout_marginEnd="16dp" />
+
+            <View
+                android:id="@+id/view_03"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/passcode_dot_empty"
+                android:layout_marginEnd="16dp" />
+
+            <View
+                android:id="@+id/view_04"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/passcode_dot_empty" />
+        </LinearLayout>
+
+        <!-- Keypad -->
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="4"
+            android:layout_gravity="center"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true">
+
+            <!-- Row 1 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_01"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_02"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="2"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_03"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="3"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Row 2 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_04"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="4"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_05"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="5"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_06"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="6"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Row 3 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_07"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="7"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_08"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="8"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_09"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="9"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Row 4 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_forgot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Forgot"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorError"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <Button
+                    android:id="@+id/btn_0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="0"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnSurface"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="2dp"
+                android:layout_margin="8dp">
+                
+                <ImageButton
+                    android:id="@+id/btn_clear"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_input_delete"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?attr/colorOnSurface"
+                    android:contentDescription="Delete"/>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+    </LinearLayout>
+
+    <!-- Action Buttons at Bottom -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:gravity="center_vertical|end">
+
+        <!-- Need Help Button -->
+        <TextView
+            android:id="@+id/need_help_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Need Help?"
+            android:textColor="?attr/colorPrimary"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="16sp"
+            android:layout_marginEnd="24dp"
+            android:padding="8dp" />
+
+        <!-- Change Passcode Button -->
+        <TextView
+            android:id="@+id/change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Passcode"
+            android:textColor="?attr/colorPrimary"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

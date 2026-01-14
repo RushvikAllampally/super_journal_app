@@ -12,15 +12,16 @@
         />
 
     <item android:id="@+id/nav_add_journal"
-        android:title="data" />
+        android:title=""
+        android:enabled="false" />
 
     <item android:id="@+id/nav_manage"
         android:title="Insights"
         android:icon="@drawable/insights_32"
         />
 
-    <item android:id="@+id/nav_list"
-        android:title="Journals"
+    <item android:id="@+id/nav_library"
+        android:title="Library"
         android:icon="@drawable/journal_list"
         />
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time_period_options">
+        <item>This Month</item>
+        <item>Last Month</item>
+        <item>This Year</item>
+        <item>All Time</item>
+    </string-array>
+    
+    <string-array name="period_options">
+        <item>This Month</item>
+        <item>Last Month</item>
+        <item>This Year</item>
+        <item>All Time</item>
+    </string-array>
+
+    <string-array name="mood_levels">
+        <item>Awful</item>
+        <item>Sad</item>
+        <item>Good</item>
+        <item>Happy</item>
+        <item>Excited</item>
+    </string-array>
+    
+    <string-array name="mood_emojis">
+        <item>😢</item>
+        <item>😔</item>
+        <item>😐</item>
+        <item>😊</item>
+        <item>😁</item>
+    </string-array>
+</resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8dff5"
+    android:background="?attr/android:colorBackground"
     android:orientation="vertical"
     tools:context=".screens.fragments.HomeFragment">
 
@@ -21,25 +21,57 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_margin="5dp"
-            android:background="@drawable/profile_icon_final" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/transparent_profile_icon" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/streak_edit_txt"
-            android:layout_width="40dp"
-            android:layout_height="55dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/streak_img"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="6dp"
-            android:text="45"
-            android:textColor="@color/white"
-            android:textSize="14dp"
-            android:textStyle="bold" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp">
+
+            <FrameLayout
+                android:layout_width="42dp"
+                android:layout_height="42dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/transparent_streak_img" />
+
+                <TextView
+                    android:id="@+id/streak_edit_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="9dp"
+                    android:text="45"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="Streak"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/balsamiqsans_regular" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/rate_mood_icon"
@@ -55,57 +87,91 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="8dp"
         android:elevation="4dp"
         app:cardCornerRadius="15dp">
 
-
         <LinearLayout
+            android:id="@+id/quote_container"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/quote_background"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/hi_quote_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:text="Hi ,Rushvik"
-                android:textColor="@color/white"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/quote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:text="What gets monitored, get improved !!"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
+            <!-- Elegant gradient overlay for better text visibility -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:background="@drawable/quote_text_background"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+                <!-- Greeting text -->
+                <TextView
+                    android:id="@+id/hi_quote_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:text="Hi, User"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
-                    android:id="@+id/quote_author"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/quote"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:text="-- Rushvik"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:text="What gets monitored, gets improved!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="6"
+                    android:lineSpacingExtra="2dp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="end|center_vertical">
+
+                    <TextView
+                        android:id="@+id/quote_author"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:text="-- Rushvik"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:shadowColor="#000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="4" />
+
+                    <ImageButton
+                        android:id="@+id/shareQuoteBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_share"
+                        android:tint="#FFFFFF"
+                        android:scaleType="centerInside"
+                        android:contentDescription="Share Quote" />
+
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
 
 
@@ -114,6 +180,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
+        android:paddingBottom="5dp"
+        android:layout_marginBottom="5dp"
         android:descendantFocusability="blocksDescendants"
         android:scrollbarSize="0dp">
 
@@ -127,33 +195,69 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="4dp">
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="230dp"
-                    android:background="@drawable/final_affirmations"
-                    android:orientation="vertical"
-                    android:padding="15dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/affirmation_card_background"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:text="Today's Affirmation"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                    <!-- Icon -->
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lightbulb"
+                        android:tint="@color/text_secondary"
+                        android:layout_marginEnd="12dp"
+                        android:alpha="0.8" />
 
-                    <TextView
-                        android:id="@+id/affirmation"
-                        android:layout_width="wrap_content"
+                    <!-- Content -->
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:paddingStart="1dp"
-                        android:text="I am confident and capable"
-                        android:textSize="18sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Header -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:text="Daily Affirmation"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:alpha="0.7"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Affirmation text -->
+                        <TextView
+                            android:id="@+id/affirmation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/balsamiqsans_regular"
+                            android:text="I am confident and capable"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="16sp"
+                            android:lineSpacingExtra="2dp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+
+                    </LinearLayout>
+
+                    <!-- Subtle accent -->
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="40dp"
+                        android:background="@color/secondary"
+                        android:alpha="0.3"
+                        android:layout_marginStart="12dp" />
 
                 </LinearLayout>
 
@@ -180,13 +284,14 @@
                         android:padding="5dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/balsamiqsans_regular"
                             android:text="Your Tasks !!"
-                            android:textSize="18dp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -194,13 +299,16 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:tint="?attr/colorOnSurface"
                             android:src="@drawable/unpin_icon" />
 
                         <ImageView
                             android:id="@+id/edit_bullet_journal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:tint="?attr/colorOnSurface"
                             android:src="@drawable/edit_black" />
 
 
@@ -238,6 +346,7 @@
                     android:layout_margin="10dp"
                     android:fontFamily="@font/balsamiqsans_regular"
                     android:text="Recent Journal Entries"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="22sp" />
 
                 <ImageView
@@ -247,11 +356,29 @@
                     android:layout_gravity="center"
                     android:src="@drawable/first_journal_img" />
 
+                <TextView
+                    android:id="@+id/nothing_found_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Start your journaling journey!\nTap the + button to write your first entry"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:textAlignment="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="15dp"
+                    android:paddingBottom="25dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:visibility="gone" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/home_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="30dp"
+                    android:paddingBottom="30dp"
+                    android:clipToPadding="false" />
 
             </LinearLayout>
 

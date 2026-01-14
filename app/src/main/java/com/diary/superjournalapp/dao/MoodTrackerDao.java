@@ -21,6 +21,9 @@ public interface MoodTrackerDao {
 
     @Query("select * from mood_tracker where created_date BETWEEN :moodCreatedDateStart AND :moodCreatedDateEnd order by created_date desc")
     List<MoodTracker> getAllMoods(Date moodCreatedDateStart, Date moodCreatedDateEnd);
+    
+    @Query("select * from mood_tracker order by created_date desc")
+    List<MoodTracker> getAllMoods();
 
     @Query("select * from mood_tracker where mood_date = :moodDate")
     MoodTracker findMoodEntryByMoodDate(String moodDate);

@@ -26,18 +26,22 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.diary.superjournalapp.applock.AppLock;
+import com.diary.superjournalapp.base.ThemedActivity;
+import com.diary.superjournalapp.adapters.JournalPopupAdapter;
 import com.diary.superjournalapp.constants.ApplicationConstants;
+import com.diary.superjournalapp.screens.fragments.BookmarkedJournalsFragment;
 import com.diary.superjournalapp.screens.fragments.CalenderViewFragment;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
 import com.diary.superjournalapp.screens.fragments.JournalsDataFragment;
+import com.diary.superjournalapp.screens.fragments.LibraryFragment;
+import com.diary.superjournalapp.screens.fragments.TagSearchFragment;
 import com.diary.superjournalapp.screens.introScreens.WelcomeScreen;
 import com.diary.superjournalapp.screens.journals.BulletJournal;
 import com.diary.superjournalapp.screens.journals.DreamJournal;
@@ -48,7 +52,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ThemedActivity {
 
     static final int REQUEST_CODE = 1;
     private static final int PERMISSION_REQUEST_POST_NOTIFICATIONS = 1;
@@ -84,10 +88,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Disable night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = getSharedPreferences(ApplicationConstants.MY_APP_NAME, Context.MODE_PRIVATE);
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
         // Set up your ListView and its adapter here
         String[] journalListViewData = {ApplicationConstants.REFLECTIVE_JOURNAL,ApplicationConstants.GRATITUDE_JOURNAL, ApplicationConstants.BULLET_JOURNAL, ApplicationConstants.DREAM_JOURNAL};
 
-        // Create an ArrayAdapter to populate the ListView with data
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.textView, journalListViewData);
+        // Create the custom JournalPopupAdapter to populate the ListView with data and appropriate icons
+        JournalPopupAdapter adapter = new JournalPopupAdapter(this, journalListViewData);
 
         // Set the adapter for the ListView
         journalsListView.setAdapter(adapter);
@@ -212,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
                     loadFrag(new JournalsDataFragment(), false);
                     return true;
 
-                } else if (selectedId == R.id.nav_list) {
-                    loadFrag(new JournalListFragment(), false);
+                } else if (selectedId == R.id.nav_library) {
+                    // Show the library fragment which manages all journal views
+                    loadFrag(LibraryFragment.newInstance(), false);
                     return true;
-
                 }
                 return false;
             }
@@ -242,7 +242,10 @@ public class MainActivity extends AppCompatActivity {
                         bottomNavigationItemView.getMenu().getItem(1).setChecked(true);
                     } else if (currentFragment instanceof JournalsDataFragment) {
                         bottomNavigationItemView.getMenu().getItem(3).setChecked(true);
-                    } else if (currentFragment instanceof JournalListFragment) {
+                    } else if (currentFragment instanceof LibraryFragment 
+                             || currentFragment instanceof JournalListFragment 
+                             || currentFragment instanceof BookmarkedJournalsFragment
+                             || currentFragment instanceof TagSearchFragment) {
                         bottomNavigationItemView.getMenu().getItem(4).setChecked(true);
                     }
                 }

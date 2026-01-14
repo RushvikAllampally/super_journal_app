@@ -30,6 +30,18 @@ public class JournalUtils {
 
         return formattedDate;
     }
+    
+    /**
+     * Get a compact date format showing month, day and year
+     * Format: MMM d, yyyy (e.g., "Oct 5, 2025")
+     * 
+     * @param date The date to format
+     * @return Formatted date string
+     */
+    public static String getCompactDateFormat(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yy");
+        return dateFormat.format(date);
+    }
 
     public static String getMonthFromJavaDate(Date date) {
 
@@ -94,7 +106,9 @@ public class JournalUtils {
         lastEntryCalendar.setTimeInMillis(lastEntryDateMillis);
 
         if (lastEntryDateMillis != -1 && isSameDay(currentCalendar, lastEntryCalendar)) {
-            return 1;
+            // If last entry was today, return current streak (don't reset)
+            int currentStreak = preferences.getInt(ApplicationConstants.STREAK_PREF_KEY, 0);
+            return currentStreak;
         } else if (!isStreakContinued) {
 
             SharedPreferences.Editor editor = preferences.edit();

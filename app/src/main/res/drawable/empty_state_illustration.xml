@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Background circle -->
+    <path
+        android:fillColor="#F5F7FA"
+        android:pathData="M100,100m-95,0a95,95 0,1,1 190,0a95,95 0,1,1 -190,0"/>
+    
+    <!-- Magnifying glass handle -->
+    <path
+        android:strokeColor="#5B8BDF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:pathData="M130,130 L155,155"/>
+    
+    <!-- Magnifying glass circle -->
+    <path
+        android:strokeColor="#5B8BDF"
+        android:strokeWidth="6"
+        android:fillColor="#FFFFFF"
+        android:pathData="M100,85m-35,0a35,35 0,1,1 70,0a35,35 0,1,1 -70,0"/>
+    
+    <!-- Empty box/document inside magnifying glass -->
+    <path
+        android:strokeColor="#B0BEC5"
+        android:strokeWidth="3"
+        android:fillColor="#F5F7FA"
+        android:pathData="M85,75 L115,75 L115,95 L85,95 Z"/>
+    
+    <!-- Sad/empty lines inside box -->
+    <path
+        android:strokeColor="#CFD8DC"
+        android:strokeWidth="2"
+        android:pathData="M90,82 L110,82"/>
+    <path
+        android:strokeColor="#CFD8DC"
+        android:strokeWidth="2"
+        android:pathData="M90,88 L110,88"/>
+    
+    <!-- Question mark or "X" to show nothing -->
+    <path
+        android:fillColor="#FF6B9D"
+        android:pathData="M95,70 m-4,0 a4,4 0,1,1 8,0 a4,4 0,1,1 -8,0"/>
+    <path
+        android:fillColor="#FF6B9D"
+        android:pathData="M105,70 m-4,0 a4,4 0,1,1 8,0 a4,4 0,1,1 -8,0"/>
+    
+    <!-- Decorative floating elements -->
+    <path
+        android:fillColor="#FFB84D"
+        android:fillAlpha="0.6"
+        android:pathData="M45,50 m-6,0 a6,6 0,1,1 12,0 a6,6 0,1,1 -12,0"/>
+    
+    <path
+        android:fillColor="#A78BFA"
+        android:fillAlpha="0.6"
+        android:pathData="M155,45 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+    
+    <path
+        android:fillColor="#5B8BDF"
+        android:fillAlpha="0.4"
+        android:pathData="M40,140 m-4,0 a4,4 0,1,1 8,0 a4,4 0,1,1 -8,0"/>
+    
+    <path
+        android:fillColor="#FF6B9D"
+        android:fillAlpha="0.4"
+        android:pathData="M160,125 m-4,0 a4,4 0,1,1 8,0 a4,4 0,1,1 -8,0"/>
+    
+    <!-- Small stars for decoration -->
+    <path
+        android:fillColor="#FFB84D"
+        android:pathData="M35,95 L37,100 L32,98 L37,96 Z"/>
+    
+    <path
+        android:fillColor="#A78BFA"
+        android:pathData="M165,85 L167,90 L162,88 L167,86 Z"/>
+    
+    <!-- Additional decorative circles for "empty" feel -->
+    <path
+        android:strokeColor="#E0E0E0"
+        android:strokeWidth="2"
+        android:pathData="M100,100m-70,0a70,70 0,1,1 140,0a70,70 0,1,1 -140,0"/>
+        
+</vector>

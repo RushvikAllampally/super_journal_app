@@ -17,7 +17,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.graphics.Color;
+import android.app.Dialog;
 
+import java.util.List;
+import java.util.Random;
+
+import com.diary.superjournalapp.utils.PromptUtils;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,76 +38,124 @@ import com.diary.superjournalapp.constants.ApplicationConstants;
 import com.diary.superjournalapp.database.DatabaseHelper;
 import com.diary.superjournalapp.entity.Journal;
 import com.diary.superjournalapp.entity.JournalCategories.ReflectiveJournalEntity;
+import com.diary.superjournalapp.screens.fragments.BookmarkedJournalsFragment;
 import com.diary.superjournalapp.screens.fragments.HomeFragment;
 import com.diary.superjournalapp.screens.fragments.JournalListFragment;
+import com.diary.superjournalapp.utils.LiveTextStyler;
 import com.diary.superjournalapp.utils.JournalUtils;
+import com.diary.superjournalapp.utils.TagManager;
 import com.diary.superjournalapp.utils.TextEditorUtils;
+import com.diary.superjournalapp.utils.JournalLockHelper;
+import com.diary.superjournalapp.dialogs.TagDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vanniktech.emoji.EmojiPopup;
+import jp.wasabeef.richeditor.RichEditor;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 public class ReflectiveJournal extends AppCompatActivity {
 
-    private ImageView closeJournalButton;
-
     private Button saveJournalButton;
-    private ImageView calenderImage;
-    private TextView dateState;
+    private ImageView closeJournalButton;
+    private ImageView journalCalenderIconReflective;
+    private ImageButton manageTagsButton;
     private TextView selectJournalDate;
+    private TextView selectedJournalDate;
     private EditText journalTitle;
-    private EditText journalContent;
-    private ReflectiveJournalEntity reflectiveJournalEntity;
+    private RichEditor journalContent;
+    private TextView placeholderTextView;
+    private TextView wordCountTextView;
     private Journal journal;
-    private ImageButton deleteIcon;
-
-    private BottomSheetDialog bottomSheetDialog;
-    private ImageButton colorPalette;
-    private ImageButton textStylesBtn;
-    private ImageButton emojiesBtn;
+    private ReflectiveJournalEntity reflectiveJournalEntity;
+    private ImageButton reflectiveDeleteIcon;
+    private ImageButton promptIcon;
     private DatabaseHelper databaseHelper;
-    private Date selectedDate = null;
-
+    private ImageView calenderImage;
+    
+    // Formatting buttons
+    private ImageButton undoButton, redoButton;
+    private Button boldButton, italicButton, underlineButton;
+    private Button heading1Button, heading2Button;
+    private ImageButton bulletButton;
+    private Button numbersButton;
+    private Button textColorButton;
+    private Date selectedDate;
+    private TagManager tagManager;
+    private ArrayList<String> temporaryTags = new ArrayList<>();  // For unsaved journals
+    
+    // Lock feature
+    private ImageButton lockJournalButton;
+    private JournalLockHelper lockHelper;
+    private ActivityResultLauncher<Intent> authLauncher;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reflective_journal);
-
-        final Calendar calendar = Calendar.getInstance();
-
+        
         journal = new Journal();
         databaseHelper = DatabaseHelper.getDb(this);
+        tagManager = new TagManager(this);
+        
+        // Initialize lock helper
+        lockHelper = new JournalLockHelper(this);
+        
+        // Setup authentication launcher BEFORE using it
+        setupAuthenticationLauncher();
 
+        // Initialize UI components
         closeJournalButton = findViewById(R.id.close_journal_reflective);
-        saveJournalButton = findViewById(R.id.save_journal_reflective);
-        calenderImage = findViewById(R.id.journal_calender_icon_reflective);
-        dateState = findViewById(R.id.journal_date_state_reflective);
+        journalCalenderIconReflective = findViewById(R.id.journal_calender_icon_reflective);
         selectJournalDate = findViewById(R.id.selected_journal_date_reflective);
+        selectedJournalDate = findViewById(R.id.selected_journal_date_reflective);
         journalTitle = findViewById(R.id.journal_title_reflective);
         journalContent = findViewById(R.id.journal_content_reflective);
-        deleteIcon = findViewById(R.id.reflective_delete_icon);
-        colorPalette = findViewById(R.id.reflective_color_palette);
-        textStylesBtn = findViewById(R.id.reflective_text_style_icon);
-        emojiesBtn = findViewById(R.id.reflective_emoji_icon);
-
-        EmojiPopup popup = EmojiPopup.Builder
-                .fromRootView(findViewById(R.id.reflective_journal_root)).build(journalContent);
-        emojiesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popup.toggle();
+        placeholderTextView = findViewById(R.id.editor_placeholder);
+        wordCountTextView = findViewById(R.id.word_count);
+        reflectiveDeleteIcon = findViewById(R.id.reflective_delete_icon);
+        promptIcon = findViewById(R.id.reflective_prompt_icon);
+        manageTagsButton = findViewById(R.id.manage_tags_button);
+        lockJournalButton = findViewById(R.id.lock_journal_button);
+        calenderImage = findViewById(R.id.journal_calender_icon_reflective);
+        saveJournalButton = findViewById(R.id.save_journal_reflective);
+        
+        // Initialize formatting buttons
+        undoButton = findViewById(R.id.action_undo);
+        redoButton = findViewById(R.id.action_redo);
+        boldButton = findViewById(R.id.action_bold);
+        italicButton = findViewById(R.id.action_italic);
+        underlineButton = findViewById(R.id.action_underline);
+        heading1Button = findViewById(R.id.action_heading1);
+        heading2Button = findViewById(R.id.action_heading2);
+        bulletButton = findViewById(R.id.action_bullet);
+        numbersButton = findViewById(R.id.action_numbers);
+        textColorButton = findViewById(R.id.action_text_color);
+        
+        // Setup Rich Editor
+        setupRichEditor();
+        setupFormattingButtons();
+        
+        // Set up prompt icon click listener
+        promptIcon.setVisibility(View.VISIBLE);
+        promptIcon.setOnClickListener(v -> {
+            // Only show prompts if they're enabled in settings
+            if (PromptUtils.arePromptsEnabled(this)) {
+                showRichEditorPrompt();
+            } else {
+                Toast.makeText(this, "Prompts are disabled in settings", Toast.LENGTH_SHORT).show();
             }
         });
-
-        colorPalette.setOnClickListener(view -> {
-            TextEditorUtils.colorPaletteOnClickListener(bottomSheetDialog, journalContent, ReflectiveJournal.this);
-        });
-
-        textStylesBtn.setOnClickListener(view -> {
-            TextEditorUtils.textStylesOnClickListener(bottomSheetDialog, journalContent, ReflectiveJournal.this);
+        
+        // Set up tag management
+        manageTagsButton.setOnClickListener(v -> {
+            showTagsDialog();
         });
 
 
@@ -113,9 +173,10 @@ public class ReflectiveJournal extends AppCompatActivity {
 
                 journalTitle.setText(reflectiveJournalEntity.getTitle());
 
-                /// Convert the HTML-formatted string back to a Spannable
-                Spanned spanned = Html.fromHtml(reflectiveJournalEntity.getJournalContent(), Html.FROM_HTML_MODE_LEGACY, null, null);
-                journalContent.setText(spanned);
+                // Load HTML content directly into rich editor
+                journalContent.setHtml(reflectiveJournalEntity.getJournalContent());
+                
+                // Load journal content normally
 
                 // Define the desired date format
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMMM yyyy", Locale.ENGLISH);
@@ -127,19 +188,22 @@ public class ReflectiveJournal extends AppCompatActivity {
                 selectedDate = reflectiveJournalEntity.getJournalCreatedOn();
 
             } else {
+                Calendar calendar = Calendar.getInstance();
                 selectJournalDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + ", " + getMonthName(String.valueOf(calendar.get(Calendar.MONTH) + 1)) + " " + calendar.get(Calendar.YEAR));
+                
+                // New journal
             }
         }
+        
+        // Setup lock button
+        setupLockButton();
 
 
-        closeJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showConfirmationDialog();
-            }
+        closeJournalButton.setOnClickListener(view -> {
+            showConfirmationDialog();
         });
 
-        deleteIcon.setOnClickListener(new View.OnClickListener() {
+        reflectiveDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDeleteConfirmationDialog(databaseHelper, reflectiveJournalEntity);
@@ -149,6 +213,7 @@ public class ReflectiveJournal extends AppCompatActivity {
         calenderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
                 int y = calendar.get(Calendar.YEAR);
                 int m = calendar.get(Calendar.MONTH);
                 int d = calendar.get(Calendar.DAY_OF_MONTH);
@@ -170,10 +235,8 @@ public class ReflectiveJournal extends AppCompatActivity {
             }
         });
 
-        saveJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveJournalDetails();
+        saveJournalButton.setOnClickListener(view -> {
+            if (saveJournalDetails(true)) {
                 finish();
             }
         });
@@ -182,28 +245,81 @@ public class ReflectiveJournal extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        saveJournalDetails();
-
+        // Show confirmation dialog asking if the user wants to save or discard
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save Changes");
+        builder.setMessage("Would you like to save your changes before exiting?");
+        
+        // Save and exit
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            if (saveJournalDetails(false)) {
+                super.onBackPressed();
+            }
+        });
+        
+        // Discard and exit
+        builder.setNegativeButton("Discard", (dialog, which) -> {
+            super.onBackPressed();
+        });
+        
+        // Cancel (continue editing)
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
+            // Do nothing, stay in editor
+            dialog.dismiss();
+        });
+        
+        builder.show();
     }
 
     private void saveJournalDetails() {
-        String title = journalTitle.getText().toString();
-        String content = journalContent.getText().toString();
+        saveJournalDetails(true);
+    }
 
+    private boolean saveJournalDetails(boolean shouldFinish) {
+        String title = journalTitle.getText().toString();
+        String content = "";
+        String html = journalContent.getHtml();
+        if (html != null) {
+            content = Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        }
+
+        // Check if title is empty
         if (title.isEmpty()) {
-            Toast.makeText(ReflectiveJournal.this, "Journal Title can't be Empty", Toast.LENGTH_LONG).show();
-            return;
-        } else if (content.isEmpty()) {
-            Toast.makeText(ReflectiveJournal.this, "Journal Content can't be Empty", Toast.LENGTH_LONG).show();
-            return;
+            // Show alert dialog instead of toast for better UX
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Missing Title");
+            builder.setMessage("Please enter a title for your journal entry before saving.");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // Focus on the title field
+                journalTitle.requestFocus();
+            });
+            builder.show();
+            return false;
+        }
+
+        // Check if content is empty
+        if (content.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Missing Content");
+            builder.setMessage("Please write something in your journal before saving.");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // Focus on the content field
+                journalContent.focusEditor();
+            });
+            builder.show();
+            return false;
         }
 
         journal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         journal.setJournalCategory(ApplicationConstants.REFLECTIVE_JOURNAL);
 
-        int contentLength = (content.length() > 100) ? 100 : content.length();
-        journal.setJournalStartText(content.substring(0, contentLength));
+        // Safely handle content length and substring
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            journal.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            journal.setJournalStartText("");
+        }
         journal.setTitle(title);
 
         long journalId;
@@ -218,23 +334,47 @@ public class ReflectiveJournal extends AppCompatActivity {
 
         reflectiveJournal.setJournalCreatedOn(selectedDate == null ? new Date() : selectedDate);
         reflectiveJournal.setJournalCategory(ApplicationConstants.REFLECTIVE_JOURNAL);
-        reflectiveJournal.setJournalStartText(content.substring(0, contentLength));
+        
+        // Safely handle content for journal start text
+        if (!content.isEmpty()) {
+            int contentLength = Math.min(content.length(), 100);
+            reflectiveJournal.setJournalStartText(content.substring(0, contentLength));
+        } else {
+            reflectiveJournal.setJournalStartText("");
+        }
+        
         reflectiveJournal.setTitle(title);
-        reflectiveJournal.setJournalContent(Html.toHtml(new SpannableStringBuilder((Spanned) journalContent.getText())));
+        
+        // Safely set HTML content
+        String htmlContent = journalContent.getHtml();
+        reflectiveJournal.setJournalContent(htmlContent != null ? htmlContent : "");
         reflectiveJournal.setJournalId(journalId);
 
         if (journal.getJournalId() == 0) {
             databaseHelper.reflectiveJournalContentDao().insert(reflectiveJournal);
+            
+            // No need for temporary tag handling - the new system manages this directly
         } else {
             databaseHelper.reflectiveJournalContentDao().updateReflectiveJournalEntity(reflectiveJournal);
         }
 
         JournalUtils.updateStreak(ReflectiveJournal.this);
         HomeFragment.notifyHomeRecyclerViewChanges();
+        
+        // Save temporary tags if journal was just created
+        if (!temporaryTags.isEmpty()) {
+            for (String tagName : temporaryTags) {
+                tagManager.addTagToJournal(journalId, tagName);
+            }
+            temporaryTags.clear();  // Clear after saving
+        }
 
         Toast.makeText(ReflectiveJournal.this, "Journal Saved Successfully", Toast.LENGTH_LONG).show();
+        return true;
     }
 
+    // No need for temporary tags with the new system
+    
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Discard Changes");
@@ -258,7 +398,88 @@ public class ReflectiveJournal extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void showDeleteConfirmationDialog(DatabaseHelper databaseHelper, ReflectiveJournalEntity reflectiveJournalEntity) {
+    private void showRichEditorPrompt() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.prompt_dialog_layout);
+        
+        TextView dialogTitle = dialog.findViewById(R.id.dialog_title);
+        TextView promptText = dialog.findViewById(R.id.prompt_text);
+        Button newPromptButton = dialog.findViewById(R.id.new_prompt_button);
+        Button usePromptButton = dialog.findViewById(R.id.use_prompt_button);
+        
+        // Set dialog title
+        dialogTitle.setText(ApplicationConstants.REFLECTIVE_JOURNAL + " Prompt");
+        
+        // Add subtitle/explanation
+        TextView dialogSubtitle = dialog.findViewById(R.id.dialog_subtitle);
+        if (dialogSubtitle != null) {
+            dialogSubtitle.setText("Select a writing prompt to inspire your journal entry");
+            dialogSubtitle.setVisibility(View.VISIBLE);
+        }
+        
+        // Get prompts for this journal type
+        List<String> prompts = ApplicationConstants.REFLECTIVE_PROMPTS;
+        
+        // Show a random prompt
+        if (prompts != null && !prompts.isEmpty()) {
+            Random random = new Random();
+            int index = random.nextInt(prompts.size());
+            String randomPrompt = prompts.get(index);
+            promptText.setText(randomPrompt);
+        }
+        
+        // Get a new prompt when clicking "New Prompt" button
+        newPromptButton.setOnClickListener(view -> {
+            if (prompts != null && !prompts.isEmpty()) {
+                Random random = new Random();
+                int index = random.nextInt(prompts.size());
+                String randomPrompt = prompts.get(index);
+                promptText.setText(randomPrompt);
+            }
+        });
+        
+        // Use the prompt
+        usePromptButton.setOnClickListener(view -> {
+            String prompt = promptText.getText().toString();
+            
+            // Set the title
+            journalTitle.setText(prompt);
+            
+            // Set cursor to the end of text to make it clear it's still editable
+            journalTitle.setSelection(journalTitle.getText().length());
+            journalTitle.requestFocus();
+            
+            // After a small delay, focus on the content editor
+            journalTitle.postDelayed(() -> journalContent.focusEditor(), 1000);
+            
+            dialog.dismiss();
+            Toast.makeText(this, "Prompt applied as title", Toast.LENGTH_SHORT).show();
+        });
+        
+        dialog.show();
+    }
+    
+    /**
+     * Show the tags management dialog
+     */
+    private void showTagsDialog() {
+        if (journal != null && journal.getJournalId() > 0) {
+            // Saved journal - use database mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstance(journal.getJournalId());
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        } else {
+            // Unsaved journal - use temporary mode
+            TagDialogFragment dialogFragment = TagDialogFragment.newInstanceTemporary(
+                temporaryTags,
+                updatedTags -> {
+                    temporaryTags = updatedTags;
+                }
+            );
+            dialogFragment.show(getSupportFragmentManager(), "tag_dialog");
+        }
+    }
+    
+    private void showDeleteConfirmationDialog(DatabaseHelper dbHelper, ReflectiveJournalEntity journalEntity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete Journal");
         builder.setMessage("Are you sure you want to delete journal ?");
@@ -285,5 +506,340 @@ public class ReflectiveJournal extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
+    
+    private void setupRichEditor() {
+        journalContent.setEditorFontSize(16);
+        journalContent.setPadding(16, 16, 16, 16);
+        journalContent.setBackgroundColor(Color.TRANSPARENT);
+        
+        // Set text color based on theme
+        int textColor = getResources().getColor(R.color.journal_editor_text, getTheme());
+        journalContent.setEditorFontColor(textColor);
+        
+        journalContent.setPlaceholder("Reflect on your day...");
+        
+        journalContent.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+            @Override
+            public void onTextChange(String text) {
+                updateWordCount(text);
+                updatePlaceholderVisibility();
+            }
+        });
+        
+        // Add decoration change listener to sync toolbar button states with actual formatting
+        journalContent.setOnDecorationChangeListener(new RichEditor.OnDecorationStateListener() {
+            @Override
+            public void onStateChangeListener(String text, List<RichEditor.Type> types) {
+                updateToolbarButtonStates(types);
+            }
+        });
+        
+        // Add text watcher to title for placeholder visibility
+        journalTitle.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updatePlaceholderVisibility();
+            }
+            
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+        
+        journalContent.focusEditor();
+    }
+    
+    private void updatePlaceholderVisibility() {
+        String titleText = journalTitle.getText().toString().trim();
+        String contentHtml = journalContent.getHtml();
+        if (contentHtml == null) {
+            contentHtml = "";
+        }
+        String contentText = Html.fromHtml(contentHtml, Html.FROM_HTML_MODE_LEGACY).toString().trim();
+        
+        // Hide placeholder if either title or content has text
+        if (!titleText.isEmpty() || (!contentText.isEmpty() && !contentHtml.equals("<br>"))) {
+            placeholderTextView.setVisibility(View.GONE);
+        } else {
+            placeholderTextView.setVisibility(View.VISIBLE);
+        }
+    }
+    
+    private void setupFormattingButtons() {
+        undoButton.setOnClickListener(v -> journalContent.undo());
+        redoButton.setOnClickListener(v -> journalContent.redo());
+        
+        // Toggle buttons with immediate visual feedback
+        boldButton.setOnClickListener(v -> {
+            boldButton.setSelected(!boldButton.isSelected());
+            journalContent.setBold();
+        });
+        
+        italicButton.setOnClickListener(v -> {
+            italicButton.setSelected(!italicButton.isSelected());
+            journalContent.setItalic();
+        });
+        
+        underlineButton.setOnClickListener(v -> {
+            underlineButton.setSelected(!underlineButton.isSelected());
+            journalContent.setUnderline();
+        });
+        
+        // Headings - toggle with immediate feedback
+        heading1Button.setOnClickListener(v -> {
+            if (!heading1Button.isSelected()) {
+                heading1Button.setSelected(true);
+                heading2Button.setSelected(false);
+                journalContent.setHeading(1);
+            } else {
+                heading1Button.setSelected(false);
+                journalContent.setHeading(0);
+            }
+        });
+        
+        heading2Button.setOnClickListener(v -> {
+            if (!heading2Button.isSelected()) {
+                heading2Button.setSelected(true);
+                heading1Button.setSelected(false);
+                journalContent.setHeading(2);
+            } else {
+                heading2Button.setSelected(false);
+                journalContent.setHeading(0);
+            }
+        });
+        
+        // Lists - toggle with immediate feedback
+        bulletButton.setOnClickListener(v -> {
+            bulletButton.setSelected(!bulletButton.isSelected());
+            if (bulletButton.isSelected()) {
+                numbersButton.setSelected(false);
+            }
+            journalContent.setBullets();
+        });
+        
+        numbersButton.setOnClickListener(v -> {
+            numbersButton.setSelected(!numbersButton.isSelected());
+            if (numbersButton.isSelected()) {
+                bulletButton.setSelected(false);
+            }
+            journalContent.setNumbers();
+        });
+        
+        textColorButton.setOnClickListener(v -> showColorPicker());
+    }
+    
+    private void updateWordCount(String htmlContent) {
+        if (htmlContent == null) {
+            wordCountTextView.setText("0 words");
+            return;
+        }
+        
+        String plainText = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY).toString();
+        String[] words = plainText.trim().split("\\s+");
+        int wordCount = plainText.trim().isEmpty() ? 0 : words.length;
+        wordCountTextView.setText(wordCount + (wordCount == 1 ? " word" : " words"));
+    }
+    
+    private void showColorPicker() {
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.setContentView(R.layout.dialog_color_picker);
+        dialog.show();
+        
+        GridLayout colorGrid = dialog.findViewById(R.id.color_grid);
+        final int[] colors = {
+            Color.BLACK, Color.DKGRAY, Color.GRAY, Color.WHITE,
+            Color.RED, Color.rgb(255, 100, 100), Color.rgb(255, 150, 150),
+            Color.GREEN, Color.rgb(144, 238, 144), Color.rgb(152, 251, 152),
+            Color.BLUE, Color.rgb(135, 206, 250), Color.rgb(173, 216, 230),
+            Color.rgb(138, 43, 226), Color.MAGENTA, Color.rgb(221, 160, 221),
+            Color.rgb(165, 42, 42), Color.rgb(210, 105, 30), Color.rgb(244, 164, 96)
+        };
+        
+        colorGrid.setColumnCount(3);
+        colorGrid.setRowCount((colors.length + 2) / 3);
+        
+        for (int color : colors) {
+            Button colorButton = new Button(this);
+            colorButton.setBackgroundColor(color);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 100;
+            params.height = 100;
+            params.setMargins(8, 8, 8, 8);
+            colorButton.setLayoutParams(params);
+            colorButton.setOnClickListener(v -> {
+                journalContent.setTextColor(color);
+                textColorButton.setTextColor(color);
+                dialog.dismiss();
+            });
+            colorGrid.addView(colorButton);
+        }
+        
+        Button cancelButton = dialog.findViewById(R.id.btn_cancel_color);
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+    }
+    
+    /**
+     * Update toolbar button states based on the current formatting at cursor position
+     * This is called by RichEditor's decoration change listener
+     */
+    private void updateToolbarButtonStates(List<RichEditor.Type> types) {
+        // Reset all button states
+        boldButton.setSelected(false);
+        italicButton.setSelected(false);
+        underlineButton.setSelected(false);
+        heading1Button.setSelected(false);
+        heading2Button.setSelected(false);
+        bulletButton.setSelected(false);
+        numbersButton.setSelected(false);
+        
+        // Set button states based on active formatting
+        for (RichEditor.Type type : types) {
+            switch (type) {
+                case BOLD:
+                    boldButton.setSelected(true);
+                    break;
+                case ITALIC:
+                    italicButton.setSelected(true);
+                    break;
+                case UNDERLINE:
+                    underlineButton.setSelected(true);
+                    break;
+                case H1:
+                    heading1Button.setSelected(true);
+                    break;
+                case H2:
+                    heading2Button.setSelected(true);
+                    break;
+                case ORDEREDLIST:
+                    numbersButton.setSelected(true);
+                    break;
+                case UNORDEREDLIST:
+                    bulletButton.setSelected(true);
+                    break;
+            }
+        }
+    }
+    
+    // ==================== Lock Feature Methods ====================
+    
+    /**
+     * Setup authentication launcher for lock feature
+     */
+    private void setupAuthenticationLauncher() {
+        authLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    boolean isUnlock = data.getBooleanExtra("journal_unlock", false);
+                    boolean isAccess = data.getBooleanExtra("journal_access", false);
+                    
+                    if (isUnlock) {
+                        // Handle permanent unlock - reload journal from database
+                        journal = databaseHelper.journalDao().getMainJournalById(journal.getJournalId());
+                        updateLockButtonIcon();
+                        Toast.makeText(ReflectiveJournal.this, 
+                            "Journal permanently unlocked", Toast.LENGTH_SHORT).show();
+                        
+                        // Notify all fragments to refresh their lists
+                        JournalListFragment.notifyJournalListFragment();
+                        BookmarkedJournalsFragment.notifyBookmarksChanged();
+                        HomeFragment.notifyHomeRecyclerViewChanges();
+                    } else if (isAccess) {
+                        // Handle access authentication - journal opened, no status change
+                        Toast.makeText(ReflectiveJournal.this, 
+                            "Journal opened", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // Authentication failed
+                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        );
+    }
+    
+    /**
+     * Setup lock button click listener
+     */
+    private void setupLockButton() {
+        // Hide lock button for new journals (not saved yet)
+        if (journal.getJournalId() == 0) {
+            lockJournalButton.setVisibility(View.GONE);
+            return;
+        }
+        
+        lockJournalButton.setVisibility(View.VISIBLE);
+        updateLockButtonIcon();
+        
+        lockJournalButton.setOnClickListener(v -> {
+            lockHelper.toggleJournalLock(journal, this, authLauncher, 
+                new JournalLockHelper.LockToggleCallback() {
+                    @Override
+                    public void onLockToggled(boolean isNowLocked) {
+                        updateLockButtonIcon();
+                        // Reload journal to get updated lock status
+                        journal = databaseHelper.journalDao().getMainJournalById(journal.getJournalId());
+                    }
+                    
+                    @Override
+                    public void onAuthenticationRequired() {
+                        // Authentication dialog will be shown automatically
+                    }
+                    
+                    @Override
+                    public void onSetupRequired() {
+                        // Setup dialog will be shown automatically
+                    }
+                });
+        });
+    }
+    
+    /**
+     * Update lock button icon based on journal lock status
+     */
+    private void updateLockButtonIcon() {
+        if (journal != null && journal.isLocked()) {
+            lockJournalButton.setImageResource(android.R.drawable.ic_lock_lock);
+        } else {
+            lockJournalButton.setImageResource(android.R.drawable.ic_lock_idle_lock);
+        }
+    }
+    
+    /**
+     * Disable editing for locked journals
+     */
+    private void disableEditing() {
+        journalTitle.setEnabled(false);
+        journalContent.setInputEnabled(false);
+        saveJournalButton.setEnabled(false);
+        // Disable formatting buttons
+        boldButton.setEnabled(false);
+        italicButton.setEnabled(false);
+        underlineButton.setEnabled(false);
+        heading1Button.setEnabled(false);
+        heading2Button.setEnabled(false);
+        bulletButton.setEnabled(false);
+        numbersButton.setEnabled(false);
+        textColorButton.setEnabled(false);
+    }
+    
+    /**
+     * Enable editing for unlocked journals
+     */
+    private void enableEditing() {
+        journalTitle.setEnabled(true);
+        journalContent.setInputEnabled(true);
+        saveJournalButton.setEnabled(true);
+        // Enable formatting buttons
+        boldButton.setEnabled(true);
+        italicButton.setEnabled(true);
+        underlineButton.setEnabled(true);
+        heading1Button.setEnabled(true);
+        heading2Button.setEnabled(true);
+        bulletButton.setEnabled(true);
+        numbersButton.setEnabled(true);
+        textColorButton.setEnabled(true);
+    }
 }

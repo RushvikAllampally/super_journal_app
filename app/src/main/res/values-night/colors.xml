@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme colors - Dark theme overrides -->
+    <color name="primary">#80A7FF</color> <!-- Lighter blue for dark theme -->
+    <color name="primary_variant">#5686F0</color> <!-- Mid-tone blue for dark theme -->
+    <color name="secondary">#C9B7FA</color> <!-- Lighter purple for dark theme -->
+    <color name="secondary_variant">#A797D9</color> <!-- Mid-tone purple for dark theme -->
+    <color name="bottom_nav_select_color">#C9B7FA</color>
+    <color name="icons_color">#B8A6E9</color>
+    <color name="text_primary">#C9B7FA</color> <!-- Same as secondary for dark mode -->
+    <color name="text_secondary">#B8A6E9</color> <!-- Slightly dimmer for secondary text -->
+    <color name="stat_card_text">#1a1a1a</color> <!-- Light text for colored stat cards in dark mode -->
+    <color name="stat_card_heading">#ffffff</color> <!-- Dark text for colored stat cards in light mode -->
+
+    <color name="background">#121212</color> <!-- Dark background -->
+    <color name="surface">#1E1E1E</color> <!-- Dark surface -->
+    <color name="error">#CF6679</color> <!-- Error color for dark theme -->
+    
+    <color name="on_primary">#000000</color> <!-- Text on primary -->
+    <color name="on_secondary">#000000</color> <!-- Text on secondary -->
+    <color name="on_background">#FFFFFF</color> <!-- Text on background -->
+    <color name="on_surface">#FFFFFF</color> <!-- Text on surface -->
+    <color name="on_error">#000000</color> <!-- Text on error -->
+    
+    <!-- Journal specific colors - Dark theme variants - Calm aesthetic -->
+    <color name="journal_list_bg_color">#BB8506</color> <!-- Darker yellow -->
+    
+    <color name="journal_bg_gratitude">#335F3F</color><!-- Rich, earthy green — still grounded, but a bit livelier and contrasts better with white text -->
+    <color name="journal_bg_reflective">#243B55</color>  <!-- Deep steel blue — evokes introspection, smoother gradient harmony with the light blue counterpart -->
+    <color name="journal_bg_dream">#3B2E58</color> <!-- Mystical violet-indigo — slightly lighter for visual depth and dreamlike softness -->
+    <color name="journal_bg_bullet">#8B6B45</color> <!-- Warm bronze-brown — adds cozy yet professional tone to journaling/bullet sections -->
+
+    <color name="prompt_button_bg">#1A5889</color> <!-- Darker blue for prompt button -->
+    <color name="thumb_tint">#3A3A3A</color> <!-- Dark gray -->
+    <color name="thumb_tint_on">#9547B7</color> <!-- Lighter purple -->
+    
+    <!-- Tag colors - Dark theme -->
+    <color name="tag_unselected">#4A3F5C</color> <!-- Darker purple for unselected tags -->
+    <color name="tag_selected">#8B76B3</color> <!-- Medium purple for selected tags -->
+    
+    <!-- Journal editor colors - Dark theme -->
+    <color name="journal_writing_area_bg">#1E1E1E</color> <!-- Dark surface for writing area -->
+    <color name="journal_toolbar_bg">#2A2A2A</color> <!-- Slightly lighter dark for toolbar separation -->
+    <color name="journal_title_text">#FFFFFF</color> <!-- White text for journal title in dark mode -->
+    <color name="journal_editor_text">#FFFFFF</color> <!-- White text for journal content in dark mode -->
+    <color name="journal_hint_text">#BBBBBB</color> <!-- Light gray text for journal hints in dark mode -->
+    <color name="toolbar_button_active">#4A3F5C</color> <!-- Dark purple for active toolbar buttons -->
+    <color name="toolbar_button_pressed">#5B4F6D</color> <!-- Lighter purple for pressed state -->
+    
+    <!-- Affirmation card colors - Dark theme -->
+    <color name="affirmation_card_bg">#2A2A2A</color> <!-- Dark gray background -->
+    <color name="affirmation_border">#404040</color> <!-- Medium gray border -->
+    
+    <!-- Calendar category colors for event dots - Dark theme (brighter for visibility) -->
+    <color name="calendar_gratitude">#A5D6A7</color> <!-- Bright green for gratitude -->
+    <color name="calendar_reflective">#90CAF9</color> <!-- Bright blue for reflective -->
+    <color name="calendar_dream">#CE93D8</color> <!-- Bright purple for dream -->
+    <color name="calendar_bullet">#FFAB91</color> <!-- Bright coral for bullet -->
+</resources>

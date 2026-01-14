@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:background="#5E17EB"
+    android:background="@color/intro_screen_primary"
     android:orientation="vertical">
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Hi, Welcome to Super Journal App"
+            android:text="Hi, Welcome to Diaryverse App"
             android:fontFamily="@font/balsamiqsans_regular"
             android:textColor="@color/white"
             android:textStyle="bold"

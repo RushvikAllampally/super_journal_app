@@ -1,189 +1,576 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#e8dff5"
+    android:padding="16dp"
+    android:scrollbars="none"
+    android:background="?attr/android:colorBackground"
     tools:context=".screens.fragments.JournalsDataFragment">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Journal Insights"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/text_primary"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="4dp" />
+            
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your personalized writing analytics"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground"
+            android:alpha="0.6"
+            android:fontFamily="@font/balsamiqsans_regular"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Journal Overview -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Journal Analytics"
+                    android:text="Journal Overview"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/stat_card_heading"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    android:textColor="@color/app_blue"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:layout_marginBottom="8dp" />
+                    
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="All-time stats and monthly averages"
+                    android:textColor="@color/stat_card_heading"
+                    android:textSize="12sp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Stats Grid Layout -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="3"
+                    android:useDefaultMargins="true"
+                    android:alignmentMode="alignBounds">
+                    
+                    <!-- Total Entries Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#E8F5E9"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📔 Total Entries"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/total_entries"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="0" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Current Streak Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#E3F2FD"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⚡ Current Streak"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/current_streak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="0" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Weekly Entries Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#FFF3E0"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📅 Last Week"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/last_week_entries"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="0" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Most Productive Day Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#F3E5F5"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🌟 Best Day"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/most_productive_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="N/A" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Average Mood Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#E8EAF6"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="😊 Mood (Current month avg)"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/average_mood"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="N/A" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Average Words Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#FFEBEE"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="✍️ Words (Current month avg)"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/average_word_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="N/A" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Longest Streak Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#FFF9C4"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🔥 Best Streak"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/longest_streak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="0" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    
+                    <!-- Total Words Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_gravity="fill_horizontal"
+                        app:cardBackgroundColor="#E0F2F1"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        android:layout_margin="4dp">
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📝 Total Words"
+                                android:textSize="14sp"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular" />
+                                
+                            <TextView
+                                android:id="@+id/total_words"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/stat_card_text"
+                                android:fontFamily="@font/balsamiqsans_regular"
+                                android:text="0" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </GridLayout>
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        
+        <!-- Journal Types Chart -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
 
-            <!-- TODO: Update blank fragment layout -->
-            <!--    <TextView-->
-            <!--        android:layout_width="match_parent"-->
-            <!--        android:layout_height="wrap_content"-->
-            <!--        android:gravity="center"-->
-            <!--        android:text="Manage Your Journals Here !!"-->
-            <!--        android:textSize="20sp"-->
-            <!--        android:textStyle="bold" />-->
-
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginVertical="8dp"
-                android:elevation="4dp"
-                android:orientation="horizontal"
-                app:cardCornerRadius="8dp">
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Journal Types (All Time)"
+                    android:textColor="@color/stat_card_heading"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:layout_marginBottom="8dp" />
+                
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/journal_types_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        
+        <!-- Mood Trends Chart -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:orientation="vertical"
-                    android:background="@drawable/planet_nature"
-                    android:padding="10dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Total Journals written till date"
-                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:layout_weight="1"
+                        android:text="Your Mood Trends"
+                        android:textColor="@color/stat_card_heading"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/total_journal_count"
+                        android:fontFamily="@font/balsamiqsans_regular" />
+                    
+                    <Spinner
+                        android:id="@+id/mood_month_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Journals"
-                        android:fontFamily="@font/balsamiqsans_regular"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
-
-<!--                    <ImageView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:background="@drawable/mood_emojies" />-->
-
+                        android:minWidth="150dp"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
+                    
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mood frequency for the selected period"
+                    android:textSize="14sp"
+                    android:textColor="@color/stat_card_heading"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/balsamiqsans_regular"
+                    android:layout_marginBottom="8dp" />
+                
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/mood_trends_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
 
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mood Statistics"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:layout_marginHorizontal="15dp"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        
+        <!-- Writing Patterns Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="15dp"
-                >
-
-                <ImageButton
-                    android:id="@+id/left_arrow_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/left_arrow_24"
-                    android:background="#e8dff5"
-                    />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/graph_month_name"
-                    android:layout_width="85dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Month"
-                    android:textSize="16sp"
-                    android:gravity="center"
+                    android:text="Writing Patterns"
+                    android:textColor="@color/stat_card_heading"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:fontFamily="@font/balsamiqsans_regular"
-                    />
+                    android:layout_marginBottom="16dp" />
 
-                <ImageButton
-                    android:id="@+id/right_arrow_btn"
-                    android:layout_width="20dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/right_arrow_24"
-                    android:background="#e8dff5"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/stat_card_heading"
+                        android:text="Bookmarked Entries ⭐"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/balsamiqsans_regular" />
+                        
+                    <TextView
+                        android:id="@+id/bookmarked_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/stat_card_heading"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:text="0" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/stat_card_heading"
+                        android:text="Most Active Month 📅"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/balsamiqsans_regular" />
+                        
+                    <TextView
+                        android:id="@+id/most_active_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/stat_card_heading"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:text="N/A" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/stat_card_heading"
+                        android:text="Favorite Journal Type 📖"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/balsamiqsans_regular" />
+                        
+                    <TextView
+                        android:id="@+id/favorite_journal_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/stat_card_heading"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/balsamiqsans_regular"
+                        android:text="N/A" />
+                </LinearLayout>
 
             </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-
-
-            <!--Ui component for our bar chart-->
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/idBarChart"
-                android:layout_width="370dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/barchart_bg"
-                android:padding="10dp" />
-
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_gravity="center"
-                android:src="@drawable/more_coming_soon_purple"
-                android:layout_margin="10dp"
-                />
-
-
-            <Button
-                android:id="@+id/share_improvements_btn"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:text="Share Improvements and Suggestions"
-                android:textColor="@color/black"
-                android:fontFamily="@font/balsamiqsans_regular"
-                android:textSize="15sp"
-                android:backgroundTint="@color/btn_color"
-                />
-
-
-        </LinearLayout>
-
-    </ScrollView>
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

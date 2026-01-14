@@ -1,0 +1,150 @@
+package com.diary.superjournalapp.database;
+
+import androidx.annotation.NonNull;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+/**
+ * Database migrations for the journal app
+ */
+public class Migrations {
+
+    /**
+     * Migration from version 12 to 14
+     * - Adds is_bookmarked column to journals table
+     * - Adds Tag and JournalTag tables for the new tagging system
+     * (Version 13 was internal only and never deployed to users)
+     */
+    public static final Migration MIGRATION_12_14 = new Migration(12, 14) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Add is_bookmarked column to journals table
+            database.execSQL(
+                "ALTER TABLE journals ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Add is_bookmarked column to all journal content tables
+            // Gratitude Journal
+            database.execSQL(
+                "ALTER TABLE gratitude_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Reflective Journal
+            database.execSQL(
+                "ALTER TABLE reflective_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Bullet Journal
+            database.execSQL(
+                "ALTER TABLE bullet_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Dream Journal
+            database.execSQL(
+                "ALTER TABLE dream_journal_content ADD COLUMN is_bookmarked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Create tags table
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `tags` (" +
+                "`tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "`name` TEXT NOT NULL, " +
+                "`color` TEXT, " +
+                "`usageCount` INTEGER NOT NULL, " +
+                "`isFavorite` INTEGER NOT NULL)"
+            );
+            
+            // Create unique index on tag name
+            database.execSQL(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `index_tags_name` ON `tags` (`name`)"
+            );
+            
+            // Drop existing journal_tags table with incorrect foreign key reference
+            database.execSQL("DROP TABLE IF EXISTS `journal_tags`");
+            
+            // Create journal_tags junction table with correct reference to 'journals' table (lowercase)
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `journal_tags` (" +
+                "`journalId` INTEGER NOT NULL, " +
+                "`tagId` INTEGER NOT NULL, " +
+                "PRIMARY KEY(`journalId`, `tagId`), " +
+                "FOREIGN KEY(`journalId`) REFERENCES `journals`(`journalId`) ON DELETE CASCADE, " +
+                "FOREIGN KEY(`tagId`) REFERENCES `tags`(`tagId`) ON DELETE CASCADE)"
+            );
+            
+            // Create indices for foreign keys
+            database.execSQL(
+                "CREATE INDEX IF NOT EXISTS `index_journal_tags_journalId` ON `journal_tags` (`journalId`)"
+            );
+            
+            database.execSQL(
+                "CREATE INDEX IF NOT EXISTS `index_journal_tags_tagId` ON `journal_tags` (`tagId`)"
+            );
+        }
+    };
+    
+    /**
+     * Migration from version 14 to 15
+     * - Adds is_locked column to journals table and all journal content tables
+     * - Enables per-journal locking premium feature
+     */
+    public static final Migration MIGRATION_14_15 = new Migration(14, 15) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Add is_locked column to main journals table
+            database.execSQL(
+                "ALTER TABLE journals ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Add is_locked column to all journal content tables for consistency
+            // Gratitude Journal
+            database.execSQL(
+                "ALTER TABLE gratitude_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Reflective Journal
+            database.execSQL(
+                "ALTER TABLE reflective_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Bullet Journal
+            database.execSQL(
+                "ALTER TABLE bullet_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+            
+            // Dream Journal
+            database.execSQL(
+                "ALTER TABLE dream_journal_content ADD COLUMN is_locked INTEGER NOT NULL DEFAULT 0"
+            );
+        }
+    };
+    
+    /**
+     * Migration from version 15 to 16
+     * - Adds backup_history table for tracking backup operations
+     * - Adds lock_pin column to all journal content tables
+     * - Enables backup & restore premium feature
+     */
+    public static final Migration MIGRATION_15_16 = new Migration(15, 16) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Create backup_history table without indices to match entity exactly
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `backup_history` (" +
+                "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "`backup_date` INTEGER NOT NULL, " +
+                "`backup_type` TEXT, " +
+                "`drive_file_id` TEXT, " +
+                "`file_name` TEXT, " +
+                "`file_size` INTEGER NOT NULL, " +
+                "`journal_count` INTEGER NOT NULL, " +
+                "`backup_status` TEXT, " +
+                "`error_message` TEXT, " +
+                "`is_encrypted` INTEGER NOT NULL, " +
+                "`app_version` TEXT, " +
+                "`database_version` INTEGER NOT NULL, " +
+                "`device_info` TEXT)"
+            );
+        }
+    };
+}

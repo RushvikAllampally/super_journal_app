@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F8E598"
+    android:background="@color/journal_bg_bullet"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,47 +16,77 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:paddingBottom="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:elevation="2dp"
+            android:background="@color/journal_bg_bullet">
 
             <ImageView
                 android:id="@+id/close_journal_bullet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:src="@drawable/icons8_multiply_24" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:src="@drawable/icons8_multiply_24"
+                android:tint="?attr/colorOnBackground"
+                android:contentDescription="Close"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
-            <Space
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bullet Journal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
+                android:fontFamily="@font/balsamiqsans_regular"
+                android:layout_marginStart="8dp" />
 
             <ImageButton
                 android:id="@+id/bullet_delete_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="5dp"
-                android:background="#F8E598"
-                android:src="@drawable/delete_icon_24" />
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_delete_outline"
+                android:contentDescription="Delete"
+                android:tint="?attr/colorOnBackground"
+                android:padding="6dp" />
 
             <ImageView
                 android:id="@+id/journal_pin_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="5dp"
-                android:src="@drawable/pin_icon" />
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:src="@drawable/pin_icon"
+                android:contentDescription="Pin"
+                android:tint="?attr/colorOnBackground" />
+                
+            <ImageButton
+                android:id="@+id/manage_tags_button"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_tag_outline"
+                android:contentDescription="Manage Tags"
+                android:tint="?attr/colorOnBackground"
+                android:padding="6dp" />
 
             <Button
                 android:id="@+id/save_journal_bullet"
-                android:layout_width="90dp"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_margin="1dp"
+                android:layout_margin="4dp"
                 android:fontFamily="@font/balsamiqsans_regular"
-                android:gravity="center"
                 android:text="Save"
-                android:textSize="14sp" />
-
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:backgroundTint="@color/secondary" />
 
         </LinearLayout>
 
@@ -86,10 +116,12 @@
 
             <ImageView
                 android:id="@+id/journal_calender_icon_bullet"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/calender_view_icon" />
+                android:src="@drawable/ic_calendar_outline"
+                android:tint="?attr/colorOnBackground"
+                android:contentDescription="Select Date" />
 
         </LinearLayout>
 

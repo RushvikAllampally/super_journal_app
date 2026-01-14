@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".screens.introScreens.JournalTypesScreenIntro">
 
 
@@ -34,7 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:text="What We Have for You ?"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="#445FD2"
+            android:textColor="@color/text_primary"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="Reflective Journal"
                 android:fontFamily="@font/balsamiqsans_regular"
-                android:textColor="#445FD2"
+                android:textColor="@color/text_primary"
                 android:textSize="19sp"
                 android:textStyle="bold" />
 
@@ -81,7 +82,7 @@
             android:layout_marginTop="10dp"
             android:text="Dream Journal"
             android:fontFamily="@font/balsamiqsans_regular"
-            android:textColor="#445FD2"
+            android:textColor="@color/text_primary"
             android:textSize="19sp"
             android:textStyle="bold" />
 

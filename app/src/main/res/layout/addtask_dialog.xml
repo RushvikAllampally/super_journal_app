@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:background="@color/app_blue"
+    android:background="?attr/colorSecondary"
     android:orientation="vertical"
     android:gravity="center_vertical">
 
@@ -13,7 +13,7 @@
         android:layout_marginBottom="20dp"
         android:text="Add Task"
         android:fontFamily="@font/balsamiqsans_regular"
-        android:textColor="@color/white"
+        android:textColor="@android:color/black"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
@@ -24,8 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:padding="5dp"
+        android:padding="8dp"
         android:background="@color/white"
+        android:textColor="@android:color/black"
+        android:textColorHint="#757575"
+        android:hint="Enter task..."
         android:textSize="@dimen/text_size_medium"/>
 
     <LinearLayout
@@ -42,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:textSize="@dimen/text_size_small"
-            android:textColor="@color/white"
+            android:textColor="@android:color/black"
             android:textStyle="bold"
             android:layout_marginHorizontal="10dp"
             android:layout_gravity="start"
@@ -65,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textColor="@color/white"
+                android:textColor="@android:color/black"
                 android:layout_marginHorizontal="10dp"
                 android:textStyle="bold"
                 android:background="@android:color/transparent"
@@ -79,7 +82,7 @@
                 android:textSize="15sp"
                 android:layout_marginHorizontal="10dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@android:color/black"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/balsamiqsans_regular"
                 android:text="Add"/>

@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="app_blue">#5B8BDF</color>
-    <color name="jounral_list_bg_color">#FFC107</color>
-    <color name="btn_color">#b3a0e6</color>
-    <color name="thumb_tint">#EDEFECEC</color>
-    <color name="thumb_tint_on">#7F2EA1</color>
 
-    //color palette colors
+    <color name="intro_screen_primary">#5E17EB</color>
+    
+    <!-- Theme colors - Light theme defaults -->
+    <color name="primary">#5B8BDF</color> <!-- App blue -->
+    <color name="primary_variant">#3F6ABF</color> <!-- Darker blue -->
+    <color name="secondary">#b3a0e6</color> <!-- Button color -->
+    <color name="bottom_nav_select_color">#7153ac</color> <!-- Button color -->
+    <color name="icons_color">#B8A6E9</color>
+    <color name="secondary_variant">#9380C6</color> <!-- Darker secondary -->
+    <color name="text_primary">#654b9b</color> <!-- Darker purple for text in light mode -->
+    <color name="text_secondary">#7B5FB3</color> <!-- Medium purple for secondary text -->
+    <color name="stat_card_text">#1a1a1a</color> <!-- Dark text for colored stat cards in light mode -->
+    <color name="stat_card_heading">#1a1a1a</color> <!-- Dark text for colored stat cards in light mode -->
+    
+    <color name="background">#e8dff5</color> <!-- App background -->
+    <color name="surface">#FFFFFF</color> <!-- Surface elements background -->
+    <color name="error">#B00020</color> <!-- Error color -->
+    
+    <color name="on_primary">#FFFFFF</color> <!-- Text/icons on primary -->
+    <color name="on_secondary">#000000</color> <!-- Text/icons on secondary -->
+    <color name="on_background">#000000</color> <!-- Text/icons on background -->
+    <color name="on_surface">#000000</color> <!-- Text/icons on surface -->
+    <color name="on_error">#FFFFFF</color> <!-- Text/icons on error -->
+    
+    <!-- Journal specific colors - Calm aesthetic palette -->
+    <color name="journal_list_bg_color">#FFC107</color> <!-- Yellow background -->
+    <color name="journal_bg_gratitude">#D4EDDA</color> <!-- Soft mint green for gratitude journal -->
+    <color name="journal_bg_reflective">#E3F2FD</color> <!-- Soft sky blue for reflective journal -->
+    <color name="journal_bg_dream">#F3E5F5</color> <!-- Soft lavender for dream journal -->
+    <color name="journal_bg_bullet">#FFE5E5</color> <!-- Soft blush for bullet journal -->
+    <color name="prompt_button_bg">#3498db</color> <!-- Blue for prompt button -->
+    <color name="thumb_tint">#EDEFECEC</color> <!-- Light gray -->
+    <color name="thumb_tint_on">#7F2EA1</color> <!-- Purple -->
+    
+    <!-- Color palette colors -->
     <color name="red">#FF0000</color>
     <color name="blue">#0000FF</color>
     <color name="green">#008000</color>
@@ -19,4 +49,38 @@
     <color name="brown">#A52A2A</color>
     <color name="yellow">#FFFF00</color>
     <color name="grey">#808080</color>
+    
+    <!-- Tag colors -->
+    <color name="tag_unselected">#E0D7F5</color> <!-- Light purple for unselected tags -->
+    <color name="tag_selected">#A797D9</color> <!-- Darker purple for selected tags -->
+    
+    <!-- Journal editor colors -->
+    <color name="journal_writing_area_bg">#FFFFFF</color> <!-- White background for writing area -->
+    <color name="journal_toolbar_bg">#FFFFFF</color> <!-- White background for toolbar -->
+    <color name="journal_title_text">#000000</color> <!-- Black text for journal title in light mode -->
+    <color name="journal_editor_text">#000000</color> <!-- Black text for journal content in light mode -->
+    <color name="journal_hint_text">#757575</color> <!-- Medium gray text for journal hints in light mode -->
+    <color name="toolbar_button_active">#E8DFF5</color> <!-- Light purple for active toolbar buttons -->
+    <color name="toolbar_button_pressed">#D4C5ED</color> <!-- Slightly darker purple for pressed state -->
+    
+    <!-- Affirmation card colors -->
+    <color name="affirmation_card_bg">#FAFAFA</color> <!-- Very light gray background -->
+    <color name="affirmation_border">#E0E0E0</color> <!-- Light gray border -->
+    
+    <!-- Calendar category colors for event dots -->
+    <color name="calendar_gratitude">#81C784</color> <!-- Green for gratitude -->
+    <color name="calendar_reflective">#64B5F6</color> <!-- Blue for reflective -->
+    <color name="calendar_dream">#BA68C8</color> <!-- Purple for dream -->
+    <color name="calendar_bullet">#FF8A80</color> <!-- Red for bullet -->
+    
+    <!-- Status colors for backup feature -->
+    <color name="success_green">#4CAF50</color> <!-- Green for success status -->
+    <color name="error_red">#F44336</color> <!-- Red for error status -->
+    <color name="warning_orange">#FF9800</color> <!-- Orange for warning/in-progress status -->
+    <color name="premium_gold">#FFD700</color> <!-- Gold color for premium features -->
+    
+    <!-- Legacy color references (for backward compatibility) -->
+    <color name="app_blue">@color/secondary</color> <!-- Changed from primary to secondary to match purple theme -->
+    <color name="btn_color">@color/secondary</color>
+    <color name="jounral_list_bg_color">@color/journal_list_bg_color</color>
 </resources>
